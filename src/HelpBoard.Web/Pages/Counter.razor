@@ -2,11 +2,44 @@
 
 <PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
+<section class="hb-stack-lg">
+    <header class="hb-page-header">
+        <div class="hb-stack-sm">
+            <p class="hb-eyebrow">Starter surface</p>
+            <h1>Counter</h1>
+            <p class="hb-page-copy">
+                This page exercises the shared button, card, and focus foundations in the current design system.
+            </p>
+        </div>
+    </header>
 
-<p role="status">Current count: @currentCount</p>
+    <div class="hb-grid-2">
+        <section class="hb-card hb-stack-md">
+            <div class="hb-inline">
+                <span class="hb-badge hb-badge--accent">Interactive</span>
+            </div>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+            <div>
+                <p class="hb-metric-label">Current count</p>
+                <p class="hb-counter-value" role="status" aria-live="polite">@currentCount</p>
+            </div>
+
+            <button type="button" class="hb-button hb-button--primary" @onclick="IncrementCount">
+                <AppIcon Name="plus-square" />
+                <span>Increment counter</span>
+            </button>
+        </section>
+
+        <section class="hb-card hb-stack-md" aria-labelledby="counter-foundation-heading">
+            <h2 id="counter-foundation-heading">Foundation checks</h2>
+            <ul class="hb-checklist">
+                <li>Buttons use tokenized color, spacing, and focus treatment.</li>
+                <li>Status text updates through a live region for assistive technology.</li>
+                <li>Cards and layout spacing match the shared shell primitives.</li>
+            </ul>
+        </section>
+    </div>
+</section>
 
 @code {
     private int currentCount = 0;

@@ -1,16 +1,35 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+<div class="app-shell">
+    <!-- Skip link allows keyboard users to bypass navigation and go directly to main content -->
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <NavMenu />
+
+    <div class="app-shell__main">
+        <header class="app-header">
+            <div>
+                <p class="app-header__eyebrow">Feature 001 foundation</p>
+                <p class="app-header__title">HELP-Board</p>
+            </div>
+
+            <a class="app-header__link" href="https://learn.microsoft.com/aspnet/core/blazor/" target="_blank" rel="noreferrer" aria-label="Blazor guidance (opens in a new tab)">
+                <span>Blazor guidance (opens in a new tab)</span>
+                <AppIcon Name="arrow-up-right" Class="app-header__icon" />
+            </a>
+        </header>
+
+        <!-- 
+            Main element receives focus on navigation (via FocusOnNavigate directive in App.razor).
+            tabindex="-1" allows programmatic focus without making it keyboard-focusable.
+            This ensures focus moves to the main content area when routes change,
+            helping users with assistive technology understand page transitions.
+            
+            Tab order: Skip link → NavMenu links/toggle → Header links → Main content area
+        -->
+        <main id="main-content" class="app-main" tabindex="-1">
+            <article class="app-content">
+                @Body
+            </article>
+        </main>
     </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
 </div>

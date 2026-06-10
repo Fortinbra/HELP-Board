@@ -3,53 +3,184 @@
 @using HelpBoard.Web.Services
 @inject TicketApiService TicketApi
 
-<PageTitle>HELP-Board</PageTitle>
+<PageTitle>Dashboard</PageTitle>
 
-<h1>HELP-Board</h1>
+<section class="hb-stack-lg">
+    <header class="hb-page-header">
+        <div class="hb-stack-sm">
+            <p class="hb-eyebrow">Operations overview</p>
+            <h1>Ticket dashboard</h1>
+            <p class="hb-page-copy">
+                This starter surface now uses the in-repo design system foundation with tokenized spacing,
+                semantic status treatment, and a migration-ready shell.
+            </p>
+        </div>
 
-@if (_loading)
-{
-    <p><em>Loading tickets...</em></p>
-}
-else if (_errorMessage is not null)
-{
-    <div class="alert alert-danger">@_errorMessage</div>
-}
-else if (_tickets.Count == 0)
-{
-    <p>No tickets found. Create one to get started.</p>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Status</th>
-                <th>Priority</th>
-                <th>Created By</th>
-                <th>Created</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var ticket in _tickets)
+        <a class="hb-button hb-button--secondary" href="https://learn.microsoft.com/aspnet/core/blazor/components/" target="_blank" rel="noreferrer" aria-label="Component guidance (opens in a new tab)">
+            <AppIcon Name="arrow-up-right" />
+            <span>Component guidance (opens in a new tab)</span>
+        </a>
+    </header>
+
+    @if (_loading)
+    {
+        <section class="hb-card hb-state" aria-live="polite">
+            <div class="hb-inline" role="status">
+                <span class="hb-spinner" aria-hidden="true"></span>
+                <span>Loading tickets...</span>
+            </div>
+        </section>
+    }
+    else if (_errorMessage is not null)
+    {
+        <section class="hb-alert hb-alert--danger" role="alert">
+            <AppIcon Name="alert-circle" />
+            <div>
+                <h2>Ticket data unavailable</h2>
+                <p>@_errorMessage</p>
+            </div>
+        </section>
+    }
+    else
+    {
+        <section class="hb-stat-grid" aria-label="Ticket summary">
+            <article class="hb-card hb-stat-card">
+                <div class="hb-stat-card__icon hb-stat-card__icon--primary" aria-hidden="true">
+                    <AppIcon Name="ticket" />
+                </div>
+                <div>
+                    <p class="hb-stat-card__label">Total tickets</p>
+                    <p class="hb-stat-card__value">@TotalTickets</p>
+                </div>
+            </article>
+
+            <article class="hb-card hb-stat-card">
+                <div class="hb-stat-card__icon hb-stat-card__icon--warning" aria-hidden="true">
+                    <AppIcon Name="clock-3" />
+                </div>
+                <div>
+                    <p class="hb-stat-card__label">Active work</p>
+                    <p class="hb-stat-card__value">@ActiveTickets</p>
+                </div>
+            </article>
+
+            <article class="hb-card hb-stat-card">
+                <div class="hb-stat-card__icon hb-stat-card__icon--success" aria-hidden="true">
+                    <AppIcon Name="check-circle-2" />
+                </div>
+                <div>
+                    <p class="hb-stat-card__label">Completed</p>
+                    <p class="hb-stat-card__value">@ResolvedTickets</p>
+                </div>
+            </article>
+
+            <article class="hb-card hb-stat-card">
+                <div class="hb-stat-card__icon hb-stat-card__icon--danger" aria-hidden="true">
+                    <AppIcon Name="alert-circle" />
+                </div>
+                <div>
+                    <p class="hb-stat-card__label">Critical priority</p>
+                    <p class="hb-stat-card__value">@CriticalTickets</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="hb-card hb-stack-md" aria-labelledby="ticket-progress-heading">
+            <div class="hb-section-header">
+                <div>
+                    <h2 id="ticket-progress-heading">Progress snapshot</h2>
+                    <p>Completion is shown with text, percentage, and a labeled progress bar.</p>
+                </div>
+
+                <span class="hb-badge hb-badge--info">@CompletionPercentage% complete</span>
+            </div>
+
+            <div class="hb-progress-block">
+                <div class="hb-progress-meta">
+                    <span>Resolved or closed</span>
+                    <span>@ResolvedTickets of @TotalTickets</span>
+                </div>
+                <div class="hb-progress" role="progressbar" aria-label="Resolved ticket progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="@CompletionPercentage">
+                    <span class="hb-progress__value" style="width: @($"{CompletionPercentage}%")"></span>
+                </div>
+            </div>
+        </section>
+
+        <section class="hb-card hb-stack-md" aria-labelledby="ticket-table-heading">
+            <div class="hb-section-header">
+                <div>
+                    <h2 id="ticket-table-heading">Current tickets</h2>
+                    <p>Accessible badges pair text and color to avoid color-only status communication.</p>
+                </div>
+            </div>
+
+            @if (_tickets.Count == 0)
             {
-                <tr>
-                    <td>@ticket.Title</td>
-                    <td>@ticket.Status</td>
-                    <td>@ticket.Priority</td>
-                    <td>@ticket.CreatedBy</td>
-                    <td>@ticket.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
-                </tr>
+                <div class="hb-empty-state" role="status">
+                    <div class="hb-empty-state__icon" aria-hidden="true">
+                        <AppIcon Name="inbox" />
+                    </div>
+                    <div>
+                        <h3>No tickets yet</h3>
+                        <p>Create a ticket to populate the dashboard foundation.</p>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
-}
+            else
+            {
+                <div class="hb-table-wrap">
+                    <table class="hb-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Priority</th>
+                                <th scope="col">Created by</th>
+                                <th scope="col">Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ticket in _tickets)
+                            {
+                                <tr>
+                                    <th scope="row">@ticket.Title</th>
+                                    <td>
+                                        <span class="hb-badge @GetStatusBadgeClass(ticket.Status)">
+                                            <AppIcon Name="@GetStatusIcon(ticket.Status)" />
+                                            <span>@GetStatusLabel(ticket.Status)</span>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="hb-badge @GetPriorityBadgeClass(ticket.Priority)">@GetPriorityLabel(ticket.Priority)</span>
+                                    </td>
+                                    <td>@ticket.CreatedBy</td>
+                                    <td>@ticket.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </section>
+    }
+</section>
 
 @code {
     private IReadOnlyList<TicketResponse> _tickets = [];
     private bool _loading = true;
     private string? _errorMessage;
+
+    private int TotalTickets => _tickets.Count;
+
+    private int ActiveTickets => _tickets.Count(ticket => ticket.Status is TicketStatus.Open or TicketStatus.InProgress);
+
+    private int ResolvedTickets => _tickets.Count(ticket => ticket.Status is TicketStatus.Resolved or TicketStatus.Closed);
+
+    private int CriticalTickets => _tickets.Count(ticket => ticket.Priority == TicketPriority.Critical);
+
+    private int CompletionPercentage => TotalTickets == 0
+        ? 0
+        : (int)Math.Round((double)ResolvedTickets / TotalTickets * 100, MidpointRounding.AwayFromZero);
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,4 +197,39 @@ else
             _loading = false;
         }
     }
+
+    private static string GetStatusBadgeClass(TicketStatus status) => status switch
+    {
+        TicketStatus.Open => "hb-badge--info",
+        TicketStatus.InProgress => "hb-badge--warning",
+        TicketStatus.Resolved => "hb-badge--success",
+        TicketStatus.Closed => "hb-badge--neutral",
+        _ => "hb-badge--neutral"
+    };
+
+    private static string GetPriorityBadgeClass(TicketPriority priority) => priority switch
+    {
+        TicketPriority.Low => "hb-badge--neutral",
+        TicketPriority.Medium => "hb-badge--info",
+        TicketPriority.High => "hb-badge--warning",
+        TicketPriority.Critical => "hb-badge--danger",
+        _ => "hb-badge--neutral"
+    };
+
+    private static string GetStatusIcon(TicketStatus status) => status switch
+    {
+        TicketStatus.Open => "clock-3",
+        TicketStatus.InProgress => "activity",
+        TicketStatus.Resolved => "check-circle-2",
+        TicketStatus.Closed => "inbox",
+        _ => "ticket"
+    };
+
+    private static string GetStatusLabel(TicketStatus status) => status switch
+    {
+        TicketStatus.InProgress => "In progress",
+        _ => status.ToString()
+    };
+
+    private static string GetPriorityLabel(TicketPriority priority) => priority.ToString();
 }

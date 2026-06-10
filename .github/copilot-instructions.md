@@ -77,6 +77,16 @@ This repository contains shared Copilot instructions that apply to any .NET proj
 
 ---
 
+## Blazor UI Code-Behind Policy (Summary)
+
+- In `src/HelpBoard.Web`, keep C# behavior out of `.razor` `@code` blocks.
+- Implement component behavior in paired `.razor.cs` partial classes.
+- Keep `.razor` files focused on markup and directives.
+
+> Detailed guidance is in `.github/instructions/blazor-code-behind.instructions.md`.
+
+---
+
 ## How These Instructions Combine with Local Instructions
 
 When a project includes its own `.github/copilot-instructions.md` or `.github/instructions/*.instructions.md` files, those **extend and override** the instructions in this template repository. Local instructions take precedence for project-specific concerns (e.g., framework choices, database access patterns, naming conventions specific to the domain).

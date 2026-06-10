@@ -1,39 +1,60 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">HelpBoard.Web</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
+﻿<aside class="app-sidebar">
+    <div class="app-sidebar__top">
+        <a class="app-brand" href="">
+            <span class="app-brand__mark" aria-hidden="true">
+                <AppIcon Name="panel-left" />
+            </span>
+            <span>
+                <span class="app-brand__name">HELP-Board</span>
+                <span class="app-brand__meta">Service operations workspace</span>
+            </span>
+        </a>
+
+        <button
+            type="button"
+            class="nav-toggle"
+            aria-controls="primary-navigation"
+            aria-expanded="@(!collapseNavMenu)"
+            @onclick="ToggleNavMenu">
+            <AppIcon Name="menu" />
+            <span>Menu</span>
         </button>
     </div>
-</div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+    <div id="primary-navigation" class="app-sidebar__panel @NavMenuCssClass">
+        <nav class="app-nav" aria-label="Primary navigation">
+            <p class="app-nav__label">Workspace</p>
+
+            <NavLink class="app-nav__link" href="" Match="NavLinkMatch.All" @onclick="CloseNavMenu">
+                <AppIcon Name="home" />
+                <span>Dashboard</span>
             </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+
+            <NavLink class="app-nav__link" href="counter" @onclick="CloseNavMenu">
+                <AppIcon Name="plus-square" />
+                <span>Counter</span>
             </NavLink>
+        </nav>
+
+        <div class="app-sidebar__footer">
+            <span class="hb-badge hb-badge--accent">Default theme</span>
+            <p>Teal and purple tokens now drive the shared shell.</p>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
+    </div>
+</aside>
 
 @code {
     private bool collapseNavMenu = true;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string NavMenuCssClass => collapseNavMenu ? "is-collapsed" : string.Empty;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void CloseNavMenu()
+    {
+        collapseNavMenu = true;
     }
 }

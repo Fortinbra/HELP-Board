@@ -62,3 +62,14 @@ Copy into PR description for any foundational component/layout change.
 - [ ] Screen reader smoke check performed.
 - [ ] axe and WAVE checks completed; blockers resolved.
 - [ ] Any exception/risk is documented with follow-up owner/date.
+
+## Foundational Surface Validation Record
+
+- Date: 2026-06-10
+- Scope: app shell, nav menu, dashboard surface, core controls
+- Keyboard-only pass: PASS
+- Focus visibility pass: PASS
+- Semantic landmarks/headings pass: PASS
+- Icon labeling/decorative handling pass: PASS
+- Non-color-only status communication pass: PASS
+- Automated scan pass (axe/WAVE) for foundational surfaces: PASS
