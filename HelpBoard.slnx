@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HelpBoard.Abstractions/HelpBoard.Abstractions.csproj" />
+    <Project Path="src/HelpBoard.Api/HelpBoard.Api.csproj" />
+    <Project Path="src/HelpBoard.Contracts/HelpBoard.Contracts.csproj" />
+    <Project Path="src/HelpBoard.Repositories/HelpBoard.Repositories.csproj" />
+    <Project Path="src/HelpBoard.Services/HelpBoard.Services.csproj" />
+    <Project Path="src/HelpBoard.Web/HelpBoard.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HelpBoard.Api.Tests/HelpBoard.Api.Tests.csproj" />
+    <Project Path="tests/HelpBoard.Repositories.Tests/HelpBoard.Repositories.Tests.csproj" />
+    <Project Path="tests/HelpBoard.Services.Tests/HelpBoard.Services.Tests.csproj" />
+  </Folder>
+</Solution>

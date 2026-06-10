@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HelpBoard.Services\HelpBoard.Services.csproj" />
+    <ProjectReference Include="..\HelpBoard.Repositories\HelpBoard.Repositories.csproj" />
+    <ProjectReference Include="..\HelpBoard.Abstractions\HelpBoard.Abstractions.csproj" />
+    <ProjectReference Include="..\HelpBoard.Contracts\HelpBoard.Contracts.csproj" />
+    <ProjectReference Include="..\HelpBoard.Web\HelpBoard.Web.csproj" />
+  </ItemGroup>
+
+</Project>
