@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HelpBoard.Contracts")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9594a3290e95ab38aaf6733de02da33d4fe62939")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4a98c23ddaa320b2706957e55ea0816262a2d9fd")]
 [assembly: System.Reflection.AssemblyProductAttribute("HelpBoard.Contracts")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HelpBoard.Contracts")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
