@@ -30,6 +30,26 @@
                 <span>Dashboard</span>
             </NavLink>
 
+            <NavLink class="app-nav__link" href="tickets" @onclick="CloseNavMenu">
+                <AppIcon Name="ticket" />
+                <span>Tickets</span>
+            </NavLink>
+
+            <NavLink class="app-nav__link" href="tickets/active" @onclick="CloseNavMenu">
+                <AppIcon Name="activity" />
+                <span>Active work</span>
+            </NavLink>
+
+            <NavLink class="app-nav__link" href="strategic-plan" @onclick="CloseNavMenu">
+                <AppIcon Name="panel-left" />
+                <span>Strategic plan</span>
+            </NavLink>
+
+            <NavLink class="app-nav__link" href="boards" @onclick="CloseNavMenu">
+                <AppIcon Name="menu" />
+                <span>Project boards</span>
+            </NavLink>
+
             <NavLink class="app-nav__link" href="counter" @onclick="CloseNavMenu">
                 <AppIcon Name="plus-square" />
                 <span>Counter</span>
@@ -42,19 +62,3 @@
         </div>
     </div>
 </aside>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string NavMenuCssClass => collapseNavMenu ? "is-collapsed" : string.Empty;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-
-    private void CloseNavMenu()
-    {
-        collapseNavMenu = true;
-    }
-}

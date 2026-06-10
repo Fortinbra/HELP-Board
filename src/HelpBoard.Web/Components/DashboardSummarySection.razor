@@ -1,0 +1,77 @@
+<section class="hb-card hb-stack-md" aria-labelledby="dashboard-summary-title">
+    <div class="hb-section-header hb-dashboard-summary__header">
+        <div class="hb-stack-sm">
+            <h2 id="dashboard-summary-title">@Title</h2>
+            <p>@Description</p>
+        </div>
+
+        <span class="hb-badge hb-badge--neutral">@LastUpdatedText</span>
+    </div>
+
+    @if (IsLoading)
+    {
+        <div class="hb-state" aria-live="polite">
+            <div class="hb-inline" role="status">
+                <span class="hb-spinner" aria-hidden="true"></span>
+                <span>Loading dashboard summary...</span>
+            </div>
+        </div>
+    }
+    else if (!string.IsNullOrWhiteSpace(ErrorMessage))
+    {
+        <section class="hb-alert hb-alert--danger" role="alert" aria-live="assertive">
+            <AppIcon Name="alert-circle" />
+            <div class="hb-stack-sm">
+                <h3>Summary data unavailable</h3>
+                <p>@ErrorMessage</p>
+                <button type="button" class="hb-button hb-button--secondary hb-summary-action" @onclick="OnRetryClickAsync">
+                    <AppIcon Name="activity" />
+                    <span>Try again</span>
+                </button>
+            </div>
+        </section>
+    }
+    else if (Cards.Count == 0)
+    {
+        <div class="hb-empty-state" role="status">
+            <div class="hb-empty-state__icon" aria-hidden="true">
+                <AppIcon Name="inbox" />
+            </div>
+            <div class="hb-stack-sm">
+                <h3>No summary cards available</h3>
+                <p>Data sources have no records yet. Use the navigation to create work and return here.</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <section class="hb-stat-grid" aria-label="Dashboard summary cards">
+            @foreach (var card in Cards)
+            {
+                <article class="hb-card hb-summary-card" aria-labelledby="@($"summary-card-title-{card.Key}")">
+                    <div class="hb-summary-card__top-row">
+                        <div class="hb-stat-card__icon @card.IconToneClass" aria-hidden="true">
+                            <AppIcon Name="@card.IconName" />
+                        </div>
+
+                        <span class="hb-badge @card.StatusBadgeClass">
+                            <AppIcon Name="@card.StatusIconName" />
+                            <span>@card.StatusText</span>
+                        </span>
+                    </div>
+
+                    <div class="hb-stack-sm">
+                        <h3 id="@($"summary-card-title-{card.Key}")">@card.Title</h3>
+                        <p class="hb-stat-card__value">@card.ValueText</p>
+                        <p class="hb-summary-card__supporting-text">@card.SupportingText</p>
+                    </div>
+
+                    <a class="hb-button hb-button--secondary hb-summary-card__drill-down" href="@card.DrillDownRoute" aria-label="@($"View details for {card.Title}")">
+                        <AppIcon Name="arrow-up-right" />
+                        <span>@card.DrillDownText</span>
+                    </a>
+                </article>
+            }
+        </section>
+    }
+</section>

@@ -440,6 +440,39 @@ textarea:disabled {
     color: var(--color-text-muted);
 }
 
+.hb-dashboard-summary__header {
+    align-items: start;
+}
+
+.hb-summary-card {
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+}
+
+.hb-summary-card__top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.hb-summary-card__supporting-text {
+    color: var(--color-text-muted);
+}
+
+.hb-summary-card__drill-down,
+.hb-summary-action {
+    justify-content: flex-start;
+    width: fit-content;
+}
+
+.hb-summary-card__drill-down:focus-visible,
+.hb-summary-action:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
 .hb-progress-block {
     display: grid;
     gap: var(--space-2);

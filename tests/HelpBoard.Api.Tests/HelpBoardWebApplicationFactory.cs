@@ -1,5 +1,6 @@
 using HelpBoard.Abstractions.Domain;
 using HelpBoard.Abstractions.Repositories;
+using HelpBoard.Contracts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -15,6 +16,13 @@ namespace HelpBoard.Api.Tests;
 /// </summary>
 public sealed class HelpBoardWebApplicationFactory : WebApplicationFactory<Program>
 {
+    internal interface ITestTicketStore
+    {
+        void Reset();
+
+        Task SeedAsync(IEnumerable<Ticket> tickets, CancellationToken cancellationToken = default);
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Development");
@@ -25,23 +33,47 @@ public sealed class HelpBoardWebApplicationFactory : WebApplicationFactory<Progr
         {
             services.RemoveAll<ITicketReader>();
             services.RemoveAll<ITicketWriter>();
+            services.RemoveAll<ITestTicketStore>();
 
             var store = new InMemoryTicketStore();
             services.AddSingleton<ITicketReader>(store);
             services.AddSingleton<ITicketWriter>(store);
+            services.AddSingleton<ITestTicketStore>(store);
         });
     }
 
     /// <summary>Simple thread-safe in-memory implementation of the ticket repository interfaces.</summary>
-    private sealed class InMemoryTicketStore : ITicketReader, ITicketWriter
+    private sealed class InMemoryTicketStore : ITicketReader, ITicketWriter, ITestTicketStore
     {
         private readonly List<Ticket> _tickets = [];
+
+        public void Reset() => _tickets.Clear();
+
+        public Task SeedAsync(IEnumerable<Ticket> tickets, CancellationToken cancellationToken = default)
+        {
+            ArgumentNullException.ThrowIfNull(tickets);
+
+            _tickets.AddRange(tickets);
+            return Task.CompletedTask;
+        }
 
         public Task<Ticket?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
             => Task.FromResult(_tickets.FirstOrDefault(t => t.Id == id));
 
         public Task<IReadOnlyList<Ticket>> GetAllAsync(CancellationToken cancellationToken = default)
             => Task.FromResult<IReadOnlyList<Ticket>>(_tickets.AsReadOnly());
+
+        public Task<TicketSummaryCounts> GetSummaryCountsAsync(CancellationToken cancellationToken = default)
+        {
+            var summary = new TicketSummaryCounts(
+                TotalCount: _tickets.Count,
+                OpenCount: _tickets.Count(t => t.Status == TicketStatus.Open),
+                InProgressCount: _tickets.Count(t => t.Status == TicketStatus.InProgress),
+                ResolvedCount: _tickets.Count(t => t.Status == TicketStatus.Resolved),
+                ClosedCount: _tickets.Count(t => t.Status == TicketStatus.Closed));
+
+            return Task.FromResult(summary);
+        }
 
         public Task AddAsync(Ticket ticket, CancellationToken cancellationToken = default)
         {
