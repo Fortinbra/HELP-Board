@@ -97,6 +97,21 @@ Users get a clear, modern, and accessible interface that makes work status easy 
 - Some third-party components may not meet accessibility requirements by default.
 - Color choices may fail contrast in edge combinations without strict token governance.
 
+## Copilot Governance
+### Candidate Instructions
+- Require every new shared UI component to consume approved design tokens instead of hard-coded colors, spacing, or typography values.
+- Require Bootstrap usage checks in any new UI work until the migration is complete.
+- Require accessibility notes for keyboard flow, focus treatment, and semantic structure whenever new foundational components are introduced.
+
+### Candidate Skills
+- UI foundation review skill to verify token usage, Lucide alignment, and Bootstrap avoidance before merge.
+- Accessibility regression skill for shared components, layouts, and navigation patterns.
+
+### Reusable Prompts
+- "Review this UI change for design-token compliance, Lucide consistency, and Bootstrap avoidance."
+- "List the accessibility checks that must pass for this new shared component before it can be accepted."
+- "Identify any new shared UI surface that should become a repository instruction or component standard."
+
 ## Acceptance Criteria
 - [ ] Bootstrap is not used by newly implemented UI components.
 - [ ] Lucide icon usage is standardized through a documented approach.
@@ -104,6 +119,7 @@ Users get a clear, modern, and accessible interface that makes work status easy 
 - [ ] Core components meet keyboard navigation and focus visibility requirements.
 - [ ] WCAG 2.2 AA checks are documented and pass for foundational UI surfaces.
 - [ ] A phased migration plan exists and is ready to execute.
+- [ ] Copilot governance artifacts are defined for UI foundation work, including token, icon, accessibility, and Bootstrap-migration guardrails.
 
 ## Open Questions
 - Which specific non-Bootstrap UI framework best matches maintainability and accessibility priorities?

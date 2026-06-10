@@ -71,6 +71,21 @@ Teams can release safely, test features progressively, and enable or disable cap
 - Inconsistent defaults across environments can cause release drift.
 - Weak governance can leave unfinished experiments in production paths.
 
+## Copilot Governance
+### Candidate Instructions
+- Require every net-new feature and theme to ship with a named toggle, owner, default state by environment, and expiry or review date.
+- Require tests to cover both toggle-off and toggle-on behavior, including safe-default behavior when configuration is missing or stale.
+- Require PRs that add or extend flags to include a removal or retirement plan so flags do not become long-lived by default.
+
+### Candidate Skills
+- Feature-flag governance skill to review ownership, expiry, environment defaults, and retirement expectations.
+- Toggle test coverage skill to verify on/off behavior, fallback handling, and rollout safety before merge.
+
+### Reusable Prompts
+- "Review this change to confirm every new feature or theme has a toggle, safe defaults, owner, expiry date, and retirement plan."
+- "List the toggle-on, toggle-off, and stale-configuration tests that must exist for this feature."
+- "Identify any flags in this area that appear long-lived and should be retired or escalated for review."
+
 ## Acceptance Criteria
 - [ ] Toggle system requirements are documented with local-first preference.
 - [ ] OSS/free suitability criteria are documented.
@@ -78,6 +93,7 @@ Teams can release safely, test features progressively, and enable or disable cap
 - [ ] Requirement that all new features are toggleable is documented.
 - [ ] Requirement that all new themes are toggleable is documented.
 - [ ] Flag lifecycle/governance expectations are documented.
+- [ ] Copilot governance artifacts are defined for feature-toggle work, covering required flags, short-lived lifecycle management, and on/off test expectations.
 
 ## Open Questions
 - Which concrete toggle library/service best balances simplicity and local-first operation?

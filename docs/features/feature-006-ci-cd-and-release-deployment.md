@@ -80,6 +80,21 @@ Contributors gain fast feedback before merge, and operators gain a predictable r
 - Self-hosted runner instability can delay deployments.
 - Missing rollback automation can increase outage duration.
 
+## Copilot Governance
+### Candidate Instructions
+- Require all workflow changes to keep build, test, release, and rollback expectations aligned with documented branch-protection rules.
+- Require CI changes to call out security boundaries for secrets, environments, and self-hosted runners.
+- Require deployment workflow updates to define validation gates, failure handling, and rollback triggers before merge.
+
+### Candidate Skills
+- CI governance skill to review workflow completeness, required checks, and branch-protection alignment.
+- Release readiness skill to review deployment gating, runner trust boundaries, and rollback coverage.
+
+### Reusable Prompts
+- "Review this workflow change for branch-protection alignment, required validation coverage, and release safety."
+- "List the release and rollback checks that must be updated for this CI/CD change."
+- "Identify which CI/CD decisions should become persistent Copilot instructions or reusable release prompts."
+
 ## Acceptance Criteria
 - [ ] PR validation workflow requires successful build and all tests.
 - [ ] Branch protection requirements are documented for required checks and merge rules.
@@ -87,6 +102,7 @@ Contributors gain fast feedback before merge, and operators gain a predictable r
 - [ ] Full release build and test execution is documented before deployment.
 - [ ] Self-hosted deployment agent model and security boundaries are documented.
 - [ ] Environment gates and rollback expectations are documented.
+- [ ] Copilot governance artifacts are defined for CI/CD work, covering workflow guardrails, security boundaries, and rollback expectations.
 
 ## Open Questions
 - Which branches should be protected beyond the default branch?

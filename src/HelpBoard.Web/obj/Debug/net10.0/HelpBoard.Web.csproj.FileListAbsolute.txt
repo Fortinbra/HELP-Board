@@ -1,6 +1,4 @@
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/HelpBoard.Web.runtimeconfig.json
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Contracts.lutu55wbea.pdb
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Contracts.stltqnudlp.wasm
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.CSharp.hejdt5q9w7.wasm
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.DotNet.HotReload.WebAssembly.Browser.07z1swgmnq.wasm
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.VisualBasic.Core.s01ygrxnou.wasm
@@ -259,7 +257,6 @@
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/System.Collections.Immutable.5ej7i7eb90.wasm.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/System.Security.Principal.Windows.otv2bpu9cg.wasm.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.CSharp.hejdt5q9w7.wasm.gz
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Contracts.stltqnudlp.wasm.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/dotnet.runtime.r2kbxkuujc.js.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/System.Runtime.CompilerServices.Unsafe.w8la5ypnnp.wasm.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/System.Runtime.Serialization.Primitives.xaxxmx62hr.wasm.gz
@@ -307,7 +304,6 @@
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/System.Security.Cryptography.Primitives.txvslu1vx1.wasm.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/System.Threading.Tasks.Parallel.ayr8d1m559.wasm.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/System.Diagnostics.Process.esxdiea9kf.wasm.gz
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Contracts.lutu55wbea.pdb.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/System.AppContext.s4abp71nh7.wasm.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/System.Threading.Thread.unpebuo3i9.wasm.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/System.IO.FileSystem.a1ices0sc0.wasm.gz
@@ -1034,8 +1030,6 @@
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/0m8p1y14f6-{0}-tjcz0u77k5-tjcz0u77k5.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/14ngvrrtr3-{0}-tptq2av103-tptq2av103.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/8b5it9igzl-{0}-lfu7j35m59-lfu7j35m59.gz
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/e579djq4c5-{0}-stltqnudlp-stltqnudlp.gz
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/myjetyr35t-{0}-lutu55wbea-lutu55wbea.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/7vw2b3rfyq-{0}-07z1swgmnq-07z1swgmnq.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/staticwebassets.build.json
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/staticwebassets.build.json.cache
@@ -1047,12 +1041,6 @@
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/refint/HelpBoard.Web.dll
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/HelpBoard.Web.pdb
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/ref/HelpBoard.Web.dll
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Web.7dkeoutuyc.wasm
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Web.rof248ekna.pdb
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Web.rof248ekna.pdb.gz
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Web.7dkeoutuyc.wasm.gz
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/zn3k2zuj6n-{0}-7dkeoutuyc-7dkeoutuyc.gz
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/42utwe3cge-{0}-rof248ekna-rof248ekna.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.AspNetCore.Authorization.wp5b4xwrtz.wasm
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.AspNetCore.Components.4payhwuyuh.wasm
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.AspNetCore.Components.Forms.ec8b0m8vzy.wasm
@@ -1079,10 +1067,8 @@
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.Extensions.Validation.y25xlv978u.wasm
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.JSInterop.WebAssembly.vi1uw8swyy.wasm
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.JSInterop.zhfbg74p0e.wasm
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/dotnet.x6bj23oodd.js
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.Extensions.Validation.y25xlv978u.wasm.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.Extensions.Logging.Abstractions.62zefycurg.wasm.gz
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/dotnet.x6bj23oodd.js.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.Extensions.FileProviders.Abstractions.woov9lkdcy.wasm.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.Extensions.Diagnostics.Abstractions.s62vewhs76.wasm.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/Microsoft.AspNetCore.Components.Forms.ec8b0m8vzy.wasm.gz
@@ -1133,5 +1119,19 @@
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/0ottu3fnst-{0}-y25xlv978u-y25xlv978u.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/z5qpwurenh-{0}-zhfbg74p0e-zhfbg74p0e.gz
 /home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/x1qmeqssvf-{0}-vi1uw8swyy-vi1uw8swyy.gz
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/42rn6li37n-{0}-x6bj23oodd-x6bj23oodd.gz
-/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/5s11vq4wua-{0}-rfypv51r21-rfypv51r21.gz
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Contracts.6vehp4hcre.wasm
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Contracts.no3uppegnv.pdb
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Web.88uhiar3rg.pdb
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Web.wtybdkezyk.wasm
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/dotnet.vgluapte3k.js
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/dotnet.vgluapte3k.js.gz
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Web.88uhiar3rg.pdb.gz
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Contracts.6vehp4hcre.wasm.gz
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Contracts.no3uppegnv.pdb.gz
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/bin/Debug/net10.0/wwwroot/_framework/HelpBoard.Web.wtybdkezyk.wasm.gz
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/e579djq4c5-{0}-6vehp4hcre-6vehp4hcre.gz
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/myjetyr35t-{0}-no3uppegnv-no3uppegnv.gz
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/zn3k2zuj6n-{0}-wtybdkezyk-wtybdkezyk.gz
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/42utwe3cge-{0}-88uhiar3rg-88uhiar3rg.gz
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/42rn6li37n-{0}-vgluapte3k-vgluapte3k.gz
+/home/runner/work/HELP-Board/HELP-Board/Fortinbra/HELP-Board/src/HelpBoard.Web/obj/Debug/net10.0/compressed/5s11vq4wua-{0}-2sh89by8p1-2sh89by8p1.gz

@@ -71,12 +71,28 @@ Users can rapidly understand what is happening across work streams, identify bot
 - High-cardinality data may affect render and query performance.
 - Inaccessible chart defaults can reduce usability for keyboard and screen-reader users.
 
+## Copilot Governance
+### Candidate Instructions
+- Require each new dashboard widget to document its data source, refresh strategy, loading states, and drill-down destination.
+- Require dashboard visuals to include non-color cues and text summaries before they are considered complete.
+- Require performance expectations for above-the-fold content, query scope, and filter behavior to be captured with each dashboard enhancement.
+
+### Candidate Skills
+- Dashboard composition skill to review widget consistency, information hierarchy, and drill-down behavior.
+- Dashboard accessibility/performance skill to validate chart accessibility, filter ergonomics, and render strategy.
+
+### Reusable Prompts
+- "Review this dashboard feature for widget state coverage, accessible chart behavior, and drill-down consistency."
+- "List the dashboard acceptance checks for loading, empty, stale, and error states for this change."
+- "Identify any dashboard additions that need new repository instructions or reusable implementation checklists."
+
 ## Acceptance Criteria
 - [ ] Dashboard is defined as the default post-login landing page.
 - [ ] Widget/card model is documented with consistent states and interactions.
 - [ ] Visualization patterns include accessibility accommodations.
 - [ ] Performance constraints and loading strategy are explicitly documented.
 - [ ] Drill-down behavior from summary to detail is clearly defined.
+- [ ] Copilot governance artifacts are defined for dashboard work, covering widget contracts, accessibility, and performance guardrails.
 
 ## Open Questions
 - What is the minimum set of widgets required for initial release?
