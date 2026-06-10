@@ -69,12 +69,28 @@ Teams can quickly stand up project-specific workflows, track progress in a consi
 - Board configuration complexity may slow onboarding.
 - High interaction density can create accessibility challenges without deliberate design.
 
+## Copilot Governance
+### Candidate Instructions
+- Require new board capabilities to define their effect on shared workflow consistency, reporting, and strategic linkage before implementation.
+- Require keyboard-accessible alternatives for any drag-and-drop or dense board interaction.
+- Require new board fields, statuses, and templates to document reporting implications so board customization does not create drift.
+
+### Candidate Skills
+- Project board governance skill to review workflow customization boundaries, template consistency, and strategic linkage expectations.
+- Board interaction accessibility skill to validate keyboard alternatives, inline editing behavior, and semantic board structure.
+
+### Reusable Prompts
+- "Review this board feature for workflow-governance drift, reporting consistency, and strategic-link integrity."
+- "List the accessibility and reporting checks required for this new board interaction or customization option."
+- "Identify which board configuration decisions should become permanent Copilot instructions or reusable review prompts."
+
 ## Acceptance Criteria
 - [ ] Board lifecycle and creation path are documented.
 - [ ] Work item model and status workflow customization are documented.
 - [ ] Strategic linkage model is explicitly defined.
 - [ ] Dashboard reporting relationships are explicitly defined.
 - [ ] Accessibility requirements are documented for board interactions.
+- [ ] Copilot governance artifacts are defined for board work, covering workflow guardrails, reporting consistency, and accessibility expectations.
 
 ## Open Questions
 - Should board templates be centrally managed or team-managed?

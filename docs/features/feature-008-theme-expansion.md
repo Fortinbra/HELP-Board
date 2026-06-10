@@ -72,6 +72,21 @@ Users can choose presentation styles that match brand, comfort, and context whil
 - Theme drift can occur if token governance is weak.
 - Excessive theme branching can increase maintenance cost.
 
+## Copilot Governance
+### Candidate Instructions
+- Require each new theme to map back to approved token slots, accessibility checks, and feature-toggle controls before implementation begins.
+- Require theme changes to document reduced-motion behavior, readability protections, and any novelty-theme constraints.
+- Require theme QA to cover parity of core components, status states, and preference persistence across enabled themes.
+
+### Candidate Skills
+- Theme governance skill to review token alignment, toggle integration, and consistency with the shared UI foundation.
+- Theme accessibility and motion skill to review contrast, animation controls, and readability across theme variants.
+
+### Reusable Prompts
+- "Review this theme change for token drift, feature-toggle integration, and accessibility or reduced-motion regressions."
+- "List the QA checks required before enabling this theme in a shared environment."
+- "Identify which theme-specific rules should become permanent Copilot instructions or reusable prompts."
+
 ## Acceptance Criteria
 - [ ] Theme expansion requirements are documented for all five required themes.
 - [ ] Dark theme palette behavior is documented relative to default branding.
@@ -79,6 +94,7 @@ Users can choose presentation styles that match brand, comfort, and context whil
 - [ ] Minimalist and Western theme design expectations are documented.
 - [ ] Accessibility and reduced-motion requirements are documented for all themes.
 - [ ] Theme availability is documented as feature-toggle controlled.
+- [ ] Copilot governance artifacts are defined for theme work, covering token alignment, toggle controls, and accessibility or motion guardrails.
 
 ## Open Questions
 - Which themes are enabled by default at launch versus opt-in?

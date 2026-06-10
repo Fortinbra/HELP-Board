@@ -69,12 +69,28 @@ Users gain transparency into strategic progress, can detect stalled initiatives 
 - Too much manual data entry can reduce update consistency.
 - Complex hierarchy visualization may hurt usability without careful design.
 
+## Copilot Governance
+### Candidate Instructions
+- Require every change to strategic entities to preserve explicit hierarchy rules, owner attribution, and update history expectations.
+- Require roll-up logic changes to describe how milestone, initiative, and objective health calculations are derived and tested.
+- Require accessibility notes for hierarchy navigation, expand/collapse behavior, and timeline summaries in every related UI change.
+
+### Candidate Skills
+- Strategic model review skill to verify hierarchy integrity, roll-up consistency, and linkage to project boards.
+- Strategic accessibility/reporting skill to review timeline, hierarchy, and dashboard-summary behavior.
+
+### Reusable Prompts
+- "Review this strategic tracker change for roll-up correctness, ownership accountability, and hierarchy clarity."
+- "List the tests and documentation needed when strategic status or progress roll-up rules change."
+- "Identify whether this strategic feature change introduces new governance rules that should become Copilot instructions."
+
 ## Acceptance Criteria
 - [ ] Strategic hierarchy and progression states are clearly defined.
 - [ ] Roll-up logic for progress and health is documented.
 - [ ] Ownership and update accountability requirements are documented.
 - [ ] Dashboard integration points are explicitly listed.
 - [ ] Accessibility expectations are documented for hierarchy and timeline views.
+- [ ] Copilot governance artifacts are defined for strategic planning work, covering roll-up logic, accountability, and accessibility guardrails.
 
 ## Open Questions
 - Should objectives support weighted scoring or equal weighting by default?

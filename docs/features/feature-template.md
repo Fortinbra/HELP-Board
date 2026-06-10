@@ -47,8 +47,19 @@
 ## Risks
 - [Risk]
 
+## Copilot Governance
+### Candidate Instructions
+- [Repository or path-specific Copilot instruction needed to govern implementation]
+
+### Candidate Skills
+- [Reusable skill or agent workflow that should exist for this feature area]
+
+### Reusable Prompts
+- [Prompt that contributors should run to plan, implement, or validate this feature consistently]
+
 ## Acceptance Criteria
 - [ ] [Testable condition]
+- [ ] Copilot governance artifacts are defined for this feature, including any required instructions, reusable prompts, and skills.
 
 ## Open Questions
 - [Question]

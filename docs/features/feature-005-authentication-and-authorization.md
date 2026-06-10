@@ -81,6 +81,21 @@ Staff and volunteers can access HELP-Board using familiar accounts while adminis
 - Provider outages can block user access without tested fallback paths.
 - Session policy misconfiguration can weaken security posture.
 
+## Copilot Governance
+### Candidate Instructions
+- Require every auth change to document claim mapping, least-privilege expectations, and fallback-provider behavior before implementation.
+- Require authentication work to include secure-by-default handling for token validation, cookies, redirect URIs, and audit events.
+- Require user provisioning and deprovisioning changes to call out role bootstrap rules and revocation behavior explicitly.
+
+### Candidate Skills
+- Authentication review skill to verify OIDC/OAuth configuration, claim mapping, session controls, and fallback-provider safety.
+- Authorization governance skill to review RBAC changes, provisioning flows, and auditability requirements.
+
+### Reusable Prompts
+- "Review this authentication change for least-privilege alignment, provider fallback safety, and token/session validation completeness."
+- "List the tests and operational checks required when claim mapping, role bootstrap, or auth fallback behavior changes."
+- "Identify whether this auth work needs new Copilot instructions for security, provisioning, or configuration governance."
+
 ## Acceptance Criteria
 - [ ] Google Workspace OIDC login path is documented as the primary SSO method.
 - [ ] Authentik OIDC fallback path is documented with activation conditions.
@@ -88,6 +103,7 @@ Staff and volunteers can access HELP-Board using familiar accounts while adminis
 - [ ] User provisioning/deprovisioning lifecycle is documented.
 - [ ] Session and token validation security requirements are documented.
 - [ ] Failure/fallback behavior is documented for provider outages and auth errors.
+- [ ] Copilot governance artifacts are defined for auth work, covering security guardrails, RBAC consistency, and fallback-provider validation.
 
 ## Open Questions
 - Should provider selection be user-facing or fully controlled by configuration?
