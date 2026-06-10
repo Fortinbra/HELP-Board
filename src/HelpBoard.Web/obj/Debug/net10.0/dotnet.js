@@ -5,7 +5,7 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
   "mainAssemblyName": "HelpBoard.Web",
   "applicationEnvironment": "Development",
   "resources": {
-    "hash": "sha256-CWEXvxPtAC3OVHB/T6yU5jDQu6bm35iaKHESi1Ikhqk=",
+    "hash": "sha256-xS4hSv6jJ73zUH5+07VhxPZH7Fbl5Mk9whV9QHYtsY4=",
     "jsModuleNative": [
       {
         "name": "dotnet.native.rjbmzc4jpg.js"
@@ -1236,8 +1236,8 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
       },
       {
         "virtualPath": "HelpBoard.Contracts.wasm",
-        "name": "HelpBoard.Contracts.6vehp4hcre.wasm",
-        "hash": "sha256-fkGawEyTk8CN9JaXv1DCwv+TECGqoXysMVn4Hf0hb4k=",
+        "name": "HelpBoard.Contracts.c8es4fqtri.wasm",
+        "hash": "sha256-9Mg9Z0o/WMuHCHAMmSqRyJ4cSdjY1x1H63AEjv4178s=",
         "cache": "force-cache"
       },
       {
@@ -1248,22 +1248,22 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
       },
       {
         "virtualPath": "HelpBoard.Web.wasm",
-        "name": "HelpBoard.Web.wtybdkezyk.wasm",
-        "hash": "sha256-7N2NgDgw0yjr71ke7m5ABT+rzOQHdk6/rwnMbUriyxg=",
+        "name": "HelpBoard.Web.y2m067mvr2.wasm",
+        "hash": "sha256-ytEML/E44NQ60KnFPcH29h9gs8cNJITLHaXxjpkeD3E=",
         "cache": "force-cache"
       }
     ],
     "pdb": [
       {
         "virtualPath": "HelpBoard.Contracts.pdb",
-        "name": "HelpBoard.Contracts.no3uppegnv.pdb",
-        "hash": "sha256-2fR1fLee2tqwr8HjExNdRquJ2gGLXflnEc9ArG5PGIM=",
+        "name": "HelpBoard.Contracts.f34vh0802j.pdb",
+        "hash": "sha256-hajvd01wqDqLFGLxBYCeGTl7xhbazJqmb1GizLWJddE=",
         "cache": "force-cache"
       },
       {
         "virtualPath": "HelpBoard.Web.pdb",
-        "name": "HelpBoard.Web.88uhiar3rg.pdb",
-        "hash": "sha256-SN2wBjIocf1/ABvxF6/fLjtKmO8mSkRYMnFMjr+tioc=",
+        "name": "HelpBoard.Web.d4vphcyimg.pdb",
+        "hash": "sha256-M5XD3dADONWVqU+L/jjwxk9xjpePLaIMQgtS8pQ/4yM=",
         "cache": "force-cache"
       }
     ],
