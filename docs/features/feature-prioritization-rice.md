@@ -26,15 +26,23 @@ Use these fields for updates as requirements mature:
 | Feature | Reach | Impact | Confidence | Effort | RICE Score | Priority |
 |---|---:|---:|---:|---:|---:|---|
 | Feature 001: UI Foundation & Theme System | 95 | 3.0 | 0.90 | 2.5 | 102.60 | P1 |
+| Feature 005: Authentication and Authorization | 95 | 3.0 | 0.85 | 3.5 | 69.21 | P1 |
+| Feature 006: CI/CD and Release Deployment | 85 | 2.5 | 0.80 | 3.0 | 56.67 | P2 |
 | Feature 002: Dashboard Experience | 90 | 3.0 | 0.85 | 4.0 | 57.38 | P2 |
+| Feature 007: Feature Toggle System | 80 | 2.0 | 0.80 | 2.5 | 51.20 | P3 |
 | Feature 003: Strategic Plan Tracker | 70 | 2.5 | 0.75 | 4.0 | 32.81 | P3 |
+| Feature 008: Theme Expansion | 70 | 1.5 | 0.75 | 2.5 | 31.50 | P4 |
 | Feature 004: Project Boards | 75 | 2.0 | 0.70 | 4.5 | 23.33 | P4 |
 
 ## Priority Order for Initial Execution
 1. **P1** — Feature 001: UI Foundation & Theme System
-2. **P2** — Feature 002: Dashboard Experience
-3. **P3** — Feature 003: Strategic Plan Tracker
-4. **P4** — Feature 004: Project Boards
+2. **P1** — Feature 005: Authentication and Authorization
+3. **P2** — Feature 006: CI/CD and Release Deployment
+4. **P2** — Feature 002: Dashboard Experience
+5. **P3** — Feature 007: Feature Toggle System
+6. **P3** — Feature 003: Strategic Plan Tracker
+7. **P4** — Feature 008: Theme Expansion
+8. **P4** — Feature 004: Project Boards
 
 ## Update Guidance
 - Re-score features whenever scope, dependencies, or team capacity changes.
