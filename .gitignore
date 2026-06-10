@@ -1,0 +1,47 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Aa]rtifacts/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.VC.db
+*.VC.VC.opendb
+
+# Rider / ReSharper
+.idea/
+_ReSharper*/
+*.DotSettings.user
+
+# VS Code
+.vscode/
+
+# Test results and coverage
+[Tt]est[Rr]esults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+coverage-*/
+BenchmarkDotNet.Artifacts/
+
+# Packages
+*.nupkg
+*.snupkg
+packages/
+
+# Tool caches and logs
+*.log
+*.pid
+*.cache
+
+# OS files
+.DS_Store
+Thumbs.db
