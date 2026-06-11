@@ -1,7 +1,7 @@
 # Feature 004: Project Boards
 
 ## Goal
-Provide reusable project boards so teams can create and manage work tracking spaces for any project while maintaining visibility into status, throughput, and strategic alignment.
+Provide a shared project board model so teams can create and manage work tracking spaces for any project, while the Strategic Plan is represented as the required always-present system board with reserved identity/name and non-deletable constraints.
 
 ## User Value
 Teams can quickly stand up project-specific workflows, track progress in a consistent way, and connect project execution to broader strategic goals.
@@ -11,6 +11,7 @@ Teams can quickly stand up project-specific workflows, track progress in a consi
 - Define board creation lifecycle.
 - Define work item schema, status model, and workflow customization capabilities.
 - Define relationship mapping to strategic objectives and dashboard reporting.
+- Define Strategic Plan board constraints (required default board, reserved identity/name, non-deletable).
 
 ### Out of Scope
 - Highly customized per-board automation marketplace.
@@ -22,6 +23,7 @@ Teams can quickly stand up project-specific workflows, track progress in a consi
 - User configures statuses, swimlanes, and key fields.
 - User creates and updates work items.
 - User links work items to strategic initiatives/objectives.
+- User accesses the default Strategic Plan system board that is always present.
 
 ### Key Screens / Components
 - Board directory and creation wizard.
@@ -37,12 +39,13 @@ Teams can quickly stand up project-specific workflows, track progress in a consi
 ### Data Sources
 - Project board metadata.
 - Work item records and history.
-- Strategic plan links and dashboard aggregates.
+- Strategic Plan links and dashboard aggregates.
 
 ### Data Model Considerations
 - Board entity with configurable workflows and field definitions.
 - Work item entity supporting status history, assignment, priority, and due dates.
 - Link table between work items and strategic entities.
+- Strategic Plan is the required system board using the same board/work-item model with reserved identity/name and non-deletable constraints.
 
 ### Data Freshness
 - Immediate persistence for workflow interactions.
@@ -57,6 +60,7 @@ Teams can quickly stand up project-specific workflows, track progress in a consi
 ## Strategic and Dashboard Integration
 - Boards contribute metrics to dashboard workload and progress widgets.
 - Work items can be linked to strategic objectives for roll-up reporting.
+- Strategic objectives, initiatives, and milestones are typed strategic work items on the Strategic Plan system board.
 - Board-level health indicators can appear in dashboard snapshots.
 
 ## Dependencies
@@ -74,6 +78,7 @@ Teams can quickly stand up project-specific workflows, track progress in a consi
 - Require new board capabilities to define their effect on shared workflow consistency, reporting, and strategic linkage before implementation.
 - Require keyboard-accessible alternatives for any drag-and-drop or dense board interaction.
 - Require new board fields, statuses, and templates to document reporting implications so board customization does not create drift.
+- Require changes to board lifecycle/customization to preserve Strategic Plan system-board constraints (always present, reserved identity/name, non-deletable).
 
 ### Candidate Skills
 - Project board governance skill to review workflow customization boundaries, template consistency, and strategic linkage expectations.
@@ -85,13 +90,15 @@ Teams can quickly stand up project-specific workflows, track progress in a consi
 - "Identify which board configuration decisions should become permanent Copilot instructions or reusable review prompts."
 
 ## Acceptance Criteria
-- [ ] Board lifecycle and creation path are documented.
-- [ ] Work item model and status workflow customization are documented.
-- [ ] Strategic linkage model is explicitly defined.
-- [ ] Dashboard reporting relationships are explicitly defined.
-- [ ] Accessibility requirements are documented for board interactions.
-- [ ] Copilot governance artifacts are defined for board work, covering workflow guardrails, reporting consistency, and accessibility expectations.
+- [ ] Documentation defines board lifecycle and creation path.
+- [ ] Documentation defines the shared board/work-item model for all boards, including Strategic Plan.
+- [ ] Documentation defines work item model and status workflow customization, with reserved constraints for the Strategic Plan system board.
+- [ ] Documentation explicitly states Strategic Plan board is required/default, non-deletable, and uses a reserved identity/name.
+- [ ] Documentation explicitly defines the strategic linkage model.
+- [ ] Documentation explicitly defines dashboard reporting relationships.
+- [ ] Documentation defines accessibility requirements for board interactions.
+- [ ] Documentation defines governance artifacts for board work, covering workflow guardrails, reporting consistency, and accessibility expectations.
 
 ## Open Questions
 - Should board templates be centrally managed or team-managed?
-- What workflow customization limits are required to preserve reporting consistency?
+- What workflow customization limits are required to preserve reporting consistency while honoring Strategic Plan reserved constraints?

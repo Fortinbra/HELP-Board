@@ -1,0 +1,61 @@
+.strategic-page {
+    min-width: 0;
+}
+
+.strategic-objective-grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+
+.strategic-objective-card {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    border-color: var(--color-border-strong);
+}
+
+.strategic-objective-card:focus-visible {
+    box-shadow: var(--focus-ring);
+}
+
+.strategic-objective-card--focus {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--focus-ring);
+}
+
+.strategic-objective-card__row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    align-items: center;
+}
+
+.strategic-objective-card__meta {
+    color: var(--color-text-muted);
+    font-size: 0.94rem;
+    font-weight: 600;
+}
+
+.strategic-visual-summary {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.strategic-table-caption {
+    text-align: left;
+    padding-block: var(--space-2) var(--space-3);
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+}
+
+.strategic-milestone-link {
+    width: fit-content;
+}
+
+@media (max-width: 767.98px) {
+    .strategic-objective-card__row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

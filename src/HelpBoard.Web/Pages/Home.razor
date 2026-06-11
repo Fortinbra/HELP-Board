@@ -27,4 +27,13 @@
         ErrorMessage="@ErrorMessage"
         Cards="@SummaryCards"
         OnRetry="ReloadSummaryAsync" />
+
+    @if (StrategicSummaryCards.Count > 0)
+    {
+        <StrategicTrackerSummarySection
+            Cards="@StrategicSummaryCards"
+            LastUpdatedText="@StrategicLastUpdatedText"
+            IsPlaceholderData="@IsStrategicPlaceholderData"
+            DataSourceLabel="@StrategicDataSourceLabel" />
+    }
 </section>

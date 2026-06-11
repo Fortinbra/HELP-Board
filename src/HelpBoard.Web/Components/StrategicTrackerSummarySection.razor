@@ -1,0 +1,56 @@
+<section class="hb-card hb-stack-md" aria-labelledby="strategic-tracker-summary-title">
+    <div class="hb-section-header hb-dashboard-summary__header">
+        <div class="hb-stack-sm">
+            <h2 id="strategic-tracker-summary-title">Strategic tracker summary</h2>
+            <p>Live strategic tracker indicators with objective risk, near-term milestone pressure, and direct drill-down access.</p>
+        </div>
+
+        <span class="hb-badge hb-badge--info">
+            <AppIcon Name="calendar-clock" />
+            <span>@LastUpdatedText</span>
+        </span>
+    </div>
+
+    @if (IsPlaceholderData)
+    {
+        <section class="hb-alert hb-alert--danger" role="note" aria-live="polite">
+            <AppIcon Name="alert-circle" Title="Placeholder data source" />
+            <div class="hb-stack-sm">
+                <h3>Temporary strategic data source in use</h3>
+                <p>@DataSourceLabel</p>
+                <p>
+                    TODO: Replace with backend endpoint contracts once strategic API models are finalized.
+                </p>
+            </div>
+        </section>
+    }
+
+    <section class="hb-stat-grid" aria-label="Strategic tracker dashboard summary cards">
+        @foreach (var card in Cards)
+        {
+            <article class="hb-card hb-summary-card" aria-labelledby="@($"strategic-summary-card-{card.Key}")">
+                <div class="hb-summary-card__top-row">
+                    <div class="hb-stat-card__icon @card.IconToneClass" aria-hidden="true">
+                        <AppIcon Name="@card.IconName" />
+                    </div>
+
+                    <span class="hb-badge @card.StatusBadgeClass">
+                        <AppIcon Name="@card.StatusIconName" />
+                        <span>@card.StatusText</span>
+                    </span>
+                </div>
+
+                <div class="hb-stack-sm">
+                    <h3 id="@($"strategic-summary-card-{card.Key}")">@card.Title</h3>
+                    <p class="hb-stat-card__value">@card.ValueText</p>
+                    <p class="hb-summary-card__supporting-text">@card.SupportingText</p>
+                </div>
+
+                <a class="hb-button hb-button--secondary hb-summary-card__drill-down" href="@card.DrillDownRoute" aria-label="@($"Open {card.Title}")">
+                    <AppIcon Name="arrow-up-right" />
+                    <span>@card.DrillDownText</span>
+                </a>
+            </article>
+        }
+    </section>
+</section>
