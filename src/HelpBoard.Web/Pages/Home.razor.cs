@@ -6,7 +6,7 @@ namespace HelpBoard.Web.Pages;
 public partial class Home : ComponentBase
 {
     [Inject]
-    private TicketApiService TicketApi { get; set; } = null!;
+    private DashboardFoundationService DashboardFoundation { get; set; } = null!;
 
     private bool IsLoading { get; set; } = true;
 
@@ -37,13 +37,13 @@ public partial class Home : ComponentBase
     {
         try
         {
-            var summary = await TicketApi.GetDashboardSummaryAsync();
+            var summary = await DashboardFoundation.GetFoundationSummaryAsync();
             SummaryCards = summary.Cards;
             LastUpdatedAt = summary.LastUpdatedAt;
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Failed to load dashboard summary: {ex.Message}";
+            ErrorMessage = $"Failed to load dashboard foundation content: {ex.Message}";
             SummaryCards = [];
             LastUpdatedAt = null;
         }

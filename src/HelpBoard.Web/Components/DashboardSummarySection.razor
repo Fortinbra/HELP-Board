@@ -13,7 +13,7 @@
         <div class="hb-state" aria-live="polite">
             <div class="hb-inline" role="status">
                 <span class="hb-spinner" aria-hidden="true"></span>
-                <span>Loading dashboard summary...</span>
+                <span>Loading dashboard foundation cards...</span>
             </div>
         </div>
     }
@@ -22,7 +22,7 @@
         <section class="hb-alert hb-alert--danger" role="alert" aria-live="assertive">
             <AppIcon Name="alert-circle" />
             <div class="hb-stack-sm">
-                <h3>Summary data unavailable</h3>
+                <h3>Foundation data unavailable</h3>
                 <p>@ErrorMessage</p>
                 <button type="button" class="hb-button hb-button--secondary hb-summary-action" @onclick="OnRetryClickAsync">
                     <AppIcon Name="activity" />
@@ -38,14 +38,14 @@
                 <AppIcon Name="inbox" />
             </div>
             <div class="hb-stack-sm">
-                <h3>No summary cards available</h3>
-                <p>Data sources have no records yet. Use the navigation to create work and return here.</p>
+                <h3>No foundation cards available</h3>
+                <p>This dashboard slice is waiting on local placeholder content. Use the navigation to explore available areas and return here.</p>
             </div>
         </div>
     }
     else
     {
-        <section class="hb-stat-grid" aria-label="Dashboard summary cards">
+        <section class="hb-stat-grid" aria-label="Dashboard foundation cards">
             @foreach (var card in Cards)
             {
                 <article class="hb-card hb-summary-card" aria-labelledby="@($"summary-card-title-{card.Key}")">

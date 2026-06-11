@@ -1,6 +1,5 @@
 using HelpBoard.Abstractions.Domain;
 using HelpBoard.Abstractions.Repositories;
-using HelpBoard.Contracts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -62,18 +61,6 @@ public sealed class HelpBoardWebApplicationFactory : WebApplicationFactory<Progr
 
         public Task<IReadOnlyList<Ticket>> GetAllAsync(CancellationToken cancellationToken = default)
             => Task.FromResult<IReadOnlyList<Ticket>>(_tickets.AsReadOnly());
-
-        public Task<TicketSummaryCounts> GetSummaryCountsAsync(CancellationToken cancellationToken = default)
-        {
-            var summary = new TicketSummaryCounts(
-                TotalCount: _tickets.Count,
-                OpenCount: _tickets.Count(t => t.Status == TicketStatus.Open),
-                InProgressCount: _tickets.Count(t => t.Status == TicketStatus.InProgress),
-                ResolvedCount: _tickets.Count(t => t.Status == TicketStatus.Resolved),
-                ClosedCount: _tickets.Count(t => t.Status == TicketStatus.Closed));
-
-            return Task.FromResult(summary);
-        }
 
         public Task AddAsync(Ticket ticket, CancellationToken cancellationToken = default)
         {

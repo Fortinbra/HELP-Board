@@ -1,7 +1,6 @@
 using HelpBoard.Abstractions.Domain;
 using HelpBoard.Abstractions.Repositories;
 using HelpBoard.Repositories.Data;
-using HelpBoard.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace HelpBoard.Repositories.Tickets;
@@ -21,23 +20,6 @@ internal sealed class TicketRepository(AppDbContext dbContext) : ITicketReader, 
             .OrderByDescending(t => t.CreatedAt)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
-
-    public async Task<TicketSummaryCounts> GetSummaryCountsAsync(CancellationToken cancellationToken = default)
-    {
-        var groupedCounts = await dbContext.Tickets
-            .AsNoTracking()
-            .GroupBy(t => t.Status)
-            .Select(g => new { Status = g.Key, Count = g.Count() })
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-
-        return new TicketSummaryCounts(
-            TotalCount: groupedCounts.Sum(c => c.Count),
-            OpenCount: groupedCounts.FirstOrDefault(c => c.Status == TicketStatus.Open)?.Count ?? 0,
-            InProgressCount: groupedCounts.FirstOrDefault(c => c.Status == TicketStatus.InProgress)?.Count ?? 0,
-            ResolvedCount: groupedCounts.FirstOrDefault(c => c.Status == TicketStatus.Resolved)?.Count ?? 0,
-            ClosedCount: groupedCounts.FirstOrDefault(c => c.Status == TicketStatus.Closed)?.Count ?? 0);
-    }
 
     public async Task AddAsync(Ticket ticket, CancellationToken cancellationToken = default)
     {

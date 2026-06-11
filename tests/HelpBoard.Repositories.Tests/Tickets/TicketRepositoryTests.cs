@@ -101,44 +101,6 @@ public sealed class TicketRepositoryTests : IDisposable
     }
 
     [Fact]
-    public async Task GetSummaryCountsAsync_WithNoTickets_ReturnsAllZeros()
-    {
-        // Act
-        var result = await _sut.GetSummaryCountsAsync();
-
-        // Assert
-        Assert.Equal(0, result.TotalCount);
-        Assert.Equal(0, result.OpenCount);
-        Assert.Equal(0, result.InProgressCount);
-        Assert.Equal(0, result.ResolvedCount);
-        Assert.Equal(0, result.ClosedCount);
-    }
-
-    [Fact]
-    public async Task GetSummaryCountsAsync_WithMixedStatuses_ReturnsAggregatedCounts()
-    {
-        // Arrange
-        await _dbContext.Tickets.AddRangeAsync(
-            BuildTicket(status: TicketStatus.Open),
-            BuildTicket(status: TicketStatus.Open),
-            BuildTicket(status: TicketStatus.InProgress),
-            BuildTicket(status: TicketStatus.Resolved),
-            BuildTicket(status: TicketStatus.Closed),
-            BuildTicket(status: TicketStatus.Closed));
-        await _dbContext.SaveChangesAsync();
-
-        // Act
-        var result = await _sut.GetSummaryCountsAsync();
-
-        // Assert
-        Assert.Equal(6, result.TotalCount);
-        Assert.Equal(2, result.OpenCount);
-        Assert.Equal(1, result.InProgressCount);
-        Assert.Equal(1, result.ResolvedCount);
-        Assert.Equal(2, result.ClosedCount);
-    }
-
-    [Fact]
     public async Task DeleteAsync_RemovesTicket()
     {
         // Arrange

@@ -8,6 +8,4 @@ public interface ITicketReader
     Task<Ticket?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<Ticket>> GetAllAsync(CancellationToken cancellationToken = default);
-
-    Task<TicketSummaryCounts> GetSummaryCountsAsync(CancellationToken cancellationToken = default);
 }
