@@ -3,28 +3,28 @@ using System.Net.Http.Json;
 
 namespace HelpBoard.Web.Services;
 
-/// <summary>HTTP client service for communicating with the HELP-Board API tickets endpoint.</summary>
+/// <summary>HTTP client service for communicating with the HELP-Board API.</summary>
 public sealed class TicketApiService(HttpClient httpClient)
 {
     private const string TicketsRoute = "api/tickets";
 
-    /// <summary>Retrieves all tickets from the API.</summary>
+    /// <summary>Retrieves all work items from the API.</summary>
     public async Task<IReadOnlyList<TicketResponse>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var tickets = await httpClient
+        var workItems = await httpClient
             .GetFromJsonAsync<List<TicketResponse>>(TicketsRoute, cancellationToken)
             .ConfigureAwait(false);
 
-        return tickets ?? [];
+        return workItems ?? [];
     }
 
-    /// <summary>Retrieves a single ticket by identifier.</summary>
+    /// <summary>Retrieves a single work item by identifier.</summary>
     public async Task<TicketResponse?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         => await httpClient
             .GetFromJsonAsync<TicketResponse>($"{TicketsRoute}/{id}", cancellationToken)
             .ConfigureAwait(false);
 
-    /// <summary>Creates a new ticket.</summary>
+    /// <summary>Creates a new work item.</summary>
     public async Task<TicketResponse?> CreateAsync(CreateTicketRequest request, CancellationToken cancellationToken = default)
     {
         var response = await httpClient
@@ -38,7 +38,7 @@ public sealed class TicketApiService(HttpClient httpClient)
             .ConfigureAwait(false);
     }
 
-    /// <summary>Updates an existing ticket.</summary>
+    /// <summary>Updates an existing work item.</summary>
     public async Task<TicketResponse?> UpdateAsync(Guid id, UpdateTicketRequest request, CancellationToken cancellationToken = default)
     {
         var response = await httpClient
@@ -57,7 +57,7 @@ public sealed class TicketApiService(HttpClient httpClient)
             .ConfigureAwait(false);
     }
 
-    /// <summary>Deletes a ticket by identifier.</summary>
+    /// <summary>Deletes a work item by identifier.</summary>
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var response = await httpClient

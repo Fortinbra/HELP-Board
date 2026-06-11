@@ -126,11 +126,12 @@ public sealed class TicketRepositoryTests : IDisposable
 
     public void Dispose() => _dbContext.Dispose();
 
-    private static Ticket BuildTicket() =>
+    private static Ticket BuildTicket(TicketStatus status = TicketStatus.Open) =>
         new()
         {
             Title = "Test ticket",
             Description = "Test description",
+            Status = status,
             CreatedBy = "tester@example.com"
         };
 }

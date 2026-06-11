@@ -9,5 +9,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<TicketApiService>();
+builder.Services.AddScoped<DashboardFoundationService>();
 
 await builder.Build().RunAsync();
