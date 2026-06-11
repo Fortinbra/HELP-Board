@@ -116,13 +116,15 @@ Users get a clear, consistent foundation for a future dashboard that can later h
 
 ## Acceptance Criteria
 
-- [ ] The document clearly frames Feature 002 as dashboard groundwork rather than a final dashboard release.
-- [ ] Widget/card guidance is documented as foundation-level guidance with consistent states, interactions, and source-agnostic contracts.
-- [ ] Visualization patterns include accessibility accommodations intended to guide future implementation work.
-- [ ] Performance expectations and loading strategy are documented as planning guidance only, not as delivered behavior.
-- [ ] Drill-down behavior from summary to detail is described at a guidance level only.
-- [ ] The document explicitly states that database-backed data integration belongs to a later feature and is deferred from this slice.
-- [ ] Copilot governance artifacts are defined for dashboard groundwork, covering widget contracts, accessibility, and performance guardrails.
+- [x] The document clearly frames Feature 002 as dashboard groundwork rather than a final dashboard release.
+- [x] Widget/card guidance is documented as foundation-level guidance with consistent states, interactions, and source-agnostic contracts.
+- [x] Visualization patterns include accessibility accommodations intended to guide future implementation work.
+- [x] Performance expectations and loading strategy are documented as planning guidance only, not as delivered behavior.
+- [x] Drill-down behavior from summary to detail is described at a guidance level only.
+- [x] The document explicitly states that database-backed data integration belongs to a later feature and is deferred from this slice.
+- [x] Copilot governance artifacts are defined for dashboard groundwork, covering widget contracts, accessibility, and performance guardrails.
+
+Status: Complete (validated 2026-06-10).
 
 ## Open Questions
 
