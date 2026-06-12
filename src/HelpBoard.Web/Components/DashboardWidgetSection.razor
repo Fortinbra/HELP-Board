@@ -1,0 +1,84 @@
+<section class="hb-card hb-stack-md" aria-labelledby="dashboard-widgets-title">
+    <div class="hb-section-header hb-dashboard-widget-section__header">
+        <div class="hb-stack-sm">
+            <h2 id="dashboard-widgets-title">@Title</h2>
+            <p>@Description</p>
+        </div>
+
+        <span class="hb-badge hb-badge--neutral">@LastUpdatedText</span>
+    </div>
+
+    @if (IsPlaceholderData)
+    {
+        <section class="hb-alert hb-alert--info" role="note" aria-live="polite">
+            <AppIcon Name="inbox" Title="Placeholder sample data" />
+            <div class="hb-stack-sm">
+                <h3>Sample widget placeholders are active</h3>
+                <p>@DataSourceLabel</p>
+                <p>These widgets are intentionally source-agnostic and are only for dashboard layout, copy, and interaction testing.</p>
+            </div>
+        </section>
+    }
+
+    @if (Widgets.Count == 0)
+    {
+        <div class="hb-empty-state" role="status">
+            <div class="hb-empty-state__icon" aria-hidden="true">
+                <AppIcon Name="inbox" />
+            </div>
+            <div class="hb-stack-sm">
+                <h3>No dashboard widgets available</h3>
+                <p>Widget placeholders are not loaded yet. Reload this page to verify sample widget rendering.</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <section class="hb-stat-grid" aria-label="Dashboard placeholder widgets">
+            @foreach (var widget in Widgets)
+            {
+                <article class="hb-card hb-dashboard-widget" aria-labelledby="@($"widget-title-{widget.Key}")" aria-describedby="@($"widget-summary-{widget.Key}")">
+                    <div class="hb-dashboard-widget__top-row">
+                        <div class="hb-stack-sm">
+                            <p class="hb-widget-type-label">@widget.WidgetTypeLabel</p>
+                            <h3 id="@($"widget-title-{widget.Key}")">@widget.Title</h3>
+                        </div>
+
+                        <span class="hb-badge @widget.StateBadgeClass" aria-label="@($"Widget state: {widget.StateLabel}")">
+                            <AppIcon Name="@widget.StateIconName" />
+                            <span>@widget.StateLabel</span>
+                        </span>
+                    </div>
+
+                    <p class="hb-summary-card__supporting-text">@widget.Description</p>
+
+                    <section class="hb-dashboard-widget__metrics" aria-label="@($"{widget.Title} metrics")">
+                        @foreach (var metric in widget.Metrics)
+                        {
+                            <article class="hb-dashboard-widget__metric">
+                                <p class="hb-metric-label">@metric.Label</p>
+                                <p class="hb-widget-metric-value">@metric.ValueText</p>
+                                <span class="hb-badge @metric.TrendBadgeClass" aria-label="@($"Trend: {metric.TrendLabel}")">
+                                    <AppIcon Name="@metric.TrendIconName" />
+                                    <span>@metric.TrendLabel</span>
+                                </span>
+                            </article>
+                        }
+                    </section>
+
+                    <p id="@($"widget-summary-{widget.Key}")" class="hb-page-copy hb-dashboard-widget__summary">
+                        @widget.AccessibilitySummary
+                    </p>
+
+                    <div class="hb-stack-sm">
+                        <p class="hb-dashboard-widget__refresh">@widget.RefreshStrategyLabel</p>
+                        <a class="hb-button hb-button--secondary hb-summary-card__drill-down" href="@widget.DrillDownRoute" aria-label="@($"View details for {widget.Title}")">
+                            <AppIcon Name="arrow-up-right" />
+                            <span>@widget.DrillDownText</span>
+                        </a>
+                    </div>
+                </article>
+            }
+        </section>
+    }
+</section>

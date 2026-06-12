@@ -28,6 +28,17 @@
         Cards="@SummaryCards"
         OnRetry="ReloadSummaryAsync" />
 
+    @if (!IsLoading && string.IsNullOrWhiteSpace(ErrorMessage))
+    {
+        <DashboardWidgetSection
+            Title="Sample dashboard widgets"
+            Description="Practical placeholder widgets for validating content hierarchy, status signaling, and drill-down pathways."
+            LastUpdatedText="@LastUpdatedText"
+            IsPlaceholderData="@IsPlaceholderData"
+            DataSourceLabel="@DataSourceLabel"
+            Widgets="@Widgets" />
+    }
+
     @if (ShowStrategicSection)
     {
         <StrategicTrackerSummarySection

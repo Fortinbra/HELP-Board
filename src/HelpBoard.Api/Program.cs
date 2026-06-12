@@ -2,6 +2,7 @@ using HelpBoard.Repositories;
 using HelpBoard.Repositories.Data;
 using HelpBoard.Services;
 using HelpBoard.Api.FeatureToggles;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 using Scalar.AspNetCore;
@@ -28,6 +29,21 @@ builder.Services
     });
 
 builder.Services.AddProblemDetails();
+
+var useForwardedHeaders = builder.Configuration.GetValue<bool>("ReverseProxy:UseForwardedHeaders");
+var enableHttpsRedirection = builder.Configuration.GetValue("HttpsRedirection:Enabled", !builder.Environment.IsDevelopment());
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+
+    if (useForwardedHeaders)
+    {
+        // Allow known proxy lists to be configured externally by infrastructure.
+        options.KnownIPNetworks.Clear();
+        options.KnownProxies.Clear();
+    }
+});
 
 // ── OpenAPI / Scalar ──────────────────────────────────────────────────────────
 builder.Services.AddOpenApi(options =>
@@ -75,7 +91,16 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+if (useForwardedHeaders)
+{
+    // Must run early so downstream middleware sees the original request scheme.
+    app.UseForwardedHeaders();
+}
+
+if (enableHttpsRedirection)
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthorization();
 

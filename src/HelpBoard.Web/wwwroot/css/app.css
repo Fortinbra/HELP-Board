@@ -444,6 +444,64 @@ textarea:disabled {
     align-items: start;
 }
 
+.hb-dashboard-widget-section__header {
+    align-items: start;
+}
+
+.hb-dashboard-widget {
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+}
+
+.hb-dashboard-widget__top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: var(--space-3);
+}
+
+.hb-widget-type-label {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.hb-dashboard-widget__metrics {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.hb-dashboard-widget__metric {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-subtle);
+    background: rgba(255, 255, 255, 0.78);
+}
+
+.hb-widget-metric-value {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 3vw, 1.85rem);
+    font-weight: 700;
+    color: var(--color-text-strong);
+}
+
+.hb-dashboard-widget__summary {
+    max-width: none;
+}
+
+.hb-dashboard-widget__refresh {
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
 .hb-summary-card {
     display: grid;
     gap: var(--space-4);

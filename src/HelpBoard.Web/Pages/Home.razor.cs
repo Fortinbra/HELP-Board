@@ -24,6 +24,12 @@ public partial class Home : ComponentBase
 
     private IReadOnlyList<DashboardSummaryCardModel> SummaryCards { get; set; } = [];
 
+    private IReadOnlyList<DashboardWidgetModel> Widgets { get; set; } = [];
+
+    private bool IsPlaceholderData { get; set; }
+
+    private string DataSourceLabel { get; set; } = string.Empty;
+
     private IReadOnlyList<DashboardSummaryCardModel> StrategicSummaryCards { get; set; } = [];
 
     private bool IsStrategicPlaceholderData { get; set; }
@@ -63,6 +69,9 @@ public partial class Home : ComponentBase
             var summary = await DashboardFoundation.GetFoundationSummaryAsync();
 
             SummaryCards = summary.Cards;
+            Widgets = summary.Widgets;
+            IsPlaceholderData = summary.IsPlaceholderData;
+            DataSourceLabel = summary.DataSourceLabel;
             LastUpdatedAt = summary.LastUpdatedAt;
 
             if (!IsStrategicPlanEnabled)
@@ -91,6 +100,9 @@ public partial class Home : ComponentBase
         {
             ErrorMessage = $"Failed to load dashboard foundation content: {ex.Message}";
             SummaryCards = [];
+            Widgets = [];
+            IsPlaceholderData = false;
+            DataSourceLabel = string.Empty;
             LastUpdatedAt = null;
             StrategicSummaryCards = [];
             StrategicLastUpdatedAt = null;
