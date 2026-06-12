@@ -11,5 +11,6 @@
     <Project Path="tests/HelpBoard.Api.Tests/HelpBoard.Api.Tests.csproj" />
     <Project Path="tests/HelpBoard.Repositories.Tests/HelpBoard.Repositories.Tests.csproj" />
     <Project Path="tests/HelpBoard.Services.Tests/HelpBoard.Services.Tests.csproj" />
+    <Project Path="tests/HelpBoard.Web.Tests/HelpBoard.Web.Tests.csproj" />
   </Folder>
 </Solution>
