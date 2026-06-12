@@ -12,9 +12,9 @@ public partial class NavMenu : ComponentBase
 
     private bool IsStrategicPlanEnabled { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        IsStrategicPlanEnabled = FeatureToggleService.IsStrategicPlanEnabled();
+        IsStrategicPlanEnabled = await FeatureToggleService.IsStrategicPlanEnabledAsync();
     }
 
     private string NavMenuCssClass => collapseNavMenu ? "is-collapsed" : string.Empty;

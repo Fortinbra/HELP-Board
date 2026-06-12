@@ -1,27 +1,51 @@
-using Microsoft.Extensions.Configuration;
+using Microsoft.FeatureManagement;
 
 namespace HelpBoard.Web.Services;
 
 public interface IFeatureToggleService
 {
-    bool IsStrategicPlanEnabled();
+    Task<bool> IsStrategicPlanEnabledAsync();
+
+    Task<bool> IsEnabledAsync(string featureKey);
+}
+
+public static class FeatureToggleKeys
+{
+    public const string StrategicPlan = "StrategicPlan";
 }
 
 public sealed class FeatureToggleService : IFeatureToggleService
 {
-    private const string StrategicPlanToggleKey = "FeatureToggles:StrategicPlan:Enabled";
+    private static readonly IReadOnlySet<string> SupportedFeatureKeys =
+        new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            FeatureToggleKeys.StrategicPlan,
+        };
 
-    private readonly IConfiguration configuration;
+    private readonly IFeatureManager featureManager;
 
-    public FeatureToggleService(IConfiguration configuration)
+    public FeatureToggleService(IFeatureManager featureManager)
     {
-        this.configuration = configuration;
+        this.featureManager = featureManager;
     }
 
-    public bool IsStrategicPlanEnabled()
+    public Task<bool> IsStrategicPlanEnabledAsync()
     {
-        var configuredValue = configuration[StrategicPlanToggleKey];
+        return IsEnabledAsync(FeatureToggleKeys.StrategicPlan);
+    }
 
-        return bool.TryParse(configuredValue, out var isEnabled) && isEnabled;
+    public async Task<bool> IsEnabledAsync(string featureKey)
+    {
+        if (string.IsNullOrWhiteSpace(featureKey))
+        {
+            return false;
+        }
+
+        if (!SupportedFeatureKeys.Contains(featureKey))
+        {
+            return false;
+        }
+
+        return await featureManager.IsEnabledAsync(featureKey);
     }
 }

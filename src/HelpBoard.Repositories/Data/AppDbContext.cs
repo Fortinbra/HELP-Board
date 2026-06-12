@@ -8,6 +8,9 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 {
     public DbSet<Ticket> Tickets => Set<Ticket>();
 
+    // Feature 004 placeholders: DbSet<ProjectBoard> and DbSet<WorkItem>.
+    // Feature 003 placeholders: DbSet<StrategicObjective>, DbSet<StrategicInitiative>, and DbSet<StrategicMilestone>.
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -20,6 +23,12 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
             entity.Property(t => t.CreatedBy).HasMaxLength(100).IsRequired();
             entity.Property(t => t.Status).HasConversion<string>();
             entity.Property(t => t.Priority).HasConversion<string>();
+
+            entity.HasIndex(t => t.CreatedAt);
+            entity.HasIndex(t => t.Status);
         });
+
+        // Feature 004 placeholder: configure ProjectBoard and WorkItem mappings here.
+        // Feature 003 placeholder: configure Strategic hierarchy mappings and relationships here.
     }
 }

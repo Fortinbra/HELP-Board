@@ -64,6 +64,7 @@ Teams can release safely, test features progressively, and enable or disable cap
 - Prefer OSS-friendly, free option(s) for open source usage.
 - Prefer local/self-hosted operation for core reliability and cost control.
 - Cloud option is acceptable when it materially reduces complexity and remains cost-effective.
+- Runtime feature flags should use Microsoft FeatureManagement with values defined under the `FeatureManagement` section in `appsettings` (and environment overrides).
 
 ## Dependencies
 - Feature 001 UI Foundation & Theme System for theme registration hooks.

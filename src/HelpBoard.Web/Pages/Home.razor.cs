@@ -44,7 +44,7 @@ public partial class Home : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        IsStrategicPlanEnabled = FeatureToggleService.IsStrategicPlanEnabled();
+        IsStrategicPlanEnabled = await FeatureToggleService.IsStrategicPlanEnabledAsync();
         await LoadSummaryAsync();
     }
 
