@@ -1,16 +1,281 @@
 @page "/strategic-plan"
+@page "/strategic-plan/milestones"
+@page "/strategic-plan/{WorkItemId:guid}"
+@page "/strategic-plan/objectives/{ObjectiveId}"
 
-<PageTitle>Strategic Plan</PageTitle>
+<PageTitle>Strategic overview board</PageTitle>
 
-<section class="hb-card hb-stack-md" aria-labelledby="strategic-plan-title">
-    <header class="hb-stack-sm">
-        <p class="hb-eyebrow">Drill-down destination</p>
-        <h1 id="strategic-plan-title">Strategic plan tracker</h1>
-        <p class="hb-page-copy">This placeholder route represents the detailed strategic plan dashboard surface.</p>
+<section class="hb-stack-lg strategic-page" aria-labelledby="strategic-overview-title">
+    <header class="hb-page-header">
+        <div class="hb-stack-sm">
+            <p class="hb-eyebrow">Feature 003 strategic tracker</p>
+            <h1 id="strategic-overview-title">Strategic overview board</h1>
+            <p class="hb-page-copy">
+                Strategic plan is a reserved system board identity with objective health, ownership accountability, and milestone pressure in one surface.
+            </p>
+        </div>
+
+        <a class="hb-button hb-button--secondary" href="/strategic-plan#milestone-board" aria-label="Jump to milestone timeline and checkpoint section">
+            <AppIcon Name="calendar-clock" />
+            <span>Milestone section</span>
+        </a>
     </header>
 
-    <a class="hb-button hb-button--secondary" href="/">
-        <AppIcon Name="home" />
-        <span>Back to dashboard</span>
-    </a>
+    <div class="hb-inline" role="note" aria-label="Reserved strategic plan identity">
+        <span class="hb-badge hb-badge--accent">
+            <AppIcon Name="panel-left" />
+            <span>System board identity: strategic-plan</span>
+        </span>
+    </div>
+
+    @if (IsLoading)
+    {
+        <div class="hb-card hb-state" aria-live="polite">
+            <div class="hb-inline" role="status">
+                <span class="hb-spinner" aria-hidden="true"></span>
+                <span>Loading strategic overview board...</span>
+            </div>
+        </div>
+    }
+    else if (!string.IsNullOrWhiteSpace(ErrorMessage))
+    {
+        <section class="hb-alert hb-alert--danger" role="alert" aria-live="assertive">
+            <AppIcon Name="alert-circle" />
+            <div class="hb-stack-sm">
+                <h2>Strategic overview unavailable</h2>
+                <p>@ErrorMessage</p>
+                <button type="button" class="hb-button hb-button--secondary" @onclick="ReloadOverviewAsync">
+                    <AppIcon Name="activity" />
+                    <span>Try again</span>
+                </button>
+            </div>
+        </section>
+    }
+    else if (Overview is not null)
+    {
+        @if (!string.IsNullOrWhiteSpace(ObjectiveRouteMessage))
+        {
+            <section class="hb-alert hb-alert--info" role="status" aria-live="polite">
+                <AppIcon Name="activity" />
+                <div class="hb-stack-sm">
+                    <h2>Objective route now resolves to the board</h2>
+                    <p>@ObjectiveRouteMessage</p>
+                </div>
+            </section>
+        }
+
+        @if (Overview.IsPlaceholderData)
+        {
+            <section class="hb-alert hb-alert--danger" role="note" aria-live="polite">
+                <AppIcon Name="alert-circle" Title="Fallback strategic board data" />
+                <div class="hb-stack-sm">
+                    <h2>Fallback strategic board data in use</h2>
+                    <p>@Overview.DataSourceLabel</p>
+                    <p>The normal path uses the live strategic board contract and this fallback only appears when the API is unavailable.</p>
+                </div>
+            </section>
+        }
+
+        <section class="hb-grid-2" aria-label="Strategic board quick indicators">
+            <article class="hb-card hb-stack-sm">
+                <h2>Board completion</h2>
+                <div class="hb-progress-block" aria-describedby="completion-visual-summary">
+                    <div class="hb-progress-meta">
+                        <span>Average objective progress</span>
+                        <strong>@AverageCompletionPercent%</strong>
+                    </div>
+                    <div class="hb-progress" role="img" aria-label="Average portfolio completion bar">
+                        <span class="hb-progress__value" style="@AverageCompletionStyle"></span>
+                    </div>
+                    <p id="completion-visual-summary" class="strategic-visual-summary">
+                        Text alternative: Board completion is @AverageCompletionPercent percent across @Overview.Objectives.Count objective work items.
+                    </p>
+                </div>
+            </article>
+
+            <article class="hb-card hb-stack-sm">
+                <h2>Objectives needing attention</h2>
+                <p class="hb-stat-card__value">@AtRiskObjectiveCount</p>
+                <p class="hb-page-copy">Objectives currently flagged as watch or at-risk status this cycle.</p>
+                <a class="hb-button hb-button--secondary" href="/strategic-plan#objective-board" aria-label="Jump to objective board section">
+                    <AppIcon Name="arrow-up-right" />
+                    <span>Review board</span>
+                </a>
+            </article>
+        </section>
+
+        <section id="objective-board" class="hb-card hb-stack-md" aria-labelledby="objective-board-title">
+            <div class="hb-section-header">
+                <div class="hb-stack-sm">
+                    <h2 id="objective-board-title">Objective hierarchy board</h2>
+                    <p>Use tab to reach each objective card and enter to open objective details.</p>
+                </div>
+                <span class="hb-badge hb-badge--neutral">
+                    <AppIcon Name="target" />
+                    <span>@Overview.Objectives.Count objectives</span>
+                </span>
+            </div>
+
+            <section class="strategic-objective-grid" aria-label="Objectives by strategic status">
+                @foreach (var objective in Overview.Objectives)
+                {
+                    <article
+                        id="@($"objective-{objective.WorkItemId:D}")"
+                        class="@(IsFocusedObjective(objective) ? "hb-card strategic-objective-card strategic-objective-card--focus" : "hb-card strategic-objective-card")"
+                        tabindex="0"
+                        aria-labelledby="@($"objective-title-{objective.WorkItemId:D}")"
+                        aria-describedby="@($"objective-meta-{objective.WorkItemId:D}")"
+                        aria-current="@(IsFocusedObjective(objective) ? "location" : null)">
+                        <div class="strategic-objective-card__row">
+                            <h3 id="@($"objective-title-{objective.WorkItemId:D}")">@objective.Title</h3>
+                            <span class="hb-badge @objective.StatusBadgeClass">
+                                <AppIcon Name="@objective.StatusIconName" />
+                                <span>@objective.StatusText</span>
+                            </span>
+                        </div>
+
+                        <p id="@($"objective-meta-{objective.WorkItemId:D}")" class="strategic-objective-card__meta">
+                            Owner: @objective.OwnerName | Updated by @objective.UpdatedBy on @objective.UpdatedAt.LocalDateTime.ToString("yyyy-MM-dd")
+                        </p>
+
+                        <div class="hb-progress-block" aria-describedby="@($"objective-progress-summary-{objective.WorkItemId:D}")">
+                            <div class="hb-progress-meta">
+                                <span>Completion</span>
+                                <strong>@objective.CompletionPercent%</strong>
+                            </div>
+                            <div class="hb-progress" role="img" aria-label="@($"{objective.Title} completion bar")">
+                                <span class="hb-progress__value" style="@($"width: {objective.CompletionPercent}%;")"></span>
+                            </div>
+                            <p id="@($"objective-progress-summary-{objective.WorkItemId:D}")" class="strategic-visual-summary">
+                                Text alternative: @objective.Title is @objective.CompletionPercent percent complete with status @objective.StatusText.
+                            </p>
+                        </div>
+
+                        <p class="hb-page-copy">@objective.HealthSummaryText</p>
+
+                        <div class="strategic-objective-card__row">
+                            <span class="hb-badge hb-badge--info">
+                                <AppIcon Name="panel-left" />
+                                <span>@objective.InitiativeCount initiatives</span>
+                            </span>
+                            <a class="hb-button hb-button--secondary" href="/@objective.DrillDownRoute" aria-label="@($"Open objective details for {objective.Title}")">
+                                <AppIcon Name="arrow-up-right" />
+                                <span>Locate objective</span>
+                            </a>
+                        </div>
+                    </article>
+                }
+            </section>
+        </section>
+
+        <section id="milestone-board" class="hb-card hb-stack-md" aria-labelledby="milestone-board-title">
+            <div class="hb-section-header">
+                <div class="hb-stack-sm">
+                    <h2 id="milestone-board-title">Milestone timeline and checkpoints</h2>
+                    <p>Timeline rows link back to objective cards on this same system board.</p>
+                </div>
+                <span class="hb-badge hb-badge--info">
+                    <AppIcon Name="calendar-clock" />
+                    <span>@MilestoneAttentionCount needing attention</span>
+                </span>
+            </div>
+
+            <div class="hb-progress-block" aria-describedby="timeline-visual-alt-text">
+                <div class="hb-progress-meta">
+                    <span>Attention milestones</span>
+                    <strong>@MilestoneAttentionCount of @Overview.UpcomingMilestones.Count</strong>
+                </div>
+                <div class="hb-progress" role="img" aria-label="Due-soon milestone ratio bar">
+                    <span class="hb-progress__value" style="@MilestoneAttentionStyle"></span>
+                </div>
+                <p id="timeline-visual-alt-text" class="strategic-visual-summary">
+                    Text alternative: @MilestoneAttentionCount milestone work items need attention out of @Overview.UpcomingMilestones.Count total timeline items.
+                </p>
+            </div>
+
+            <div class="hb-table-wrap">
+                <table class="hb-table" aria-describedby="timeline-table-caption">
+                    <caption id="timeline-table-caption" class="strategic-table-caption">
+                        Milestone checkpoint rows with objective ownership, progress, and board-based objective links.
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Milestone</th>
+                            <th scope="col">Objective</th>
+                            <th scope="col">Progress</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Checkpoint summary</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var milestone in Overview.UpcomingMilestones)
+                        {
+                            <tr>
+                                <th scope="row">@milestone.Label</th>
+                                <td>@milestone.ObjectiveTitle</td>
+                                <td>@milestone.CompletionPercent%</td>
+                                <td>
+                                    <span class="hb-badge @milestone.StatusBadgeClass">
+                                        <AppIcon Name="@milestone.StatusIconName" />
+                                        <span>@milestone.StatusText</span>
+                                    </span>
+                                </td>
+                                <td>@milestone.CheckpointSummary</td>
+                                <td>
+                                    <a class="hb-button hb-button--secondary strategic-milestone-link" href="/@milestone.DetailRoute" aria-label="@($"Locate objective card for {milestone.ObjectiveTitle}")">
+                                        <AppIcon Name="arrow-up-right" />
+                                        <span>Locate objective</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="hb-card hb-stack-md" aria-labelledby="ownership-panel-title">
+            <div class="hb-section-header">
+                <div class="hb-stack-sm">
+                    <h2 id="ownership-panel-title">Ownership and accountability panel</h2>
+                    <p>Owner distribution and latest strategic updates for the board hierarchy.</p>
+                </div>
+
+                <a class="hb-button hb-button--secondary" href="/strategic-plan#ownership-panel-title" aria-label="Jump to ownership panel section">
+                    <AppIcon Name="arrow-up-right" />
+                    <span>Ownership section</span>
+                </a>
+            </div>
+
+            <div class="hb-table-wrap">
+                <table class="hb-table" aria-describedby="ownership-table-caption">
+                    <caption id="ownership-table-caption" class="strategic-table-caption">
+                        Owner accountability summary with objective and at-risk counts.
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Owner</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Objectives</th>
+                            <th scope="col">At risk</th>
+                            <th scope="col">Latest update</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var owner in Overview.OwnershipAllocation)
+                        {
+                            <tr>
+                                <th scope="row">@owner.Name</th>
+                                <td>@owner.Role</td>
+                                <td>@owner.ObjectiveCount</td>
+                                <td>@owner.AtRiskCount</td>
+                                <td>@owner.ContactLabel</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
 </section>
