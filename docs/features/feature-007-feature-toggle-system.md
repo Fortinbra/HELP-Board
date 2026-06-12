@@ -60,6 +60,21 @@ Teams can release safely, test features progressively, and enable or disable cap
 - Flags require owner assignment and retirement criteria.
 - Expired flags must be reviewed and removed on a regular cadence.
 
+### Current Flag Inventory (as of 2026-06-11)
+| key | owner | default state | environments | review date | retirement trigger |
+| --- | --- | --- | --- | --- | --- |
+| StrategicPlan | Product + Strategic Maintainer | OFF | Development: OFF, Test: OFF, Production: OFF | 2026-06-30 | Product-ready launch approved and rollout stabilized |
+| DatabaseMigrationsApplyAtStartup | Platform Engineering | OFF (production), ON (development) | Development: ON, Test: OFF, Production: OFF | 2026-06-30 | Startup migration policy finalized and rollout automation in place |
+
+### StrategicPlan Launch Gate Approval
+- Requirement: `StrategicPlan` remains OFF in all environments until product-ready approval is explicitly recorded.
+- Current status (2026-06-11): no approval recorded; launch gate remains OFF.
+
+### Testing Expectations
+- Required coverage must include toggle OFF behavior, toggle ON behavior, and stale/missing configuration safe-default behavior for each governed flag.
+- Web toggle evaluation expectations are covered in `tests/HelpBoard.Web.Tests/Services/FeatureToggleServiceTests.cs`.
+- API/configuration evaluation expectations are covered in `tests/HelpBoard.Api.Tests/FeatureToggles/ConfigurationFeatureToggleEvaluatorTests.cs`.
+
 ## Technology Direction
 - Prefer OSS-friendly, free option(s) for open source usage.
 - Prefer local/self-hosted operation for core reliability and cost control.
@@ -94,15 +109,15 @@ Teams can release safely, test features progressively, and enable or disable cap
 - "Identify any flags in this area that appear long-lived and should be retired or escalated for review."
 
 ## Acceptance Criteria
-- [ ] Toggle system requirements are documented with local-first preference.
-- [ ] OSS/free suitability criteria are documented.
-- [ ] Per-environment behavior and fallback/default behavior are documented.
-- [ ] Requirement that all user-facing features are toggleable by default is documented.
-- [ ] Requirement that user-facing flags default OFF unless approved is documented.
-- [ ] Requirement that all new themes are toggleable is documented.
-- [ ] Requirement that Strategic Plan launch gate defaults OFF until product-ready approval is documented.
-- [ ] Flag lifecycle/governance expectations are documented.
-- [ ] Copilot governance artifacts are defined for feature-toggle work, covering required flags, short-lived lifecycle management, and on/off test expectations.
+- [x] Toggle system requirements are documented with local-first preference.
+- [x] OSS/free suitability criteria are documented.
+- [x] Per-environment behavior and fallback/default behavior are documented.
+- [x] Requirement that all user-facing features are toggleable by default is documented.
+- [x] Requirement that user-facing flags default OFF unless approved is documented.
+- [x] Requirement that all new themes are toggleable is documented.
+- [x] Requirement that Strategic Plan launch gate defaults OFF until product-ready approval is documented.
+- [x] Flag lifecycle/governance expectations are documented.
+- [x] Copilot governance artifacts are defined for feature-toggle work, covering required flags, short-lived lifecycle management, and on/off test expectations.
 
 ## Open Questions
 - Which concrete toggle library/service best balances simplicity and local-first operation?

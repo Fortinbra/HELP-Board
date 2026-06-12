@@ -1,3 +1,4 @@
+using HelpBoard.Api.FeatureToggles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FeatureManagement;
@@ -6,7 +7,7 @@ namespace HelpBoard.Api.Tests.FeatureToggles;
 
 public sealed class FeatureManagerMigrationFlagTests
 {
-    private const string MigrationFlag = "DatabaseMigrationsApplyAtStartup";
+    private const string MigrationFlag = FeatureFlagKeys.DatabaseMigrationsApplyAtStartup;
 
     [Fact]
     public async Task IsEnabledAsync_MissingFeatureManagementKey_ReturnsFalse()
@@ -80,7 +81,7 @@ public sealed class FeatureManagerMigrationFlagTests
     public async Task IsEnabledAsync_EnvironmentVariableStyleOverride_ReturnsTrue()
     {
         // Arrange
-        const string environmentVariableName = "FeatureManagement__DatabaseMigrationsApplyAtStartup";
+        var environmentVariableName = $"FeatureManagement__{FeatureFlagKeys.DatabaseMigrationsApplyAtStartup}";
         var previousValue = Environment.GetEnvironmentVariable(environmentVariableName);
 
         try

@@ -1,12 +1,12 @@
 using HelpBoard.Repositories;
 using HelpBoard.Repositories.Data;
 using HelpBoard.Services;
+using HelpBoard.Api.FeatureToggles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
-const string ApplyMigrationsAtStartupFeatureFlagName = "DatabaseMigrationsApplyAtStartup";
 
 // ── Database ──────────────────────────────────────────────────────────────────
 var connectionString = builder.Configuration.GetConnectionString("HelpBoard")
@@ -47,7 +47,7 @@ builder.Services.AddOpenApi(options =>
 var app = builder.Build();
 
 var featureManager = app.Services.GetRequiredService<IFeatureManager>();
-var applyMigrationsAtStartup = await featureManager.IsEnabledAsync(ApplyMigrationsAtStartupFeatureFlagName);
+var applyMigrationsAtStartup = await featureManager.IsEnabledAsync(FeatureFlagKeys.DatabaseMigrationsApplyAtStartup);
 
 if (applyMigrationsAtStartup)
 {
