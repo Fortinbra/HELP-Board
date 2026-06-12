@@ -11,6 +11,9 @@ public partial class Home : ComponentBase
     [Inject]
     private StrategicPlanApiService StrategicPlanApi { get; set; } = null!;
 
+    [Inject]
+    private IFeatureToggleService FeatureToggleService { get; set; } = null!;
+
     private bool IsLoading { get; set; } = true;
 
     private string? ErrorMessage { get; set; }
@@ -27,6 +30,10 @@ public partial class Home : ComponentBase
 
     private string StrategicDataSourceLabel { get; set; } = string.Empty;
 
+    private bool IsStrategicPlanEnabled { get; set; }
+
+    private bool ShowStrategicSection => IsStrategicPlanEnabled && StrategicSummaryCards.Count > 0;
+
     private string LastUpdatedText => LastUpdatedAt is null
         ? "Last updated: --"
         : $"Last updated: {LastUpdatedAt.Value.LocalDateTime:yyyy-MM-dd HH:mm}";
@@ -37,6 +44,7 @@ public partial class Home : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
+        IsStrategicPlanEnabled = FeatureToggleService.IsStrategicPlanEnabled();
         await LoadSummaryAsync();
     }
 
@@ -53,10 +61,22 @@ public partial class Home : ComponentBase
         try
         {
             var summary = await DashboardFoundation.GetFoundationSummaryAsync();
-            var strategicSummary = await StrategicPlanApi.GetDashboardSummaryAsync();
 
             SummaryCards = summary.Cards;
             LastUpdatedAt = summary.LastUpdatedAt;
+
+            if (!IsStrategicPlanEnabled)
+            {
+                StrategicSummaryCards = [];
+                StrategicLastUpdatedAt = null;
+                IsStrategicPlaceholderData = false;
+                StrategicDataSourceLabel = string.Empty;
+
+                return;
+            }
+
+            var strategicSummary = await StrategicPlanApi.GetDashboardSummaryAsync();
+
             StrategicSummaryCards =
             [
                 strategicSummary.StrategicHealthCard,

@@ -3,6 +3,9 @@
 ## Goal
 Provide secure, organization-aligned authentication and authorization so HELP-Board users can sign in with Google Workspace by default, with Authentik as a fallback OpenID Connect provider.
 
+## Planning Note
+This feature is intentionally lower priority in near-term execution until Google integration direction, constraints, and approval path are finalized.
+
 ## User Value
 Staff and volunteers can access HELP-Board using familiar accounts while administrators keep role-based access control and security policies consistent.
 
@@ -75,11 +78,13 @@ Staff and volunteers can access HELP-Board using familiar accounts while adminis
 - Infrastructure support for OAuth/OIDC redirect URIs and secrets management.
 - Administrative policy decisions for default roles and least-privilege access.
 - Feature 006 CI/CD and Release Deployment for protected config rollout.
+- Google integration research outcomes and product decisions on provider behavior, fallback expectations, and rollout timing.
 
 ## Risks
 - Incorrect claim mapping can grant incorrect role access.
 - Provider outages can block user access without tested fallback paths.
 - Session policy misconfiguration can weaken security posture.
+- Ongoing Google integration uncertainty can create rework risk if implementation proceeds before provider direction is finalized.
 
 ## Copilot Governance
 ### Candidate Instructions

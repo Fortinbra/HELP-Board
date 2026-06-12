@@ -6,53 +6,73 @@
 <PageTitle>Strategic overview board</PageTitle>
 
 <section class="hb-stack-lg strategic-page" aria-labelledby="strategic-overview-title">
-    <header class="hb-page-header">
-        <div class="hb-stack-sm">
-            <p class="hb-eyebrow">Feature 003 strategic tracker</p>
-            <h1 id="strategic-overview-title">Strategic overview board</h1>
-            <p class="hb-page-copy">
-                Strategic plan is a reserved system board identity with objective health, ownership accountability, and milestone pressure in one surface.
-            </p>
-        </div>
-
-        <a class="hb-button hb-button--secondary" href="/strategic-plan#milestone-board" aria-label="Jump to milestone timeline and checkpoint section">
-            <AppIcon Name="calendar-clock" />
-            <span>Milestone section</span>
-        </a>
-    </header>
-
-    <div class="hb-inline" role="note" aria-label="Reserved strategic plan identity">
-        <span class="hb-badge hb-badge--accent">
-            <AppIcon Name="panel-left" />
-            <span>System board identity: strategic-plan</span>
-        </span>
-    </div>
-
-    @if (IsLoading)
+    @if (!IsStrategicPlanEnabled)
     {
-        <div class="hb-card hb-state" aria-live="polite">
-            <div class="hb-inline" role="status">
-                <span class="hb-spinner" aria-hidden="true"></span>
-                <span>Loading strategic overview board...</span>
-            </div>
-        </div>
-    }
-    else if (!string.IsNullOrWhiteSpace(ErrorMessage))
-    {
-        <section class="hb-alert hb-alert--danger" role="alert" aria-live="assertive">
-            <AppIcon Name="alert-circle" />
+        <header class="hb-page-header">
             <div class="hb-stack-sm">
-                <h2>Strategic overview unavailable</h2>
-                <p>@ErrorMessage</p>
-                <button type="button" class="hb-button hb-button--secondary" @onclick="ReloadOverviewAsync">
-                    <AppIcon Name="activity" />
-                    <span>Try again</span>
-                </button>
+                <p class="hb-eyebrow">Feature toggle</p>
+                <h1 id="strategic-overview-title">Strategic overview board</h1>
+                <p class="hb-page-copy">This feature is not enabled in the current environment configuration.</p>
+            </div>
+        </header>
+
+        <section class="hb-alert hb-alert--info" role="status" aria-live="polite">
+            <AppIcon Name="alert-circle" Title="Strategic plan disabled" />
+            <div class="hb-stack-sm">
+                <h2>Strategic plan is unavailable</h2>
+                <p>The strategic plan surface is currently turned off. Contact your administrator to enable this feature toggle.</p>
             </div>
         </section>
     }
-    else if (Overview is not null)
+    else
     {
+        <header class="hb-page-header">
+            <div class="hb-stack-sm">
+                <p class="hb-eyebrow">Feature 003 strategic tracker</p>
+                <h1 id="strategic-overview-title">Strategic overview board</h1>
+                <p class="hb-page-copy">
+                    Strategic plan is a reserved system board identity with objective health, ownership accountability, and milestone pressure in one surface.
+                </p>
+            </div>
+
+            <a class="hb-button hb-button--secondary" href="/strategic-plan#milestone-board" aria-label="Jump to milestone timeline and checkpoint section">
+                <AppIcon Name="calendar-clock" />
+                <span>Milestone section</span>
+            </a>
+        </header>
+
+        <div class="hb-inline" role="note" aria-label="Reserved strategic plan identity">
+            <span class="hb-badge hb-badge--accent">
+                <AppIcon Name="panel-left" />
+                <span>System board identity: strategic-plan</span>
+            </span>
+        </div>
+
+        @if (IsLoading)
+        {
+            <div class="hb-card hb-state" aria-live="polite">
+                <div class="hb-inline" role="status">
+                    <span class="hb-spinner" aria-hidden="true"></span>
+                    <span>Loading strategic overview board...</span>
+                </div>
+            </div>
+        }
+        else if (!string.IsNullOrWhiteSpace(ErrorMessage))
+        {
+            <section class="hb-alert hb-alert--danger" role="alert" aria-live="assertive">
+                <AppIcon Name="alert-circle" />
+                <div class="hb-stack-sm">
+                    <h2>Strategic overview unavailable</h2>
+                    <p>@ErrorMessage</p>
+                    <button type="button" class="hb-button hb-button--secondary" @onclick="ReloadOverviewAsync">
+                        <AppIcon Name="activity" />
+                        <span>Try again</span>
+                    </button>
+                </div>
+            </section>
+        }
+        else if (Overview is not null)
+        {
         @if (!string.IsNullOrWhiteSpace(ObjectiveRouteMessage))
         {
             <section class="hb-alert hb-alert--info" role="status" aria-live="polite">
@@ -277,5 +297,6 @@
                 </table>
             </div>
         </section>
+        }
     }
 </section>

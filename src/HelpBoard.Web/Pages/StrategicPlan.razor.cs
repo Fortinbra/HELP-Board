@@ -8,6 +8,9 @@ public partial class StrategicPlan : ComponentBase
     [Inject]
     private StrategicPlanApiService StrategicPlanApi { get; set; } = null!;
 
+    [Inject]
+    private IFeatureToggleService FeatureToggleService { get; set; } = null!;
+
     [Parameter]
     public Guid? WorkItemId { get; set; }
 
@@ -21,6 +24,8 @@ public partial class StrategicPlan : ComponentBase
     private string? ErrorMessage { get; set; }
 
     private string? ObjectiveRouteMessage { get; set; }
+
+    private bool IsStrategicPlanEnabled { get; set; }
 
     private int AverageCompletionPercent => Overview is null || Overview.Objectives.Count == 0
         ? 0
@@ -38,6 +43,18 @@ public partial class StrategicPlan : ComponentBase
 
     protected override async Task OnParametersSetAsync()
     {
+        IsStrategicPlanEnabled = FeatureToggleService.IsStrategicPlanEnabled();
+
+        if (!IsStrategicPlanEnabled)
+        {
+            IsLoading = false;
+            ErrorMessage = null;
+            Overview = null;
+            ObjectiveRouteMessage = null;
+
+            return;
+        }
+
         await LoadOverviewAsync();
     }
 

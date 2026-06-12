@@ -40,10 +40,13 @@
                 <span>Active work</span>
             </NavLink>
 
-            <NavLink class="app-nav__link" href="strategic-plan" @onclick="CloseNavMenu">
-                <AppIcon Name="panel-left" />
-                <span>Strategic plan</span>
-            </NavLink>
+            @if (IsStrategicPlanEnabled)
+            {
+                <NavLink class="app-nav__link" href="strategic-plan" @onclick="CloseNavMenu">
+                    <AppIcon Name="panel-left" />
+                    <span>Strategic plan</span>
+                </NavLink>
+            }
 
             <NavLink class="app-nav__link" href="boards" @onclick="CloseNavMenu">
                 <AppIcon Name="menu" />

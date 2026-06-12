@@ -62,11 +62,13 @@ Teams can quickly stand up project-specific workflows, track progress in a consi
 - Work items can be linked to strategic objectives for roll-up reporting.
 - Strategic objectives, initiatives, and milestones are typed strategic work items on the Strategic Plan system board.
 - Board-level health indicators can appear in dashboard snapshots.
+- Strategic entry points in board directory/navigation must respect Strategic Plan toggle state and remain hidden when the strategic launch gate is OFF.
 
 ## Dependencies
 - Feature 001 UI Foundation & Theme System.
 - Feature 002 Dashboard Experience for reporting surfaces.
 - Feature 003 Strategic Plan Tracker for objective linkage model.
+- Feature 007 Feature Toggle System to enforce strategic navigation visibility by launch-gate state.
 
 ## Risks
 - Overly flexible workflows may reduce consistency across teams.
