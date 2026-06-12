@@ -87,7 +87,8 @@ Users benefit from durable data persistence across application restarts and depl
 - Database name: `helpboard_dev` (development), `helpboard_staging`, `helpboard_prod`.
 - Create database with UTF-8 encoding.
 - Create application user with limited privileges (not superuser).
-- All migrations are applied by the application at startup or via CLI tooling.
+- Startup migration application is controlled by `FeatureManagement:DatabaseMigrationsApplyAtStartup` and defaults to `false`.
+- Teams can apply migrations via CLI tooling by default; startup application is opt-in per environment.
 
 ## Persistence Layer Architecture
 
@@ -159,6 +160,12 @@ Users benefit from durable data persistence across application restarts and depl
 
 ### Migration Workflow
 
+- **Startup Toggle (default OFF)**:
+  - Configuration key: `FeatureManagement:DatabaseMigrationsApplyAtStartup`
+  - Default value: `false`
+  - When `true`, API startup applies pending migrations using `Database.MigrateAsync()`.
+  - Recommended use: local development and controlled lower environments.
+
 - **Apply to Development**:
   ```bash
   dotnet ef database update --project src/HelpBoard.Repositories --startup-project src/HelpBoard.Api
@@ -168,7 +175,7 @@ Users benefit from durable data persistence across application restarts and depl
 
 - **Apply to Staging/Production**:
   - Generated SQL script via `dotnet ef migrations script` for manual review and scheduled application.
-  - Applied by database administrator or deployment automation (not by application startup in production).
+  - Applied by database administrator or deployment automation (startup toggle remains `false` in production unless explicitly approved).
 
 - **Rollback** (if needed):
   - `dotnet ef database update <previous-migration>` to roll back to a prior state.

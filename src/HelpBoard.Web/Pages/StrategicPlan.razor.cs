@@ -43,7 +43,7 @@ public partial class StrategicPlan : ComponentBase
 
     protected override async Task OnParametersSetAsync()
     {
-        IsStrategicPlanEnabled = FeatureToggleService.IsStrategicPlanEnabled();
+        IsStrategicPlanEnabled = await FeatureToggleService.IsStrategicPlanEnabledAsync();
 
         if (!IsStrategicPlanEnabled)
         {

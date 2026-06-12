@@ -1,8 +1,12 @@
 using HelpBoard.Repositories;
+using HelpBoard.Repositories.Data;
 using HelpBoard.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.FeatureManagement;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+const string ApplyMigrationsAtStartupFeatureFlagName = "DatabaseMigrationsApplyAtStartup";
 
 // ── Database ──────────────────────────────────────────────────────────────────
 var connectionString = builder.Configuration.GetConnectionString("HelpBoard")
@@ -12,6 +16,7 @@ builder.Services.AddRepositories(connectionString);
 
 // ── Application services ──────────────────────────────────────────────────────
 builder.Services.AddServices();
+builder.Services.AddFeatureManagement();
 
 // ── Web API ───────────────────────────────────────────────────────────────────
 builder.Services
@@ -40,6 +45,16 @@ builder.Services.AddOpenApi(options =>
 });
 
 var app = builder.Build();
+
+var featureManager = app.Services.GetRequiredService<IFeatureManager>();
+var applyMigrationsAtStartup = await featureManager.IsEnabledAsync(ApplyMigrationsAtStartupFeatureFlagName);
+
+if (applyMigrationsAtStartup)
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
 
 // ── Static files for hosted Blazor WASM ──────────────────────────────────────
 app.UseBlazorFrameworkFiles();

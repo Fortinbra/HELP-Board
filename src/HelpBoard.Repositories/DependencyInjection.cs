@@ -16,6 +16,13 @@ public static class DependencyInjection
     /// <param name="connectionString">The PostgreSQL connection string.</param>
     public static IServiceCollection AddRepositories(this IServiceCollection services, string connectionString)
     {
+        ArgumentNullException.ThrowIfNull(services);
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException("Connection string 'HelpBoard' is not configured.");
+        }
+
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(connectionString));
 

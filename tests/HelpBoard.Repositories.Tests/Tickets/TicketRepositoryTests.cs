@@ -2,6 +2,7 @@ using HelpBoard.Abstractions.Domain;
 using HelpBoard.Contracts;
 using HelpBoard.Repositories.Data;
 using HelpBoard.Repositories.Tickets;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace HelpBoard.Repositories.Tests.Tickets;
@@ -122,6 +123,35 @@ public sealed class TicketRepositoryTests : IDisposable
         // Act & Assert — should not throw
         var exception = await Record.ExceptionAsync(() => _sut.DeleteAsync(Guid.NewGuid()));
         Assert.Null(exception);
+    }
+
+    [Fact]
+    public async Task AddAsync_WithNullTitle_OnRelationalProvider_ThrowsDbUpdateException()
+    {
+        // Arrange
+        using var sqliteConnection = new SqliteConnection("Data Source=:memory:");
+        await sqliteConnection.OpenAsync();
+
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlite(sqliteConnection)
+            .Options;
+
+        await using var dbContext = new AppDbContext(options);
+        await dbContext.Database.EnsureCreatedAsync();
+
+        var sut = new TicketRepository(dbContext);
+        var invalidTicket = new Ticket
+        {
+            Title = null!,
+            Description = "Test description",
+            CreatedBy = "tester@example.com"
+        };
+
+        // Act
+        var exception = await Record.ExceptionAsync(() => sut.AddAsync(invalidTicket));
+
+        // Assert
+        Assert.IsType<DbUpdateException>(exception);
     }
 
     public void Dispose() => _dbContext.Dispose();
