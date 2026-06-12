@@ -28,7 +28,7 @@
         Cards="@SummaryCards"
         OnRetry="ReloadSummaryAsync" />
 
-    @if (StrategicSummaryCards.Count > 0)
+    @if (ShowStrategicSection)
     {
         <StrategicTrackerSummarySection
             Cards="@StrategicSummaryCards"

@@ -12,6 +12,7 @@ Users gain transparency into strategic progress, can detect stalled initiatives 
 - Define strategic item taxonomy (themes/objectives/initiatives/milestones) as typed work items within that system board.
 - Define ownership, status, and progress roll-up behavior for strategic items on the system board.
 - Define reporting views and dashboard integration points using the shared board model.
+- Define feature-gated user-facing strategic entry points that default OFF until promotion readiness is approved.
 
 ### Out of Scope
 - Full enterprise portfolio management features.
@@ -19,7 +20,7 @@ Users gain transparency into strategic progress, can detect stalled initiatives 
 
 ## UX
 ### User Flows
-- User opens the Strategic Plan system board from the board directory.
+- User opens the Strategic Plan system board from the board directory when the Strategic Plan launch gate is enabled.
 - User views strategic plan overview on that board.
 - User opens an objective item to inspect linked initiative and milestone items.
 - Owner updates item status and progress.
@@ -67,12 +68,14 @@ Users gain transparency into strategic progress, can detect stalled initiatives 
 - Feature 001 UI Foundation & Theme System.
 - Feature 002 Dashboard Experience for visibility integration.
 - Feature 004 Project Boards for shared board model and board identity constraints.
+- Feature 007 Feature Toggle System for strategic launch gate governance and default-OFF user-facing access.
 - Data contracts for strategic entities and status roll-up logic.
 
 ## Risks
 - Ambiguous roll-up rules may cause distrust in reported progress.
 - Too much manual data entry can reduce update consistency.
 - Complex hierarchy visualization may hurt usability without careful design.
+- Weak feature-toggle governance can prematurely expose strategic entry points before product readiness.
 
 ## Copilot Governance
 ### Candidate Instructions

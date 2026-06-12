@@ -11,7 +11,9 @@ Teams can release safely, test features progressively, and enable or disable cap
 - Define feature toggle architecture and governance model.
 - Prioritize OSS-friendly and simple implementation options.
 - Define local-first operation pattern with optional cloud-backed management.
-- Require all net-new features and new themes to be toggleable.
+- Require all user-facing features and new themes to be toggleable by default.
+- Require default OFF state for user-facing feature flags in all environments unless explicit product approval is documented.
+- Require a dedicated Strategic Plan launch gate that defaults OFF until product-ready approval is recorded.
 - Define per-environment behavior and rollout controls.
 
 ### Out of Scope
@@ -51,8 +53,10 @@ Teams can release safely, test features progressively, and enable or disable cap
 - Cloud-backed config uses provider polling/webhook refresh where supported.
 
 ## Governance
-- Every new user-facing feature requires a corresponding flag strategy.
+- Every user-facing feature (including enhancements to existing surfaces) requires a corresponding flag strategy.
+- User-facing flags default to OFF unless approved for activation by product governance.
 - Every new theme requires its own enablement toggle.
+- Strategic Plan launch gate must remain OFF by default until product-ready approval is granted.
 - Flags require owner assignment and retirement criteria.
 - Expired flags must be reviewed and removed on a regular cadence.
 
@@ -73,7 +77,9 @@ Teams can release safely, test features progressively, and enable or disable cap
 
 ## Copilot Governance
 ### Candidate Instructions
-- Require every net-new feature and theme to ship with a named toggle, owner, default state by environment, and expiry or review date.
+- Require every user-facing feature and theme to ship with a named toggle, owner, default OFF state by environment, and expiry or review date.
+- Require explicit product approval metadata before switching any user-facing toggle from OFF to ON.
+- Require the Strategic Plan launch gate to default OFF and remain OFF until product-ready governance approval is documented.
 - Require tests to cover both toggle-off and toggle-on behavior, including safe-default behavior when configuration is missing or stale.
 - Require PRs that add or extend flags to include a removal or retirement plan so flags do not become long-lived by default.
 
@@ -90,8 +96,10 @@ Teams can release safely, test features progressively, and enable or disable cap
 - [ ] Toggle system requirements are documented with local-first preference.
 - [ ] OSS/free suitability criteria are documented.
 - [ ] Per-environment behavior and fallback/default behavior are documented.
-- [ ] Requirement that all new features are toggleable is documented.
+- [ ] Requirement that all user-facing features are toggleable by default is documented.
+- [ ] Requirement that user-facing flags default OFF unless approved is documented.
 - [ ] Requirement that all new themes are toggleable is documented.
+- [ ] Requirement that Strategic Plan launch gate defaults OFF until product-ready approval is documented.
 - [ ] Flag lifecycle/governance expectations are documented.
 - [ ] Copilot governance artifacts are defined for feature-toggle work, covering required flags, short-lived lifecycle management, and on/off test expectations.
 
