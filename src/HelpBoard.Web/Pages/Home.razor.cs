@@ -16,6 +16,8 @@ public partial class Home : ComponentBase
 
     private bool IsLoading { get; set; } = true;
 
+    private bool IsHelloWorldBaselineEnabled { get; set; }
+
     private string? ErrorMessage { get; set; }
 
     private DateTimeOffset? LastUpdatedAt { get; set; }
@@ -44,6 +46,13 @@ public partial class Home : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
+        IsHelloWorldBaselineEnabled = await FeatureToggleService.IsEnabledAsync(FeatureToggleKeys.HelloWorldBaseline);
+        if (IsHelloWorldBaselineEnabled)
+        {
+            IsLoading = false;
+            return;
+        }
+
         IsStrategicPlanEnabled = await FeatureToggleService.IsStrategicPlanEnabledAsync();
         await LoadSummaryAsync();
     }

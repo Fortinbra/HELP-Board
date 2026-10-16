@@ -1,7 +1,7 @@
 # Feature 007: Feature Toggle System
 
 ## Goal
-Introduce a simple, low-cost feature toggle system that supports local-first operation while allowing cloud-hosted control if needed.
+Introduce a simple, low-cost, local/self-hosted feature toggle system for this purpose-built application. The [global requirements](../global-requirements.md#103-feature-flags-and-delivery-governance) consolidate rollout rules; cloud management and tenant targeting are not requirements.
 
 ## User Value
 Teams can release safely, test features progressively, and enable or disable capabilities (including themes) without redeploying.
@@ -10,7 +10,7 @@ Teams can release safely, test features progressively, and enable or disable cap
 ### In Scope
 - Define feature toggle architecture and governance model.
 - Prioritize OSS-friendly and simple implementation options.
-- Define local-first operation pattern with optional cloud-backed management.
+- Define local/self-hosted operation and document whether updates require reload or restart.
 - Require all user-facing features and new themes to be toggleable by default.
 - Require default OFF state for user-facing feature flags in all environments unless explicit product approval is documented.
 - Require a dedicated Strategic Plan launch gate that defaults OFF until product-ready approval is recorded.
@@ -41,12 +41,13 @@ Teams can release safely, test features progressively, and enable or disable cap
 ### Data Sources
 - Local configuration provider (file/database) for baseline flags.
 - Optional cloud provider for centralized management.
-- Environment context and user/tenant targeting attributes.
+- Environment context and any explicitly approved user/role targeting attributes; no multi-tenant requirement.
 
 ### Data Model Considerations
 - Flag schema should include key, description, owner, default state, environments, and expiry/review date.
 - Evaluation path should support safe defaults when provider is unavailable.
 - Theme flags should align with UI token and theme registry identifiers.
+- Light, Dark, and HELP are the required standard theme set. Record explicit release enablement approval under the existing default-OFF policy; optional novelty themes remain independently gated.
 
 ### Data Freshness
 - Local-first config loaded at startup with optional periodic refresh.
@@ -69,6 +70,12 @@ Teams can release safely, test features progressively, and enable or disable cap
 ### StrategicPlan Launch Gate Approval
 - Requirement: `StrategicPlan` remains OFF in all environments until product-ready approval is explicitly recorded.
 - Current status (2026-06-11): no approval recorded; launch gate remains OFF.
+
+### Hello-World Milestone Approval (2026-10-16)
+
+The product owner's baseline request explicitly approves `HelloWorldBaseline`, `LightTheme`, `DarkTheme`, and `HelpTheme` ON in the web application's local configuration. Owner: application maintainer. Review at first reporting-release readiness; retire the shell transition flag after the baseline replaces the historical shell, and review theme flags after rollout stabilizes. These flags require configuration reload/application reload, not a new runtime flag-management platform.
+
+Missing flags evaluate OFF. If every theme flag is OFF, the shell retains its safe Light token fallback rather than rendering unreadable content; System remains available. Theme flags control explicit theme availability and system resolution where a standard theme remains enabled. Browser preference restoration falls back visibly when a stored theme is unavailable. `StrategicPlan` remains OFF; the disabled sample navigation label is a non-functional layout example, not a strategic entry point. Flags do not protect existing API endpoints or authorize production data.
 
 ### Testing Expectations
 - Required coverage must include toggle OFF behavior, toggle ON behavior, and stale/missing configuration safe-default behavior for each governed flag.
@@ -120,6 +127,6 @@ Teams can release safely, test features progressively, and enable or disable cap
 - [x] Copilot governance artifacts are defined for feature-toggle work, covering required flags, short-lived lifecycle management, and on/off test expectations.
 
 ## Open Questions
-- Which concrete toggle library/service best balances simplicity and local-first operation?
+- Which configuration refresh mechanism is needed around the existing Microsoft FeatureManagement direction?
 - What targeting granularity is required at launch (global, role-based, cohort)?
 - Should flag changes require approval in production?

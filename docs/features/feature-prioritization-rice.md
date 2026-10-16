@@ -23,6 +23,10 @@ Use these fields for updates as requirements mature:
 
 ## Current Feature Priorities
 
+The scores below are historical planning estimates, pending re-scoring against the [current global requirements](../global-requirements.md). Google Workspace primary authentication and Authentik fallback are confirmed scope; authentication and the standard Light/Dark/HELP theme set are production acceptance requirements regardless of their historical feature priority. Optional novelty themes remain later scope. Do not interpret the older ordering as approval to release protected reporting without authentication.
+
+[Feature 010: Director's Report](feature-010-directors-report.md) is the confirmed first business-reporting feature, including its form, publication lifecycle, meeting snapshots, and trends. Its RICE inputs have not been estimated; do not invent a score or defer it behind unrelated reporting work because it is absent from the historical table.
+
 | Feature | Reach | Impact | Confidence | Effort | RICE Score | Priority |
 |---|---:|---:|---:|---:|---:|---|
 | Feature 001: UI Foundation & Theme System | 95 | 3.0 | 0.90 | 2.5 | 102.60 | P1 |
@@ -44,7 +48,7 @@ Use these fields for updates as requirements mature:
 6. **P3** — Feature 003: Strategic Plan Tracker (hidden by default and iterated behind feature toggle until product-ready)
 7. **P3** — Feature 004: Project Boards
 8. **P4** — Feature 008: Theme Expansion
-9. **P4** — Feature 005: Authentication and Authorization (deferred while Google integration direction remains uncertain)
+9. **P4 (historical estimate)** — Feature 005: Authentication and Authorization (provider direction is now confirmed; re-score remaining eligibility, fallback, and session work before release planning)
 
 ## Update Guidance
 - Re-score features whenever scope, dependencies, or team capacity changes.

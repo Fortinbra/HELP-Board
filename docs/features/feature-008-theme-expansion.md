@@ -2,7 +2,7 @@
 
 ## Goal
 
-Expand HELP-Board theming beyond the Feature 001 default teal/purple foundation with dark mode and additional distinct visual themes while preserving usability, accessibility, and brand alignment.
+Deliver standard VS Code-inspired Light and Dark themes plus a distinct HELP purple/teal theme, with optional Geocities, Minimalist, and Western themes retained for later delivery. Follow the current [global theme requirements](../global-requirements.md#101-themes-branding-and-shared-ui); the earlier teal/purple foundation is not the default theme policy or authoritative HELP brand palette.
 
 ## User Value
 
@@ -26,10 +26,10 @@ Users can choose presentation styles that match brand, comfort, and context whil
 
 ### User Flows
 
-- User views app in default teal/purple organizational theme.
-- User switches to dark theme variant for low-light preference.
+- With no explicit selection, the app follows the system light/dark preference, including preference changes.
+- User chooses Light, Dark, HELP, or returns to system selection; explicit choices override system preference and persist.
 - Admin enables optional novelty themes (Geocities, Western) through feature toggles.
-- User selects minimalist theme for reduced visual density.
+- User selects the optional Minimalist theme when enabled for reduced visual density.
 
 ### Key Screens / Components
 
@@ -56,16 +56,25 @@ Users can choose presentation styles that match brand, comfort, and context whil
 - Theme registry should include key, display name, token set, and availability flag.
 - User profile should persist selected theme preference.
 - Reduced-motion preference should be respected globally, including high-motion themes.
+- A disabled or unavailable saved theme must fall back to an available standard theme; disabled themes must not be selectable.
 
 ### Data Freshness
 
 - Theme changes apply immediately in-session.
 - Persisted preferences load on sign-in/session start.
 
-## Required Theme Set
+## Standard Theme Set
 
-- **Default (Teal/Purple):** primary organizational colors and standard professional styling.
-- **Dark (Teal/Purple):** dark surfaces with related teal/purple accents and compliant contrast.
+- **Light:** VS Code-inspired default light presentation.
+- **Dark:** VS Code-inspired default dark presentation.
+- **HELP:** separate organizational theme using the official HELP purple/teal brand references and approved logo assets.
+
+Initial selection follows the system preference unless a user has saved an explicit choice. Use the [HELP website](https://www.helpcenterofaustin.org/) as the brand source. Observed website colors are purple `#7400B3` and teal `#00B4D0`; final semantic tokens must be contrast-tested and approved. The [global requirements](../global-requirements.md#101-themes-branding-and-shared-ui) record the published logo and palette provenance. Package approved assets locally; do not depend on runtime hotlinks.
+
+The initial hello-world shell implements browser-local theme persistence under `helpboard.theme`, system-change tracking, and separate approved `LightTheme`/`DarkTheme`/`HelpTheme` flags. It uses locally hosted HELP branding and VS Code-inspired neutral light/dark surfaces. Authentication-linked preferences, full legacy-screen theme migration, exact-reference approval, and chart theme parity remain future acceptance work; shell implementation alone does not complete this feature.
+
+## Optional Planned Themes
+
 - **Geocities-Inspired:** intentionally bright and nostalgic presentation with animated accents, decorative typography options, and saturated colors.
 - **Minimalist:** low-noise presentation with restrained typography, spacing, and visual chrome.
 - **Western:** horse/cowboy-inspired palette and motifs aligned with therapeutic riding center identity.
@@ -85,8 +94,9 @@ Users can choose presentation styles that match brand, comfort, and context whil
 
 ## Positioning Relative to Feature 001
 
-- Feature 001 delivers the default teal/purple token foundation, shell, foundational controls, icon standardization, accessibility baseline, and Bootstrap migration path.
-- Feature 008 begins after that baseline is established and owns dark mode plus all additional theme variants.
+- Feature 001 delivered the original teal/purple token foundation, shell, controls, icons, accessibility baseline, and Bootstrap migration plan.
+- Feature 008 builds on that foundation and owns the current Light/Dark/HELP standard set, system-selection behavior, preference persistence, and optional theme variants.
+- The standard theme set is a production requirement; historical low priority for novelty theme expansion does not defer it.
 
 ## Risks
 
@@ -115,8 +125,9 @@ Users can choose presentation styles that match brand, comfort, and context whil
 
 ## Acceptance Criteria
 
-- [ ] Theme expansion requirements are documented for all five required themes.
-- [ ] Dark theme palette behavior is documented relative to default branding.
+- [ ] Light, Dark, and HELP standard themes and three optional planned themes are documented and implemented within the approved delivery phase.
+- [ ] Light and Dark follow the selected VS Code references; HELP uses approved official brand assets and accessible tokens.
+- [ ] Initial system preference, system changes, explicit override, persistence, return-to-system selection, and disabled-theme fallback are verified.
 - [ ] Geocities-inspired theme constraints include animation and legibility controls.
 - [ ] Minimalist and Western theme design expectations are documented.
 - [ ] Accessibility and reduced-motion requirements are documented for all themes.
@@ -125,6 +136,6 @@ Users can choose presentation styles that match brand, comfort, and context whil
 
 ## Open Questions
 
-- Which themes are enabled by default at launch versus opt-in?
+- Which exact VS Code default light/dark references and final HELP logo/token variants are approved?
 - Should novelty themes be restricted by role or environment?
 - How should theme QA regression coverage be prioritized over time?

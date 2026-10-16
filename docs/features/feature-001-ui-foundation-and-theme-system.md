@@ -4,6 +4,12 @@
 
 Establish a reusable, accessible UI foundation for HELP-Board with a teal/purple design language, an in-repo Blazor design system and component library, and consistent Lucide-aligned iconography.
 
+## Current Product Direction
+
+This document records the original foundation slice and its historical validation. The [global requirements](../global-requirements.md#101-themes-branding-and-shared-ui) now require VS Code-inspired Light/Dark standard themes plus a separate HELP theme using official website brand references. Initial selection follows the system preference until explicitly changed. The palette below is historical foundation context, not an authoritative HELP brand guide. Feature 008 owns the updated theme requirements; the completed foundation record does not imply those newer requirements are implemented.
+
+The [initial hello-world milestone](../global-requirements.md#initial-hello-world-milestone) provides a simpler first shell: full-width top header, official locally hosted HELP logo at upper left, theme/login status at upper right, left sample navigation, and welcome content. Disabled Director's Report/Strategic Plan/Budget Report labels do not expose real routes. Login remains explicitly unavailable. `HelloWorldBaseline` selects this shell without removing prior groundwork.
+
 ## User Value
 
 Users get a clear, modern, and accessible interface that makes work status easy to understand at a glance. Teams gain a stable visual system that reduces inconsistency as new features are added.

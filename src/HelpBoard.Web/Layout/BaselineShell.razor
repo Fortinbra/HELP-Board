@@ -1,0 +1,48 @@
+<div class="baseline-shell">
+    <a class="baseline-skip" href="#main-content" @onclick="FocusMainAsync" @onclick:preventDefault="true">Skip to main content</a>
+    <header class="baseline-header">
+        <a class="baseline-brand" href="" aria-label="HELP-Board home">
+            <span class="baseline-logo"><img src="images/help-logo.png" alt="HELP" /></span>
+            <span>HELP-Board</span>
+        </a>
+        <div class="baseline-header__status">
+            <div class="baseline-theme">
+                <label for="baseline-theme">Theme</label>
+                <select id="baseline-theme" data-theme-selector aria-describedby="theme-feedback">
+                    <option value="system">System</option>
+                    @if (IsLightEnabled)
+                    {
+                        <option value="light">Light</option>
+                    }
+                    @if (IsDarkEnabled)
+                    {
+                        <option value="dark">Dark</option>
+                    }
+                    @if (IsHelpEnabled)
+                    {
+                        <option value="help">HELP</option>
+                    }
+                </select>
+            </div>
+            <div class="baseline-login" role="status">
+                <strong>Not signed in</strong>
+                <span>Sign-in is not available in this baseline</span>
+            </div>
+        </div>
+        <p id="theme-feedback" class="baseline-theme-feedback" role="status" aria-live="polite"></p>
+    </header>
+    <aside class="baseline-sidebar">
+        <nav aria-label="Sample navigation" aria-describedby="baseline-navigation-note">
+            <h2 class="baseline-nav-title">Reports &amp; planning</h2>
+            <ul class="baseline-nav">
+                <li><a role="link" aria-disabled="true" tabindex="0"><AppIcon Name="ticket" /><span>Director's report <small>Coming soon</small></span></a></li>
+                <li><a role="link" aria-disabled="true" tabindex="0"><AppIcon Name="target" /><span>Strategic plan <small>Coming soon</small></span></a></li>
+                <li><a role="link" aria-disabled="true" tabindex="0"><AppIcon Name="activity" /><span>Budget report <small>Coming soon</small></span></a></li>
+            </ul>
+        </nav>
+        <p id="baseline-navigation-note" class="baseline-note">Sample navigation only. These items do not open pages yet.</p>
+    </aside>
+    <main id="main-content" class="baseline-main" tabindex="-1" @ref="_mainContent">
+        @ChildContent
+    </main>
+</div>

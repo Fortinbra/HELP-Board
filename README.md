@@ -1,4 +1,25 @@
-# CoPilotTemplates
+# HELP-Board
+
+HELP-Board is a reporting and data visualization dashboard for the HELP board of directors, built with an ASP.NET Core API hosting a Blazor WebAssembly frontend and PostgreSQL persistence through Entity Framework Core.
+
+Planned production URL: <https://help.becauseimclever.com>. Board data requires authorized access.
+
+This purpose-built application will run as a Docker container on PiTony (Raspberry Pi 5, 16 GB RAM). Standard themes are VS Code-inspired Light/Dark and HELP purple/teal, with system light/dark preference used until the user chooses a theme.
+
+- [Global application requirements](docs/global-requirements.md) - Product scope, architecture, identity, reporting, visualization catalog, quality requirements, and open decisions.
+- [Feature documents](docs/features/README.md) - Feature-level scope and implementation guidance.
+
+## Initial UI baseline
+
+Run `dotnet run --project src\HelpBoard.Web\HelpBoard.Web.csproj` to preview the standalone WASM shell locally. The default configuration enables the hello-world layout and System/Light/Dark/HELP themes. Sample report navigation is intentionally unavailable; sign-in is not implemented in this milestone. This preview does not start the API or connect to PostgreSQL.
+
+The HELP logo is packaged from the [official website's published logo](https://static1.squarespace.com/static/5c32c0bd5ffd200348050279/t/679920a66510b00378ee444d/1738088614083/H.E.L.P.+Logo+Correct+Colors+-+transp+bkgrd_2022.png?format=500w), retrieved 2026-10-16. Browser-local theme persistence is not an account preference store.
+
+Validate the shell with `dotnet test tests\HelpBoard.Web.Tests\HelpBoard.Web.Tests.csproj` and `node --test tests\HelpBoard.Web.Tests\theme.test.cjs`.
+
+The repository also includes the shared Copilot templates described below.
+
+## CoPilotTemplates
 
 A collection of shared GitHub Copilot instructions, path-specific guidelines, and agent definitions for .NET development. These templates are **project-agnostic** — they apply to any .NET project and are designed to be combined with a repository's own local Copilot customisations.
 
@@ -59,4 +80,3 @@ These templates follow:
 - [SOLID Principles](https://en.wikipedia.org/wiki/SOLID) as applied to C# and .NET
 - [Clean Code](https://www.goodreads.com/book/show/3735293-clean-code) principles by Robert C. Martin
 - [Test-Driven Development](https://en.wikipedia.org/wiki/Test-driven_development) practices
-

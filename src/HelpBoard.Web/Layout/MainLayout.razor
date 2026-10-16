@@ -1,4 +1,10 @@
 ﻿@inherits LayoutComponentBase
+@if (IsHelloWorldBaselineEnabled)
+{
+    <BaselineShell IsLightEnabled="@IsLightEnabled" IsDarkEnabled="@IsDarkEnabled" IsHelpEnabled="@IsHelpEnabled">@Body</BaselineShell>
+}
+else
+{
 <div class="app-shell">
     <!-- Skip link allows keyboard users to bypass navigation and go directly to main content -->
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -11,7 +17,6 @@
                 <p class="app-header__eyebrow">Feature 001 foundation</p>
                 <p class="app-header__title">HELP-Board</p>
             </div>
-
             <a class="app-header__link" href="https://learn.microsoft.com/aspnet/core/blazor/" target="_blank" rel="noreferrer" aria-label="Blazor guidance (opens in a new tab)">
                 <span>Blazor guidance (opens in a new tab)</span>
                 <AppIcon Name="arrow-up-right" Class="app-header__icon" />
@@ -33,3 +38,4 @@
         </main>
     </div>
 </div>
+}

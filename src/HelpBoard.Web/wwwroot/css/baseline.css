@@ -1,0 +1,269 @@
+:root {
+    --baseline-bg: #ffffff;
+    --baseline-panel: #f3f3f3;
+    --baseline-header: #eeeeee;
+    --baseline-text: #202020;
+    --baseline-muted: #545454;
+    --baseline-border: #767676;
+    --baseline-accent: #005fb8;
+    --baseline-focus: #005fb8;
+    --baseline-font: "Segoe UI", sans-serif;
+    --baseline-font-size: 1rem;
+    --baseline-title-size: clamp(1.75rem, 4vw, 2.5rem);
+    --baseline-small-size: 0.875rem;
+    --baseline-sidebar-width: 16rem;
+    --baseline-logo-size: 3.5rem;
+    --baseline-logo-bg: #ffffff;
+    --baseline-content-width: 52rem;
+    --baseline-line: 1px;
+    --baseline-focus-width: 3px;
+    --baseline-radius: 0.25rem;
+    --baseline-touch-size: 2.75rem;
+}
+
+:root[data-theme="dark"] {
+    --baseline-bg: #1f1f1f;
+    --baseline-panel: #181818;
+    --baseline-header: #181818;
+    --baseline-text: #cccccc;
+    --baseline-muted: #b0b0b0;
+    --baseline-border: #808080;
+    --baseline-accent: #75beff;
+    --baseline-focus: #75beff;
+}
+
+:root[data-theme="help"] {
+    --baseline-bg: #fcfaff;
+    --baseline-panel: #f2ebf8;
+    --baseline-header: #f2ebf8;
+    --baseline-text: #29153b;
+    --baseline-muted: #594866;
+    --baseline-border: #877092;
+    --baseline-accent: #7400b3;
+    --baseline-focus: #006778;
+    --baseline-brand-teal: #00b4d0;
+}
+
+.baseline-shell {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-areas: "header header" "sidebar main";
+    grid-template-columns: var(--baseline-sidebar-width) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    position: relative;
+    background: var(--baseline-bg);
+    color: var(--baseline-text);
+    font-family: var(--baseline-font);
+    font-size: var(--baseline-font-size);
+}
+
+.baseline-shell h1,
+.baseline-shell h2,
+.baseline-shell strong {
+    color: inherit;
+    font-family: inherit;
+}
+
+.baseline-shell :focus-visible {
+    outline: var(--baseline-focus-width) solid var(--baseline-focus);
+    outline-offset: var(--baseline-line);
+    box-shadow: none;
+}
+
+.baseline-header {
+    grid-area: header;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+    border-bottom: var(--baseline-line) solid var(--baseline-border);
+    background: var(--baseline-header);
+}
+
+.baseline-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--baseline-text);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.baseline-logo {
+    display: inline-flex;
+    padding: var(--space-1);
+    border-radius: var(--baseline-radius);
+    background: var(--baseline-logo-bg);
+}
+
+.baseline-logo img {
+    width: var(--baseline-logo-size);
+    height: var(--baseline-logo-size);
+    object-fit: contain;
+}
+
+.baseline-header__status,
+.baseline-theme {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.baseline-header__status {
+    margin-inline-start: auto;
+    justify-content: flex-end;
+    gap: var(--space-5);
+    max-width: 100%;
+}
+
+.baseline-theme {
+    flex-wrap: nowrap;
+}
+
+.baseline-theme select {
+    width: auto;
+    min-height: var(--baseline-touch-size);
+    padding: var(--space-2);
+    border: var(--baseline-line) solid var(--baseline-border);
+    border-radius: var(--baseline-radius);
+    color: var(--baseline-text);
+    background: var(--baseline-bg);
+    color-scheme: light;
+}
+
+[data-theme="dark"] .baseline-theme select {
+    color-scheme: dark;
+}
+
+.baseline-login {
+    display: grid;
+}
+
+.baseline-login span,
+.baseline-note,
+.baseline-nav small,
+.baseline-theme-feedback {
+    color: var(--baseline-muted);
+    font-size: var(--baseline-small-size);
+}
+
+.baseline-theme-feedback:not(:empty) {
+    flex-basis: 100%;
+    text-align: end;
+}
+
+.baseline-theme-feedback:empty {
+    display: none;
+}
+
+body:has(.baseline-shell)::before {
+    display: none;
+}
+
+.baseline-sidebar {
+    grid-area: sidebar;
+    padding: var(--space-5);
+    background: var(--baseline-panel);
+    border-inline-end: var(--baseline-line) solid var(--baseline-border);
+}
+
+.baseline-nav-title {
+    font-size: var(--baseline-font-size);
+    margin-block-end: var(--space-4);
+}
+
+.baseline-nav {
+    display: grid;
+    gap: var(--space-3);
+    list-style: none;
+    margin: 0 0 var(--space-5);
+    padding: 0;
+}
+
+.baseline-nav a {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: var(--baseline-touch-size);
+    padding: var(--space-2);
+    color: var(--baseline-text);
+    cursor: not-allowed;
+    text-decoration: none;
+    border-inline-start: var(--baseline-line) solid var(--baseline-accent);
+}
+
+[data-theme="help"] .baseline-nav a {
+    border-inline-start-color: var(--baseline-brand-teal);
+}
+
+.baseline-nav small {
+    display: block;
+}
+
+.baseline-main {
+    grid-area: main;
+    min-width: 0;
+    padding: var(--space-7);
+}
+
+.baseline-welcome {
+    display: grid;
+    gap: var(--space-5);
+    max-width: var(--baseline-content-width);
+}
+
+.baseline-welcome h1 {
+    font-size: var(--baseline-title-size);
+}
+
+.baseline-welcome h2 {
+    font-size: var(--baseline-font-size);
+    margin-block-end: var(--space-3);
+}
+
+.baseline-kicker {
+    color: var(--baseline-accent);
+    font-weight: 600;
+}
+
+.baseline-placeholder {
+    padding: var(--space-5);
+    border: var(--baseline-line) solid var(--baseline-border);
+    border-radius: var(--baseline-radius);
+    background: var(--baseline-panel);
+}
+
+.baseline-skip {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    padding: var(--space-3);
+    background: var(--baseline-bg);
+    color: var(--baseline-text);
+    transform: translateY(-200%);
+    z-index: 100;
+}
+
+.baseline-skip:focus-visible {
+    transform: none;
+}
+
+@media (max-width: 767.98px) {
+    .baseline-shell {
+        grid-template-areas: "header" "sidebar" "main";
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto auto 1fr;
+    }
+
+    .baseline-main {
+        padding: var(--space-5);
+    }
+
+    .baseline-sidebar {
+        border-inline-end: none;
+        border-bottom: var(--baseline-line) solid var(--baseline-border);
+    }
+}

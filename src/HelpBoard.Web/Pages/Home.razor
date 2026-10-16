@@ -1,7 +1,24 @@
 @page "/"
 
-<PageTitle>Dashboard</PageTitle>
+<PageTitle>HELP-Board</PageTitle>
 
+@if (IsHelloWorldBaselineEnabled)
+{
+    <section class="baseline-welcome" aria-labelledby="welcome-title">
+        <p class="baseline-kicker">HELP board of directors</p>
+        <h1 id="welcome-title">Hello, HELP board!</h1>
+        <p>Welcome to HELP-Board, your future home for reports, insights, and planning.</p>
+        <p>This is our first application baseline. The layout and themes are ready to explore;
+            reports and sign-in will be added in later milestones.</p>
+        <div class="baseline-placeholder">
+            <h2>A little space for a bigger picture</h2>
+            <p>The Director's Report will be our first report. For now, this is sample content,
+                not live organizational data.</p>
+        </div>
+    </section>
+}
+else
+{
 <section class="hb-stack-lg">
     <header class="hb-page-header">
         <div class="hb-stack-sm">
@@ -37,3 +54,4 @@
             DataSourceLabel="@StrategicDataSourceLabel" />
     }
 </section>
+}

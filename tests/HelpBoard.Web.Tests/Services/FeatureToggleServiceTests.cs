@@ -7,24 +7,32 @@ namespace HelpBoard.Web.Tests.Services;
 public sealed class FeatureToggleServiceTests
 {
     [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public async Task IsEnabledAsync_KnownKey_ReturnsFeatureManagerValue(bool expected)
+    [InlineData(FeatureToggleKeys.StrategicPlan, true)]
+    [InlineData(FeatureToggleKeys.StrategicPlan, false)]
+    [InlineData(FeatureToggleKeys.HelloWorldBaseline, true)]
+    [InlineData(FeatureToggleKeys.HelloWorldBaseline, false)]
+    [InlineData(FeatureToggleKeys.LightTheme, true)]
+    [InlineData(FeatureToggleKeys.DarkTheme, true)]
+    [InlineData(FeatureToggleKeys.HelpTheme, true)]
+    [InlineData(FeatureToggleKeys.LightTheme, false)]
+    [InlineData(FeatureToggleKeys.DarkTheme, false)]
+    [InlineData(FeatureToggleKeys.HelpTheme, false)]
+    public async Task IsEnabledAsync_KnownKey_ReturnsFeatureManagerValue(string key, bool expected)
     {
         // Arrange
         var featureManagerMock = new Mock<IFeatureManager>();
         featureManagerMock
-            .Setup(manager => manager.IsEnabledAsync(FeatureToggleKeys.StrategicPlan))
+            .Setup(manager => manager.IsEnabledAsync(key))
             .ReturnsAsync(expected);
 
         var sut = new FeatureToggleService(featureManagerMock.Object);
 
         // Act
-        var result = await sut.IsEnabledAsync(FeatureToggleKeys.StrategicPlan);
+        var result = await sut.IsEnabledAsync(key);
 
         // Assert
         Assert.Equal(expected, result);
-        featureManagerMock.Verify(manager => manager.IsEnabledAsync(FeatureToggleKeys.StrategicPlan), Times.Once);
+        featureManagerMock.Verify(manager => manager.IsEnabledAsync(key), Times.Once);
     }
 
     [Fact]

@@ -4,6 +4,10 @@
 
 Establish a persistent data layer using Entity Framework Core and PostgreSQL that supports all HelpBoard domain entities (Ticket, ProjectBoard, WorkItem, Strategic Plan items) with production-ready migrations infrastructure, connection pooling, transaction handling, and repository pattern implementation.
 
+## Global Scope Clarifications
+
+The [global persistence requirements](../global-requirements.md#42-existing-persistence-requirements) consolidate this plan. The application runs only as a Docker container on PiTony; PiDB remains the documented database target. Staging/blue-green examples below do not mandate additional deployments. Pool settings below are proposed explicit values, not Npgsql defaults or measured PiTony/PiDB capacity. Production startup migration defaults OFF; development may explicitly opt in. Strategic items use the shared board/work-item model from Features 003/004, not a separate strategic-only persistence model. Schema migrations remain version-controlled even though external-client API versioning is out of scope.
+
 ## User Value
 
 Users benefit from durable data persistence across application restarts and deployments. Data integrity is guaranteed through transactional consistency. Teams can confidently track work progress and strategic plans in a production-grade relational store. Operations teams can manage migrations, backups, and scaling confidently with PostgreSQL.
@@ -78,7 +82,7 @@ Users benefit from durable data persistence across application restarts and depl
   Host=<PiDB_HOST>;Port=5432;Database=helpboard_<env>;Username=<USER>;Password=<PASSWORD>;
   ```
 - **Timeout and Pooling**:
-  - Connection pooling defaults managed by Npgsql (min 10, max 30 connections).
+  - Connection pooling managed by Npgsql; proposed explicit minimum 10, maximum 30 connections, pending capacity validation.
   - Command timeout: 30 seconds (configurable per query if needed).
   - Connection lifetime: 5 minutes (configurable in advanced scenarios).
 
@@ -193,7 +197,7 @@ Users benefit from durable data persistence across application restarts and depl
 
 ### Connection Pooling
 
-- Npgsql connection pooling is enabled by default (min 10, max 30).
+- Npgsql connection pooling is enabled by default; the proposed explicit configuration here is minimum 10, maximum 30, subject to capacity validation.
 - Configuration via connection string parameter `Pooling=true; Min Pool Size=10; Max Pool Size=30;`.
 - Connection reuse is transparent to application code.
 
@@ -335,7 +339,7 @@ Not applicable to this infrastructure feature. Accessibility concerns are addres
    - Risk: Large schema changes (adding non-nullable columns, dropping tables) require downtime or careful coordination.
    - Mitigation:
      - Breaking schema changes are avoided in first releases.
-     - If unavoidable, migrations are coordinated with deployment strategy (blue-green deployment, maintenance windows).
+     - If unavoidable, migrations are coordinated with the single-container deployment on PiTony and an approved maintenance window and recovery plan.
      - Documentation includes pre-migration checklist (backups, testing, rollback plan).
 
 6. **Query Performance Regression**
@@ -412,7 +416,7 @@ Not applicable to this infrastructure feature. Accessibility concerns are addres
 
 ## Open Questions
 
-- Should feature-flag the initial migration application, or apply at startup by default?
+- What reviewed production migration execution procedure should accompany PiTony deployment? Startup application already has a default-OFF production flag.
 - Should implement optimistic concurrency control (ConcurrencyToken/RowVersion) for conflict detection, or defer to future feature?
 - Should connection pool and timeout settings be configurable per environment, or use defaults for MVP?
 

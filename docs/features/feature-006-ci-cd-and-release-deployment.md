@@ -3,6 +3,10 @@
 ## Goal
 Establish required pull-request validation and a release-triggered deployment pipeline so HELP-Board can ship safely and consistently.
 
+## Fixed Deployment Target
+
+The [global requirements](../global-requirements.md#41-fixed-deployment-and-resource-boundaries) define the sole production target: a Docker container on PiTony, a Raspberry Pi 5 with 16 GB RAM, exposed at `https://help.becauseimclever.com`. Build for the host's verified OS/CPU platform (Linux ARM64 for a 64-bit OS), validate resource use on PiTony, and retain container identity for rollback. Alternative production platforms, mandatory staging infrastructure, and external-client API versioning are not required. Release tags identify application/container builds, not public API support versions.
+
 ## User Value
 Contributors gain fast feedback before merge, and operators gain a predictable release path that builds, tests, and deploys from tagged releases.
 
@@ -60,15 +64,17 @@ Contributors gain fast feedback before merge, and operators gain a predictable r
 
 ## Release and Deployment Pipeline
 - Trigger: release version created/published.
-- Steps: checkout, restore, build, full test run, package artifacts, deploy to target environment.
+- Steps: checkout, restore, build, full test run, package a PiTony-compatible Docker image, deploy to PiTony.
 - Deployment executes on self-hosted runner/agent in private network.
 - Environment-specific secrets and connection details are injected through secure GitHub environments.
+- A trusted private-network deployment runner need not run on PiTony. Untrusted PR execution must not expose deployment credentials or private-network access.
 
 ## Environment Gating and Rollback
 - Production deployment requires explicit environment approval.
 - Pre-deploy validation and post-deploy health checks are required.
 - If deployment validation fails, rollback to previous known-good release is executed or gated for manual confirmation.
 - Rollback procedure must be documented and regularly exercised.
+- Verify container health, public HTTPS, WASM routing/assets, database connectivity, and authentication redirects. Container rollback requires a compatible schema/data recovery plan; it does not itself undo a database migration.
 
 ## Dependencies
 - Feature 005 Authentication and Authorization for secure environment access controls.

@@ -11,6 +11,11 @@ public interface IFeatureToggleService
 
 public static class FeatureToggleKeys
 {
+    public const string HelloWorldBaseline = "HelloWorldBaseline";
+    public const string LightTheme = "LightTheme";
+    public const string DarkTheme = "DarkTheme";
+    public const string HelpTheme = "HelpTheme";
+
     public const string StrategicPlan = "StrategicPlan";
 }
 
@@ -19,6 +24,10 @@ public sealed class FeatureToggleService : IFeatureToggleService
     private static readonly IReadOnlySet<string> SupportedFeatureKeys =
         new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
+            FeatureToggleKeys.HelloWorldBaseline,
+            FeatureToggleKeys.LightTheme,
+            FeatureToggleKeys.DarkTheme,
+            FeatureToggleKeys.HelpTheme,
             FeatureToggleKeys.StrategicPlan,
         };
 
