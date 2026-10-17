@@ -1,0 +1,55 @@
+.landing-content {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-4);
+    width: min(100%, 34rem);
+    text-align: center;
+}
+
+.landing-eyebrow {
+    margin: 0;
+    color: var(--color-primary-strong);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.landing-content h1 {
+    max-width: 16ch;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+}
+
+.landing-copy {
+    max-width: 38ch;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+}
+
+.landing-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    margin-block-start: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    border: 1px solid var(--color-primary-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-primary-strong);
+    color: var(--color-text-inverse);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.landing-action:hover {
+    border-color: var(--color-text-strong);
+    background: var(--color-text-strong);
+    color: var(--color-text-inverse);
+}
+
+.landing-status {
+    max-width: 40ch;
+    margin: 0;
+    color: var(--color-text-muted);
+}

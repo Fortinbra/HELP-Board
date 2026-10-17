@@ -111,6 +111,8 @@ implementation.
 - [x] Initial role mapping is implemented: Workspace members receive Viewer; configured administrator emails receive Admin.
 - [x] The OIDC callback validates the verified Workspace domain and email claim.
 - [x] API endpoints require authentication by default; sign-out uses antiforgery protection.
+- [x] The public welcome page is anonymous; the dashboard route redirects anonymous users to sign-in when Google is configured.
+- [x] The dashboard component verifies session status before loading dashboard content.
 - [x] Cookie sessions use HTTPS-only, HttpOnly cookies and an eight-hour lifetime.
 - [ ] User provisioning/deprovisioning lifecycle is documented.
 - [ ] Immediate session revocation and database-backed user provisioning are not implemented.

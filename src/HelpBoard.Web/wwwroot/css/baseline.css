@@ -240,6 +240,32 @@ body:has(.baseline-shell)::before {
     max-width: var(--baseline-content-width);
 }
 
+.baseline-landing {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-5);
+    max-width: var(--baseline-content-width);
+    padding-block: var(--space-5);
+}
+
+.baseline-landing h1 {
+    max-width: 18ch;
+    font-size: var(--baseline-title-size);
+}
+
+.baseline-landing__intro {
+    max-width: 58ch;
+    font-size: clamp(1.125rem, 2vw, 1.35rem);
+}
+
+.baseline-landing__note {
+    color: var(--baseline-muted);
+}
+
+.baseline-landing .baseline-placeholder {
+    width: 100%;
+}
+
 .baseline-welcome h1 {
     font-size: var(--baseline-title-size);
 }

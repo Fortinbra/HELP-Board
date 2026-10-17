@@ -99,6 +99,9 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapFallbackToFile("/dashboard/{*path:nonfile}", "index.html")
+    .RequireAuthorization();
+
 // Fallback serves the Blazor WASM shell for any non-API route
 app.MapFallbackToFile("index.html").AllowAnonymous();
 

@@ -1,0 +1,84 @@
+@page "/dashboard"
+
+<PageTitle>Dashboard | HELP-Board</PageTitle>
+
+@if (_isCheckingAccess)
+{
+    <p role="status">Checking dashboard access</p>
+}
+else if (_errorMessage is not null)
+{
+    <section class="baseline-welcome" aria-labelledby="dashboard-access-title">
+        <h1 id="dashboard-access-title">Dashboard unavailable</h1>
+        <p role="alert">@_errorMessage</p>
+        <a class="baseline-login__action" href="/" @onclick="ReturnToLanding" @onclick:preventDefault="true">Return to the welcome page</a>
+    </section>
+}
+else if (_status is not { IsAuthenticated: true })
+{
+    <section class="baseline-welcome" aria-labelledby="dashboard-sign-in-title">
+        <h1 id="dashboard-sign-in-title">Sign in to view the dashboard</h1>
+        <p>HELP-Board reports are available only to authorized Workspace members.</p>
+        @if (_status is { GoogleSignInEnabled: true })
+        {
+            <a class="baseline-login__action"
+               href="/auth/sign-in?returnUrl=%2Fdashboard"
+               @onclick="StartSignIn"
+               @onclick:preventDefault="true">Sign in with Google Workspace</a>
+        }
+        else
+        {
+            <p>Workspace sign-in is not configured yet.</p>
+        }
+    </section>
+}
+else if (IsHelloWorldBaselineEnabled)
+{
+    <section class="baseline-welcome" aria-labelledby="welcome-title">
+        <p class="baseline-kicker">HELP board of directors</p>
+        <h1 id="welcome-title">Hello, HELP board!</h1>
+        <p>Welcome to HELP-Board, your home for reports, insights, and planning.</p>
+        <div class="baseline-placeholder">
+            <h2>A little space for a bigger picture</h2>
+            <p>The Director's Report will be our first report. For now, this is sample content, not live organizational data.</p>
+        </div>
+    </section>
+}
+else
+{
+    <section class="hb-stack-lg">
+        <header class="hb-page-header">
+            <div class="hb-stack-sm">
+                <p class="hb-eyebrow">Dashboard foundation</p>
+                <h1>Experience scaffolding</h1>
+                <p class="hb-page-copy">
+                    Use this starter surface to review neutral foundation cards and validate layout,
+                    navigation, and content hierarchy before real source data is connected.
+                </p>
+            </div>
+
+            <a class="hb-button hb-button--secondary" href="https://learn.microsoft.com/aspnet/core/blazor/components/" target="_blank" rel="noreferrer" aria-label="Component guidance (opens in a new tab)">
+                <AppIcon Name="arrow-up-right" />
+                <span>Component guidance (opens in a new tab)</span>
+            </a>
+        </header>
+
+        <DashboardSummarySection
+            Title="Foundation cards"
+            Description="These cards intentionally stay source-agnostic while the dashboard slice is being shaped."
+            LastUpdatedText="@LastUpdatedText"
+            IsLoading="@IsLoading"
+            ErrorMessage="@DashboardErrorMessage"
+            Cards="@SummaryCards"
+            OnRetry="ReloadSummaryAsync" />
+
+        @if (ShowStrategicSection)
+        {
+            <StrategicTrackerSummarySection
+                Cards="@StrategicSummaryCards"
+                LastUpdatedText="@StrategicLastUpdatedText"
+                IsPlaceholderData="@IsStrategicPlaceholderData"
+                DataSourceLabel="@StrategicDataSourceLabel" />
+        }
+    </section>
+}

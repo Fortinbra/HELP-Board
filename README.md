@@ -2,13 +2,13 @@
 
 HELP-Board is a reporting and data visualization dashboard for the HELP board of directors, built with an ASP.NET Core API hosting a Blazor WebAssembly frontend and PostgreSQL persistence through Entity Framework Core.
 
-Planned production URL: <https://help.becauseimclever.com>. Board data requires authorized access.
+Planned production URL: <https://help.becauseimclever.com>. The welcome page is public; dashboard and board data require an authorized Google Workspace account.
 
 This purpose-built application will run as a Docker container on PiTony (Raspberry Pi 5, 16 GB RAM). Standard themes are VS Code-inspired Light/Dark and HELP purple/teal, with system light/dark preference used until the user chooses a theme.
 
 - [Global application requirements](docs/global-requirements.md) - Product scope, architecture, identity, reporting, visualization catalog, quality requirements, and open decisions.
 - [Feature documents](docs/features/README.md) - Feature-level scope and implementation guidance.
-- [Production deployment](docs/deployment.md) - Build and publish private GHCR AMD64/ARM64 images under one tag (for example `ghcr.io/fortinbra/help-board:sha-f8475f4`), then pull onto PiTony behind Nginx Proxy Manager. The current release is an unauthenticated shell and must remain access-restricted with no real board data.
+- [Production deployment](docs/deployment.md) - Build and publish private GHCR AMD64/ARM64 images under one tag (for example `ghcr.io/fortinbra/help-board:sha-f8475f4`), then pull onto PiTony behind Nginx Proxy Manager. Configure Google Workspace sign-in before allowing public access to the welcome page.
 
 ## Initial UI baseline
 

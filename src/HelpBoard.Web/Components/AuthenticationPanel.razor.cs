@@ -80,6 +80,11 @@ public partial class AuthenticationPanel : IDisposable
         }
     }
 
+    private void StartSignIn()
+    {
+        NavigationManager.NavigateTo("/auth/sign-in", forceLoad: true);
+    }
+
     public void Dispose()
     {
         _cancellationTokenSource.Cancel();

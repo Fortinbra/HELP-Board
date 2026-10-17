@@ -8,9 +8,11 @@ OpenID Connect sign-in and authenticated API access are implemented, but must
 be configured before sign-in is available. Authentik fallback and fine-grained
 permissions are not implemented. Until real Google credentials and an approved
 Workspace domain are configured and verified, do not connect this milestone to
-real board data. Keep a restrictive Nginx Proxy Manager (NPM) Access List on the
-**entire** proxy host, including API routes, and use a dedicated empty preview
-database on PiDB as defense in depth.
+real board data. Until Google sign-in has been configured and verified, keep a
+restrictive Nginx Proxy Manager (NPM) Access List on the **entire** proxy host
+and use a dedicated empty preview database on PiDB. After verification, the
+welcome page at `/` is public; `/dashboard` and all application APIs require an
+authenticated Workspace member.
 
 The sole production target is PiTony running 64-bit Linux and Docker
 (`linux/arm64`), with PostgreSQL remaining on PiDB and HTTPS terminated by NPM at

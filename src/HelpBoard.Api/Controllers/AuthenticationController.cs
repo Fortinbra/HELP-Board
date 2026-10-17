@@ -53,7 +53,7 @@ public sealed class AuthenticationController(
     [AllowAnonymous]
     [HttpGet("sign-in")]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public IActionResult SignIn()
+    public IActionResult SignIn([FromQuery] string? returnUrl)
     {
         if (!googleOptions.IsConfigured)
         {
@@ -63,7 +63,10 @@ public sealed class AuthenticationController(
         }
 
         return Challenge(
-            new AuthenticationProperties { RedirectUri = "/" },
+            new AuthenticationProperties
+            {
+                RedirectUri = Url.IsLocalUrl(returnUrl) ? returnUrl : "/"
+            },
             "Google");
     }
 

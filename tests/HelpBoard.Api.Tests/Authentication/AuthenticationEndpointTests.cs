@@ -111,12 +111,109 @@ public sealed class AuthenticationEndpointTests
         Assert.StartsWith("https://accounts.google.com/", response.Headers.Location?.AbsoluteUri);
     }
 
+    [Fact]
+    public async Task GetDashboard_WithoutAuthenticationOrProvider_RedirectsToPublicLanding()
+    {
+        // Arrange
+        using var factory = CreateUnauthenticatedFactory();
+        using var client = factory.CreateClient(new()
+        {
+            AllowAutoRedirect = false,
+            BaseAddress = new Uri("https://localhost")
+        });
+
+        // Act
+        using var response = await client.GetAsync("/dashboard");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Equal("/", response.Headers.Location?.OriginalString);
+    }
+
+    [Fact]
+    public async Task GetDashboard_WithoutAuthenticationWithProvider_RedirectsToSignIn()
+    {
+        // Arrange
+        using var factory = CreateGoogleConfiguredFactory();
+        using var client = factory.CreateClient(new()
+        {
+            AllowAutoRedirect = false,
+            BaseAddress = new Uri("https://localhost")
+        });
+
+        // Act
+        using var response = await client.GetAsync("/dashboard");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Equal(
+            "/auth/sign-in?returnUrl=%2Fdashboard",
+            response.Headers.Location?.OriginalString);
+    }
+
+    [Fact]
+    public async Task GetDashboard_WithAuthenticatedSession_ReturnsApplicationShell()
+    {
+        // Arrange
+        using var factory = new HelpBoardWebApplicationFactory();
+        using var client = factory.CreateClient(new()
+        {
+            AllowAutoRedirect = false,
+            BaseAddress = new Uri("https://localhost")
+        });
+
+        // Act
+        using var response = await client.GetAsync("/dashboard");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Contains("id=\"app\"", await response.Content.ReadAsStringAsync());
+    }
+
+    [Fact]
+    public async Task GetLanding_WithoutAuthentication_ReturnsPublicApplicationShell()
+    {
+        // Arrange
+        using var factory = CreateUnauthenticatedFactory();
+        using var client = factory.CreateClient(new()
+        {
+            AllowAutoRedirect = false,
+            BaseAddress = new Uri("https://localhost")
+        });
+
+        // Act
+        using var response = await client.GetAsync("/");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Contains("id=\"app\"", await response.Content.ReadAsStringAsync());
+    }
+
+    [Fact]
+    public async Task GetSignIn_WithExternalReturnUrl_UsesSafeDefaultAfterGoogleChallenge()
+    {
+        // Arrange
+        using var factory = CreateGoogleConfiguredFactory();
+        using var client = factory.CreateClient(new() { AllowAutoRedirect = false });
+
+        // Act
+        using var response = await client.GetAsync(
+            "/auth/sign-in?returnUrl=https%3A%2F%2Fevil.example");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Contains("redirect_uri=", response.Headers.Location?.Query);
+    }
+
     private static WebApplicationFactory<Program> CreateUnauthenticatedFactory()
     {
         return new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder => builder
                 .UseEnvironment("Development")
-                .UseSetting("ConnectionStrings:HelpBoard", "Host=unreachable;Database=auth;Username=test"));
+                .UseSetting("ConnectionStrings:HelpBoard", "Host=unreachable;Database=auth;Username=test")
+                .UseSetting("Authentication:Google:ClientId", string.Empty)
+                .UseSetting("Authentication:Google:ClientSecret", string.Empty)
+                .UseSetting("Authentication:Google:WorkspaceDomain", string.Empty));
     }
 
     private static WebApplicationFactory<Program> CreateGoogleConfiguredFactory()

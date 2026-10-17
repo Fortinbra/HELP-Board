@@ -51,6 +51,20 @@ public static class HelpBoardAuthenticationExtensions
                         return Task.CompletedTask;
                     }
 
+                    if (context.Request.Path.StartsWithSegments("/dashboard", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (!googleOptions.IsConfigured)
+                        {
+                            context.Response.Redirect("/");
+                            return Task.CompletedTask;
+                        }
+
+                        var returnUrl = Uri.EscapeDataString(
+                            $"{context.Request.PathBase}{context.Request.Path}{context.Request.QueryString}");
+                        context.Response.Redirect($"/auth/sign-in?returnUrl={returnUrl}");
+                        return Task.CompletedTask;
+                    }
+
                     context.Response.Redirect(context.RedirectUri);
                     return Task.CompletedTask;
                 };
