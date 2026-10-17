@@ -2,7 +2,7 @@ name: help-board
 
 services:
   app:
-    image: ${HELPBOARD_IMAGE:?Set HELPBOARD_IMAGE to the published GHCR digest}
+    image: ${HELPBOARD_IMAGE:?Set HELPBOARD_IMAGE to a published GHCR tag or digest}
     platform: linux/arm64
     restart: unless-stopped
     init: true

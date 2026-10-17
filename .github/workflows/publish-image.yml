@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: publish-${{ github.ref }}
+  group: publish-container
   cancel-in-progress: false
 
 jobs:
@@ -159,6 +159,8 @@ jobs:
           fi
       - name: Merge verified images
         shell: bash
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
           set -euo pipefail
           image="ghcr.io/${GITHUB_REPOSITORY,,}"
@@ -166,6 +168,10 @@ jobs:
           tags=(--tag "$image:sha-$short_sha" --tag "$image:sha-$GITHUB_SHA")
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
             tags+=(--tag "$image:$GITHUB_REF_NAME")
+          fi
+          if [[ "$GITHUB_EVENT_NAME" == workflow_dispatch && "$GITHUB_REF" == "refs/heads/$DEFAULT_BRANCH" ]] \
+            || [[ "$GITHUB_REF" =~ ^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            tags+=(--tag "$image:latest")
           fi
           mapfile -t digests < <(cat /tmp/digests/*.txt)
           test "${#digests[@]}" = 2
@@ -179,5 +185,8 @@ jobs:
             docker buildx imagetools inspect "$image:sha-$GITHUB_SHA"
             echo
             echo "Package visibility verified: Private."
-            echo "Deploy by digest using the production deployment guide."
+            for ((index=1; index<${#tags[@]}; index+=2)); do
+              printf 'Published tag: `%s`\n' "${tags[index]}"
+            done
+            echo "Use latest for updates without editing Compose; retain the digest for rollback."
           } >> "$GITHUB_STEP_SUMMARY"

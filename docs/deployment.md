@@ -48,13 +48,16 @@ repository is `ghcr.io/fortinbra/help-board`.
    The source label links the package to this repository. If an existing package
    rejects publishing, grant this repository Actions write access in the
    package settings.
-6. Copy the multi-architecture `Digest: sha256:...` from the run summary's
-   manifest inspection and use `ghcr.io/fortinbra/help-board@sha256:...`.
+6. Use `ghcr.io/fortinbra/help-board:latest` for updates without editing the
+   deployment configuration. Manual builds from the default branch (`main`)
+   and stable `vMAJOR.MINOR.PATCH` tags update `latest`; feature-branch builds
+   and prereleases do not. Record the multi-architecture
+   `Digest: sha256:...` from the run summary for rollback or pinned deployments.
    Every run publishes `sha-<7-character-SHA>` and `sha-<full-commit-SHA>`;
    tag-triggered runs additionally publish the exact tag, for example `v0.1.0`.
    The per-platform images also retain `sha-<full-commit-SHA>-amd64` and
-   `sha-<full-commit-SHA>-arm64` tags. There is no
-   automatically moving `latest` tag. Deploy by digest, since tags can be moved.
+   `sha-<full-commit-SHA>-arm64` tags. Tags can move; use
+   `ghcr.io/fortinbra/help-board@sha256:...` when pinning a deployment.
 
 For example, a commit starting `f8475f4` can be pulled with:
 
@@ -110,7 +113,7 @@ Edit `.env` locally on the server:
 
 | Variable | Value |
 |----------|-------|
-| `HELPBOARD_IMAGE` | Exact GHCR image digest from the successful workflow run. |
+| `HELPBOARD_IMAGE` | `ghcr.io/fortinbra/help-board:latest`, or a specific tag/digest for a pinned deployment. |
 | `HELPBOARD_BIND_IP` | PiTony's LAN IPv4 address; the host port binds only to this interface. |
 | `HELPBOARD_APP_PORT` | `2026`, the approved HELP-Board host port. |
 | `HELPBOARD_PROXY_IP` | NPM's stable source IP as seen by the application after Docker forwarding/NAT. |
@@ -231,13 +234,18 @@ The current shell and liveness probe do not require database tables.
 ## 5. Update, restart, and roll back
 
 Before an update, record the previous known-good digest and its compatible
-schema/backup. Edit `HELPBOARD_IMAGE` to the newly approved digest, then:
+schema/backup. With `HELPBOARD_IMAGE=ghcr.io/fortinbra/help-board:latest`,
+leave the configuration unchanged and run:
 
 ```sh
 docker compose pull
 docker compose up -d --wait --wait-timeout 120
 docker compose logs --tail 100 app
 ```
+
+For a pinned deployment, edit `HELPBOARD_IMAGE` to the approved tag or digest
+before these commands. Publishing `latest` does not automatically restart
+PiTony's container; the pull/up commands apply the update.
 
 Repeat the acceptance checks. This is a single-container deployment and can
 have a short interruption. `unless-stopped` restarts the container after a
