@@ -2,6 +2,7 @@ using HelpBoard.Repositories;
 using HelpBoard.Repositories.Data;
 using HelpBoard.Services;
 using HelpBoard.Api.FeatureToggles;
+using HelpBoard.Api.Authentication;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
@@ -30,6 +31,7 @@ builder.Services
 
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();
+builder.Services.AddHelpBoardAuthentication(builder.Configuration);
 
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
@@ -92,12 +94,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 // Fallback serves the Blazor WASM shell for any non-API route
-app.MapFallbackToFile("index.html");
+app.MapFallbackToFile("index.html").AllowAnonymous();
 
 app.Run();
 

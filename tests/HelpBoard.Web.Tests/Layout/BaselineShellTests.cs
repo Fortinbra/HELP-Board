@@ -1,4 +1,7 @@
 using HelpBoard.Web.Layout;
+using HelpBoard.Contracts;
+using HelpBoard.Web.Components;
+using HelpBoard.Web.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +14,7 @@ public sealed class BaselineShellTests
     [Fact]
     public async Task Render_Baseline_ShowsBrandThemeLoginAndDisabledReports()
     {
-        var services = new ServiceCollection().AddLogging();
+        var services = CreateServices(new(false, false, null, null, null));
         await using var provider = services.BuildServiceProvider();
         await using var renderer = new HtmlRenderer(provider, provider.GetRequiredService<ILoggerFactory>());
 
@@ -24,7 +27,7 @@ public sealed class BaselineShellTests
         Assert.Contains("images/help-logo.png", html);
         Assert.Contains("Theme", html);
         Assert.Contains("Not signed in", html);
-        Assert.Contains("Sign-in is not available in this baseline", html);
+        Assert.Contains("Google Workspace sign-in is not configured.", html);
         Assert.Contains("Director's report", System.Net.WebUtility.HtmlDecode(html));
         Assert.Contains("Strategic plan", html);
         Assert.Contains("Budget report", html);
@@ -37,7 +40,7 @@ public sealed class BaselineShellTests
     [Fact]
     public async Task Render_WithBody_PlacesContentInMainLandmark()
     {
-        var services = new ServiceCollection().AddLogging();
+        var services = CreateServices(new(false, false, null, null, null));
         await using var provider = services.BuildServiceProvider();
         await using var renderer = new HtmlRenderer(provider, provider.GetRequiredService<ILoggerFactory>());
         RenderFragment body = builder => builder.AddContent(0, "Hello, HELP board!");
@@ -56,7 +59,7 @@ public sealed class BaselineShellTests
     [Fact]
     public async Task Render_DisabledHelpTheme_HidesOption()
     {
-        var services = new ServiceCollection().AddLogging();
+        var services = CreateServices(new(false, false, null, null, null));
         await using var provider = services.BuildServiceProvider();
         await using var renderer = new HtmlRenderer(provider, provider.GetRequiredService<ILoggerFactory>());
 
@@ -70,5 +73,51 @@ public sealed class BaselineShellTests
         Assert.DoesNotContain("value=\"help\"", html);
         Assert.Contains("value=\"dark\"", html);
         Assert.Contains("value=\"light\"", html);
+    }
+
+    [Fact]
+    public async Task Render_GoogleSignInEnabled_ShowsSignInLink()
+    {
+        var services = CreateServices(new(true, false, null, null, null));
+        await using var provider = services.BuildServiceProvider();
+        await using var renderer = new HtmlRenderer(provider, provider.GetRequiredService<ILoggerFactory>());
+
+        var html = await renderer.Dispatcher.InvokeAsync(async () =>
+        {
+            var result = await renderer.RenderComponentAsync<AuthenticationPanel>();
+            return result.ToHtmlString();
+        });
+
+        Assert.Contains("href=\"/auth/sign-in\"", html);
+        Assert.Contains("Sign in with Google Workspace", html);
+    }
+
+    private static IServiceCollection CreateServices(AuthenticationStatusResponse status)
+    {
+        var services = new ServiceCollection().AddLogging();
+        services.AddSingleton<IAuthenticationClient>(new FixedAuthenticationClient(status));
+        services.AddSingleton<NavigationManager>(new TestNavigationManager());
+        return services;
+    }
+
+    private sealed class FixedAuthenticationClient(AuthenticationStatusResponse status) : IAuthenticationClient
+    {
+        public Task<AuthenticationStatusResponse> GetStatusAsync(CancellationToken cancellationToken)
+            => Task.FromResult(status);
+
+        public Task SignOutAsync(CancellationToken cancellationToken)
+            => Task.CompletedTask;
+    }
+
+    private sealed class TestNavigationManager : NavigationManager
+    {
+        public TestNavigationManager()
+        {
+            Initialize("https://localhost/", "https://localhost/");
+        }
+
+        protected override void NavigateToCore(string uri, NavigationOptions options)
+        {
+        }
     }
 }

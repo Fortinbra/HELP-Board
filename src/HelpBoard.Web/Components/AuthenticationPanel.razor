@@ -1,0 +1,38 @@
+<div class="baseline-login" aria-live="polite">
+    @if (_isLoading)
+    {
+        <span role="status">Checking sign-in status</span>
+    }
+    else if (_errorMessage is not null)
+    {
+        <span role="alert">@_errorMessage</span>
+        @if (_status is { GoogleSignInEnabled: true, IsAuthenticated: false } or null)
+        {
+            <a class="baseline-login__action" href="/auth/sign-in">Try Google sign-in again</a>
+        }
+        else if (_status is { IsAuthenticated: true })
+        {
+            <button type="button" @onclick="SignOutAsync" disabled="@_isSigningOut">
+                Try signing out again
+            </button>
+        }
+    }
+    else if (_status is { GoogleSignInEnabled: false })
+    {
+        <strong>Not signed in</strong>
+        <span>Google Workspace sign-in is not configured.</span>
+    }
+    else if (_status is { IsAuthenticated: true })
+    {
+        <strong>@(_status.DisplayName ?? _status.Email ?? "Signed in")</strong>
+        <span>@_status.Role access</span>
+        <button type="button" @onclick="SignOutAsync" disabled="@_isSigningOut">
+            @(_isSigningOut ? "Signing out" : "Sign out")
+        </button>
+    }
+    else
+    {
+        <a class="baseline-login__action" href="/auth/sign-in">Sign in with Google Workspace</a>
+        <span>Only members of the configured Workspace can access board data.</span>
+    }
+</div>

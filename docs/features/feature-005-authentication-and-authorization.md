@@ -4,7 +4,7 @@
 Provide secure, organization-aligned authentication and authorization so HELP-Board users can sign in with Google Workspace by default, with Authentik as a fallback OpenID Connect provider.
 
 ## Planning Note
-The [global application requirements](../global-requirements.md) confirm Google Workspace as the primary sign-in provider and Authentik OIDC fallback as required scope. Provider direction is no longer an open product decision. Organizational eligibility, fallback activation and identity mapping, permissions, session architecture, and rollout timing still require approval; this document does not establish implementation completion.
+The [global application requirements](../global-requirements.md) confirm Google Workspace as the primary sign-in provider and Authentik OIDC fallback as required scope. Google Workspace sign-in is implemented for initial testing with one configured domain, Viewer by default, and a configured Admin email list. Authentik fallback is explicitly deferred for this test rollout. This initial role mapping is configuration-backed and does not yet provide persistent user provisioning, administrative role management, or immediate revocation.
 
 ## User Value
 Staff and volunteers can access HELP-Board using familiar accounts while administrators keep role-based access control and security policies consistent.
@@ -17,6 +17,10 @@ Staff and volunteers can access HELP-Board using familiar accounts while adminis
 - Define user provisioning and deprovisioning approach.
 - Define session management and authentication security requirements.
 - Define provider failover and operational fallback behavior.
+
+Google Workspace is the only implemented provider in the initial test rollout.
+Authentik support remains required product scope but is not part of this
+implementation.
 
 ### Out of Scope
 - Building a custom username/password identity store.
@@ -102,15 +106,18 @@ Staff and volunteers can access HELP-Board using familiar accounts while adminis
 - "Identify whether this auth work needs new Copilot instructions for security, provisioning, or configuration governance."
 
 ## Acceptance Criteria
-- [ ] Google Workspace OIDC login path is documented as the primary SSO method.
+- [x] Google Workspace OIDC login path is implemented as the primary SSO method.
 - [ ] Authentik OIDC fallback path is documented with activation conditions.
-- [ ] Role and permission model is documented with default role assignments.
+- [x] Initial role mapping is implemented: Workspace members receive Viewer; configured administrator emails receive Admin.
+- [x] The OIDC callback validates the verified Workspace domain and email claim.
+- [x] API endpoints require authentication by default; sign-out uses antiforgery protection.
+- [x] Cookie sessions use HTTPS-only, HttpOnly cookies and an eight-hour lifetime.
 - [ ] User provisioning/deprovisioning lifecycle is documented.
-- [ ] Session and token validation security requirements are documented.
+- [ ] Immediate session revocation and database-backed user provisioning are not implemented.
+- [x] Session and token validation security requirements are documented.
 - [ ] Failure/fallback behavior is documented for provider outages and auth errors.
 - [ ] Copilot governance artifacts are defined for auth work, covering security guardrails, RBAC consistency, and fallback-provider validation.
 
 ## Open Questions
-- Should provider selection be user-facing or fully controlled by configuration?
-- What is the minimum role set required for initial production rollout?
-- Which claims are authoritative for role bootstrap and org membership?
+- Authentik fallback activation, identity mapping, and outage procedures remain open.
+- Persistent role management, provisioning/deprovisioning, and immediate session revocation remain open.

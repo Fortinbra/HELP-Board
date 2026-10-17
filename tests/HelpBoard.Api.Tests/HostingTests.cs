@@ -41,7 +41,7 @@ public sealed class HostingTests
             request.Connection.RemoteIpAddress = IPAddress.Parse(remoteAddress);
             request.Request.Scheme = "http";
             request.Request.Host = new HostString("localhost");
-            request.Request.Path = "/api/tickets";
+            request.Request.Path = "/auth/status";
             request.Request.Headers["X-Forwarded-Proto"] = "https";
             request.Request.Headers["X-Forwarded-For"] = "192.0.2.1";
         });

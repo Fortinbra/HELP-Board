@@ -3,13 +3,14 @@
 ## Release boundary
 
 This packages the current hello-world Blazor WebAssembly shell and ASP.NET Core
-API together, not the completed reporting application. Google/Authentik sign-in
-and board-data authorization are **not implemented**. Existing proof-of-concept
-API controllers are unauthenticated. Do not connect this milestone to real board
-data or make it publicly accessible. Apply a restrictive Nginx Proxy Manager
-(NPM) Access List to the **entire** proxy host, including API routes, and use a
-dedicated empty preview database on PiDB. Network restrictions are temporary
-deployment protection, not a replacement for application authentication.
+API together, not the completed reporting application. Google Workspace
+OpenID Connect sign-in and authenticated API access are implemented, but must
+be configured before sign-in is available. Authentik fallback and fine-grained
+permissions are not implemented. Until real Google credentials and an approved
+Workspace domain are configured and verified, do not connect this milestone to
+real board data. Keep a restrictive Nginx Proxy Manager (NPM) Access List on the
+**entire** proxy host, including API routes, and use a dedicated empty preview
+database on PiDB as defense in depth.
 
 The sole production target is PiTony running 64-bit Linux and Docker
 (`linux/arm64`), with PostgreSQL remaining on PiDB and HTTPS terminated by NPM at
@@ -118,6 +119,45 @@ Edit `.env` locally on the server:
 | `HELPBOARD_APP_PORT` | `2026`, the approved HELP-Board host port. |
 | `HELPBOARD_PROXY_IP` | NPM's stable source IP as seen by the application after Docker forwarding/NAT. |
 | `DB_CONNECTION_STRING` | PiDB connection string for a least-privilege, dedicated preview database user. Uses the same environment-file variable name as BudgetExperiment, mapped to HELP-Board's own configuration key. |
+| `GOOGLE_OAUTH_CLIENT_ID` | OAuth 2.0 Web application client ID from the organization's Google Cloud project. |
+| `GOOGLE_OAUTH_CLIENT_SECRET` | The matching client secret. Keep only in the restricted, ignored `.env` file; never commit or include it in an image. |
+| `GOOGLE_WORKSPACE_DOMAIN` | The single Workspace domain whose verified members may sign in. |
+| `GOOGLE_ADMIN_EMAILS` | Optional comma-separated Workspace email addresses assigned the initial Admin role. Other eligible users receive Viewer. |
+
+The client ID is public OAuth configuration. Add it as `GOOGLE_OAUTH_CLIENT_ID`
+in the ignored `.env`; store the matching client secret only as
+`GOOGLE_OAUTH_CLIENT_SECRET` in that same protected file.
+
+### Google Workspace OAuth setup
+
+Create an OAuth 2.0 client of type **Web application** in the organization's
+Google Cloud project. Configure this exact authorized redirect URI:
+
+```text
+https://help.becauseimclever.com/signin-google
+```
+
+For local HTTPS testing, add the exact localhost callback URI used by the
+development profile as a separate redirect URI. Configure the OAuth consent
+screen for the Workspace audience and have the Workspace administrator allow
+the application if organizational OAuth controls require approval. HELP-Board
+requests only the `openid`, `email`, and `profile` identity scopes; no Drive or
+Gmail API access is needed.
+
+Set the client ID, client secret, Workspace domain, and optional administrator
+addresses in the private `.env` on the host, then recreate the container. The
+domain check requires both Google's verified `hd` claim and the email address
+to match the configured domain. A Google login outside that Workspace is
+rejected. The client secret is injected only into the server-side API process.
+The repository ignores `.env` files; do not add the populated file to version
+control or share its contents.
+
+The initial authorization model is intentionally small: all eligible members
+are Viewers, with Admin assigned only to addresses in `GOOGLE_ADMIN_EMAILS`.
+Roles are carried in the protected authentication cookie rather than stored in
+an application user database. Sign out and sign in again after changing the
+administrator list; sessions expire after eight hours. Authentik fallback and
+database-backed provisioning/revocation remain future work.
 
 Compose creates its own bridge network, like the existing application. Match
 the current NPM LAN routing, but confirm the source address actually seen by the

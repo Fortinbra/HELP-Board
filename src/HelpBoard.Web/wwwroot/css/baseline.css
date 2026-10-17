@@ -140,6 +140,7 @@
 
 .baseline-login {
     display: grid;
+    gap: var(--space-1);
 }
 
 .baseline-login span,
@@ -148,6 +149,30 @@
 .baseline-theme-feedback {
     color: var(--baseline-muted);
     font-size: var(--baseline-small-size);
+}
+
+.baseline-login__action,
+.baseline-login button {
+    justify-self: start;
+    min-height: var(--baseline-touch-size);
+    padding: var(--space-2) var(--space-3);
+    border: var(--baseline-line) solid var(--baseline-border);
+    border-radius: var(--baseline-radius);
+    color: var(--baseline-text);
+    background: var(--baseline-bg);
+    font: inherit;
+    font-weight: 600;
+}
+
+.baseline-login__action {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.baseline-login__action:hover,
+.baseline-login button:hover {
+    border-color: var(--baseline-accent);
 }
 
 .baseline-theme-feedback:not(:empty) {

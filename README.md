@@ -12,7 +12,7 @@ This purpose-built application will run as a Docker container on PiTony (Raspber
 
 ## Initial UI baseline
 
-Run `dotnet run --project src\HelpBoard.Web\HelpBoard.Web.csproj` to preview the standalone WASM shell locally. The default configuration enables the hello-world layout and System/Light/Dark/HELP themes. Sample report navigation is intentionally unavailable; sign-in is not implemented in this milestone. This preview does not start the API or connect to PostgreSQL.
+Run `dotnet run --project src\HelpBoard.Web\HelpBoard.Web.csproj` to preview the standalone WASM shell locally. The default configuration enables the hello-world layout and System/Light/Dark/HELP themes. Sample report navigation is intentionally unavailable. Google Workspace sign-in is implemented in the hosted API and requires OAuth client settings and the Workspace domain; the standalone preview does not start the API and cannot test sign-in or connect to PostgreSQL.
 
 The HELP logo is packaged from the [official website's published logo](https://static1.squarespace.com/static/5c32c0bd5ffd200348050279/t/679920a66510b00378ee444d/1738088614083/H.E.L.P.+Logo+Correct+Colors+-+transp+bkgrd_2022.png?format=500w), retrieved 2026-10-16. Browser-local theme persistence is not an account preference store.
 
