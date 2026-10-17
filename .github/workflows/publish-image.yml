@@ -145,6 +145,18 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify private package visibility
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          package="${GITHUB_REPOSITORY#*/}"
+          visibility=$(gh api "/users/$GITHUB_REPOSITORY_OWNER/packages/container/${package,,}" --jq .visibility)
+          if [[ "$visibility" != private ]]; then
+            echo "::error::GHCR package must be Private; current visibility is $visibility. Update package settings before publishing release tags."
+            exit 1
+          fi
       - name: Merge verified images
         shell: bash
         run: |
@@ -166,6 +178,6 @@ jobs:
             echo
             docker buildx imagetools inspect "$image:sha-$GITHUB_SHA"
             echo
-            echo "Verify the package visibility is Private before granting production access."
+            echo "Package visibility verified: Private."
             echo "Deploy by digest using the production deployment guide."
           } >> "$GITHUB_STEP_SUMMARY"

@@ -40,8 +40,8 @@ repository is `ghcr.io/fortinbra/help-board`.
    container smoke checks to pass. Each platform publishes the same image it
    smoke-tested; a final job combines their digests into one multi-architecture
    tag, following the reference BudgetExperiment release pattern.
-5. Open the account's **Packages > help-board > Package settings** and verify
-   visibility is **Private**. New GHCR packages default to private even when
+5. The final publishing job verifies the package visibility is **Private**
+   before creating release tags. New GHCR packages default to private even when
    their source repository is public. If a package already exists, its existing
    visibility is not changed by the workflow; make it private before publishing
    sensitive artifacts. Keep it private and grant only intended readers.
