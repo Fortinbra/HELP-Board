@@ -66,8 +66,10 @@ jobs:
             --cpus 1 --memory 512m --pids-limit 128 \
             --env 'ConnectionStrings__HelpBoard=Host=127.0.0.1;Database=smoke;Username=smoke' \
             help-board:verification
-          curl --fail --silent --show-error --retry 20 --retry-delay 2 --retry-connrefused \
-            http://127.0.0.1:18080/healthz | grep -Fx Healthy
+          curl --fail --silent --show-error --retry 30 --retry-delay 2 --retry-all-errors \
+            --retry-max-time 90 --connect-timeout 3 --max-time 5 \
+            --output /tmp/health.txt http://127.0.0.1:18080/healthz
+          grep -Fx Healthy /tmp/health.txt
           curl --fail --silent --show-error http://127.0.0.1:18080/ > /tmp/index.html
           grep -F '<title>HELP-Board</title>' /tmp/index.html
           if grep -F '{fingerprint}' /tmp/index.html; then

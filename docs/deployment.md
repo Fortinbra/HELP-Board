@@ -14,10 +14,11 @@ deployment protection, not a replacement for application authentication.
 The sole production target is PiTony running 64-bit Linux and Docker
 (`linux/arm64`), with PostgreSQL remaining on PiDB and HTTPS terminated by NPM at
 `https://help.becauseimclever.com`. No database or identity provider is included
-in the application container. The deployment below assumes NPM runs in Docker
-on PiTony and can join a shared Docker network. If it runs elsewhere, stop and
-adapt the network/firewall arrangement before deployment; do not expose port
-8080 publicly.
+in the application container. Like the existing BudgetExperiment deployment,
+NPM forwards to PiTony's LAN IP and a published host port. HELP-Board uses
+**2026:8080** instead of BudgetExperiment's **5099:8080**, avoiding a collision.
+The API hosts the frontend in one running container, not separate UI/API
+services. No shared NPM Docker network or changes to BudgetExperiment are needed.
 
 ## 1. Build and publish through GitHub Actions
 
@@ -110,16 +111,19 @@ Edit `.env` locally on the server:
 | Variable | Value |
 |----------|-------|
 | `HELPBOARD_IMAGE` | Exact GHCR image digest from the successful workflow run. |
-| `HELPBOARD_PROXY_NETWORK` | Existing user-defined bridge network shared with NPM. |
-| `HELPBOARD_PROXY_IP` | NPM's stable container IPv4 address on that network, as seen by the application. |
-| `HELPBOARD_CONNECTION_STRING` | PiDB connection string for a least-privilege, dedicated preview database user. |
+| `HELPBOARD_BIND_IP` | PiTony's LAN IPv4 address; the host port binds only to this interface. |
+| `HELPBOARD_APP_PORT` | `2026`, the approved HELP-Board host port. |
+| `HELPBOARD_PROXY_IP` | NPM's stable source IP as seen by the application after Docker forwarding/NAT. |
+| `DB_CONNECTION_STRING` | PiDB connection string for a least-privilege, dedicated preview database user. Uses the same environment-file variable name as BudgetExperiment, mapped to HELP-Board's own configuration key. |
 
-Inspect NPM's existing Docker networks before choosing one. If needed, create a
-dedicated network and attach NPM through **its own persistent Compose
-configuration**. Assign NPM a stable address using that network's IPAM settings;
-a temporary `docker network connect` alone will not survive container
-recreation. Other containers on this network must be trusted. Do not use a
-wildcard trusted proxy or trust all forwarded headers.
+Compose creates its own bridge network, like the existing application. Match
+the current NPM LAN routing, but confirm the source address actually seen by the
+application; Docker NAT may make it different from the proxy's configured
+address. Do not use a wildcard trusted proxy or trust all forwarded headers.
+Allow access to TCP 2026 only from NPM and approved operators using firewall
+rules that cover Docker-published traffic (for example the `DOCKER-USER` chain);
+ordinary UFW rules alone may be bypassed by Docker forwarding. Do not forward
+2026 from the Internet. Direct port access otherwise bypasses the NPM Access List.
 
 The application accepts `X-Forwarded-For` and `X-Forwarded-Proto` from the
 configured proxy IP (and framework-default loopback proxies), with the default
@@ -143,15 +147,15 @@ Create or update the proxy host:
 
 - Domain: `help.becauseimclever.com`.
 - Forward scheme: `http`.
-- Forward hostname: `help-board` (the application's shared-network alias).
-- Forward port: `8080`.
+- Forward hostname/IP: PiTony's LAN IP (same target host as BudgetExperiment).
+- Forward port: `2026` (not BudgetExperiment's `5099`).
 - Preserve the original Host header and HTTPS forwarding information.
 - Obtain/configure a valid TLS certificate and enable **Force SSL**.
 - Apply an Access List limiting the entire site to approved operators during
   this unauthenticated milestone. Confirm it covers `/api/` as well as `/`.
 
-DNS must resolve to the existing NPM ingress. Do not publish an application host
-port or add a second TLS endpoint to the application container. Docker liveness
+DNS must resolve to the existing NPM ingress. Publish only the LAN-bound host
+port above; do not add a second TLS endpoint to the application container. Docker liveness
 probes use HTTP internally before HTTPS redirection; normal proxied requests
 use the trusted forwarded scheme.
 
@@ -166,6 +170,17 @@ docker compose ps
 docker compose logs --tail 100 app
 docker stats --no-stream
 ```
+
+From an approved operator host, check the LAN-bound probe while preserving an
+allowed Host header:
+
+```sh
+curl --fail -H 'Host: help.becauseimclever.com' http://PITONY_LAN_IP:2026/healthz
+```
+
+Direct application-page requests are not the supported browsing path: host
+filtering and HTTPS redirection expect the public hostname and trusted proxy
+headers. Browse through NPM for the normal application flow.
 
 `docker compose config --quiet` validates without printing interpolated
 credentials. Avoid sharing the output of `docker inspect` or plain
@@ -190,7 +205,8 @@ Acceptance checks:
    confirm the Blazor shell loads (the client may show its Not Found page).
 4. Confirm the NPM Access List denies unapproved clients access to both the
    shell and `/api/tickets`. Private registry visibility does not protect a
-   running website.
+   running website. Also verify firewall rules deny those clients direct access
+   to PiTony's published TCP 2026 port.
 5. Validate DNS/TLS and confirm HTTP ingress redirects to the canonical HTTPS
    host. Check application logs for unknown-proxy warnings.
 6. Separately confirm PiDB reachability and least-privilege access from the

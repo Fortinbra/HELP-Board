@@ -6,18 +6,16 @@ services:
     platform: linux/arm64
     restart: unless-stopped
     init: true
+    ports:
+      - "${HELPBOARD_BIND_IP:?Set PiTony's LAN IP}:${HELPBOARD_APP_PORT:-2026}:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_HTTP_PORTS: '8080'
       ASPNETCORE_HTTPS_PORT: '443'
       AllowedHosts: help.becauseimclever.com;localhost;127.0.0.1
-      ConnectionStrings__HelpBoard: ${HELPBOARD_CONNECTION_STRING:?Set the PiDB connection string}
+      ConnectionStrings__HelpBoard: ${DB_CONNECTION_STRING:?Set the PiDB connection string}
       FeatureManagement__DatabaseMigrationsApplyAtStartup: 'false'
       ReverseProxy__KnownProxy: ${HELPBOARD_PROXY_IP:?Set Nginx Proxy Manager's source IP}
-    networks:
-      proxy:
-        aliases: [help-board]
-    expose: ['8080']
     read_only: true
     tmpfs:
       - /tmp:size=64m,mode=1777
@@ -32,8 +30,3 @@ services:
       options:
         max-size: 10m
         max-file: '3'
-
-networks:
-  proxy:
-    external: true
-    name: ${HELPBOARD_PROXY_NETWORK:?Set the shared Nginx Proxy Manager Docker network}
