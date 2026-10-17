@@ -1,0 +1,39 @@
+name: help-board
+
+services:
+  app:
+    image: ${HELPBOARD_IMAGE:?Set HELPBOARD_IMAGE to the published GHCR digest}
+    platform: linux/arm64
+    restart: unless-stopped
+    init: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: '8080'
+      ASPNETCORE_HTTPS_PORT: '443'
+      AllowedHosts: help.becauseimclever.com;localhost;127.0.0.1
+      ConnectionStrings__HelpBoard: ${HELPBOARD_CONNECTION_STRING:?Set the PiDB connection string}
+      FeatureManagement__DatabaseMigrationsApplyAtStartup: 'false'
+      ReverseProxy__KnownProxy: ${HELPBOARD_PROXY_IP:?Set Nginx Proxy Manager's source IP}
+    networks:
+      proxy:
+        aliases: [help-board]
+    expose: ['8080']
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    cpus: '1.0'
+    mem_limit: 512m
+    pids_limit: 128
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+
+networks:
+  proxy:
+    external: true
+    name: ${HELPBOARD_PROXY_NETWORK:?Set the shared Nginx Proxy Manager Docker network}

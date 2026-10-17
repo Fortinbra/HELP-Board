@@ -1,0 +1,169 @@
+name: Publish container
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    uses: ./.github/workflows/ci.yml
+
+  build:
+    name: Build and verify (${{ matrix.arch }})
+    needs: validate
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set image identity
+        id: image
+        shell: bash
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Build platform image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          platforms: linux/${{ matrix.arch }}
+          load: true
+          tags: help-board:verification
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.arch }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.arch }}
+      - name: Smoke test hosted application
+        shell: bash
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          docker run --detach --name help-board-smoke \
+            --publish 127.0.0.1:18080:8080 \
+            --read-only --tmpfs /tmp:size=64m,mode=1777 \
+            --cap-drop ALL --security-opt no-new-privileges:true \
+            --cpus 1 --memory 512m --pids-limit 128 \
+            --env 'ConnectionStrings__HelpBoard=Host=127.0.0.1;Database=smoke;Username=smoke' \
+            help-board:verification
+          curl --fail --silent --show-error --retry 20 --retry-delay 2 --retry-connrefused \
+            http://127.0.0.1:18080/healthz | grep -Fx Healthy
+          curl --fail --silent --show-error http://127.0.0.1:18080/ > /tmp/index.html
+          grep -F '<title>HELP-Board</title>' /tmp/index.html
+          if grep -F '{fingerprint}' /tmp/index.html; then
+            echo "Unresolved static asset placeholder in published shell" >&2
+            exit 1
+          fi
+          curl --fail --silent --show-error http://127.0.0.1:18080/deployment/deep-link \
+            | grep -F '<title>HELP-Board</title>'
+          curl --fail --silent --show-error http://127.0.0.1:18080/css/app.css > /dev/null
+          curl --fail --silent --show-error http://127.0.0.1:18080/js/theme.js > /dev/null
+          framework=$(grep -oE 'src="_framework/blazor\.webassembly[^"]*\.js' /tmp/index.html | cut -d '"' -f 2)
+          test -n "$framework"
+          curl --fail --silent --show-error "http://127.0.0.1:18080/$framework" > /dev/null
+          wasm=$(docker exec help-board-smoke find /app/wwwroot/_framework -name '*.wasm' -print -quit)
+          test -n "$wasm"
+          content_type=$(curl --fail --silent --show-error --output /dev/null \
+            --write-out '%{content_type}' "http://127.0.0.1:18080/${wasm#/app/wwwroot/}")
+          test "$content_type" = application/wasm
+          test "$(docker exec help-board-smoke id -u)" != 0
+          test "$(docker image inspect help-board:verification --format '{{.Architecture}}')" = "$ARCH"
+          test "$(docker exec help-board-smoke find /app -name appsettings.Development.json | wc -l)" = 0
+      - name: Container logs and cleanup
+        if: always()
+        shell: bash
+        run: |
+          if docker container inspect help-board-smoke > /dev/null 2>&1; then
+            docker logs help-board-smoke
+            docker rm --force help-board-smoke
+          fi
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish verified platform image
+        shell: bash
+        env:
+          IMAGE: ${{ steps.image.outputs.name }}
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          tag="$IMAGE:sha-$GITHUB_SHA-$ARCH"
+          docker tag help-board:verification "$tag"
+          docker push "$tag"
+          mkdir -p /tmp/digests
+          docker image inspect "$tag" --format '{{range .RepoDigests}}{{println .}}{{end}}' \
+            | grep "^$IMAGE@sha256:" > "/tmp/digests/$ARCH.txt"
+          test -s "/tmp/digests/$ARCH.txt"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: digest-${{ matrix.arch }}
+          path: /tmp/digests/${{ matrix.arch }}.txt
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    name: Publish multi-architecture tags
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: digest-*
+          path: /tmp/digests
+          merge-multiple: true
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Merge verified images
+        shell: bash
+        run: |
+          set -euo pipefail
+          image="ghcr.io/${GITHUB_REPOSITORY,,}"
+          short_sha="${GITHUB_SHA:0:7}"
+          tags=(--tag "$image:sha-$short_sha" --tag "$image:sha-$GITHUB_SHA")
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            tags+=(--tag "$image:$GITHUB_REF_NAME")
+          fi
+          mapfile -t digests < <(cat /tmp/digests/*.txt)
+          test "${#digests[@]}" = 2
+          docker buildx imagetools create "${tags[@]}" "${digests[@]}"
+          docker buildx imagetools inspect "$image:sha-$GITHUB_SHA"
+          {
+            echo "## Published Linux AMD64 + ARM64 image"
+            echo
+            echo "\`docker pull $image:sha-$short_sha\`"
+            echo
+            docker buildx imagetools inspect "$image:sha-$GITHUB_SHA"
+            echo
+            echo "Verify the package visibility is Private before granting production access."
+            echo "Deploy by digest using the production deployment guide."
+          } >> "$GITHUB_STEP_SUMMARY"

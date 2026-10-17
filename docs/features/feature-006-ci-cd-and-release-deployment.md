@@ -3,6 +3,18 @@
 ## Goal
 Establish required pull-request validation and a release-triggered deployment pipeline so HELP-Board can ship safely and consistently.
 
+## Implemented Packaging Baseline
+
+The [deployment guide](../deployment.md) documents the initial implementation:
+
+- [CI workflow](../../.github/workflows/ci.yml): solution restore/build, all .NET tests, and JavaScript theme tests on pull requests and `main` pushes.
+- [Publishing workflow](../../.github/workflows/publish-image.yml): manual dispatch or a pushed `v*` tag, successful CI validation, native Linux AMD64/ARM64 builds, hosted-shell/liveness smoke tests, then publication of the verified images and a combined multi-architecture tag to GHCR. Short SHA tags match the BudgetExperiment pull workflow; the API and frontend remain in one image.
+- Private package visibility must be verified in GitHub package settings; publication uses the job-scoped `GITHUB_TOKEN`, and PiTony pulls with a read-only package credential.
+- [Production Compose configuration](../../deploy/compose.yml): explicit image digest, trusted NPM proxy, runtime-injected PiDB settings, migrations disabled, non-root/read-only execution, and initial resource/log limits.
+- Production pull/restart and rollback are manual operator actions. Branch protection, package visibility, measured PiTony limits, environment approval gates, and self-hosted deployment automation are not configured by these files.
+
+This is deployment packaging for the current unauthenticated shell, not approval to expose board data. Restrict the entire proxy host until authentication and authorization are implemented. The complete target pipeline and its remaining acceptance criteria below still apply; internal-agent deployment is deferred rather than required for image publication.
+
 ## Fixed Deployment Target
 
 The [global requirements](../global-requirements.md#41-fixed-deployment-and-resource-boundaries) define the sole production target: a Docker container on PiTony, a Raspberry Pi 5 with 16 GB RAM, exposed at `https://help.becauseimclever.com`. Build for the host's verified OS/CPU platform (Linux ARM64 for a 64-bit OS), validate resource use on PiTony, and retain container identity for rollback. Alternative production platforms, mandatory staging infrastructure, and external-client API versioning are not required. Release tags identify application/container builds, not public API support versions.

@@ -2,6 +2,7 @@ using HelpBoard.Repositories;
 using HelpBoard.Repositories.Data;
 using HelpBoard.Services;
 using HelpBoard.Api.FeatureToggles;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 using Scalar.AspNetCore;
@@ -28,6 +29,17 @@ builder.Services
     });
 
 builder.Services.AddProblemDetails();
+builder.Services.AddHealthChecks();
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    var knownProxy = builder.Configuration["ReverseProxy:KnownProxy"];
+    if (!string.IsNullOrWhiteSpace(knownProxy))
+    {
+        options.KnownProxies.Add(System.Net.IPAddress.Parse(knownProxy));
+    }
+});
 
 // ── OpenAPI / Scalar ──────────────────────────────────────────────────────────
 builder.Services.AddOpenApi(options =>
@@ -45,6 +57,9 @@ builder.Services.AddOpenApi(options =>
 });
 
 var app = builder.Build();
+
+app.UseForwardedHeaders();
+app.UseHealthChecks("/healthz");
 
 var featureManager = app.Services.GetRequiredService<IFeatureManager>();
 var applyMigrationsAtStartup = await featureManager.IsEnabledAsync(FeatureFlagKeys.DatabaseMigrationsApplyAtStartup);

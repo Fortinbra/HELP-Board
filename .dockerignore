@@ -1,0 +1,15 @@
+**
+!global.json
+!Directory.Packages.props
+!src/
+!src/**
+**/bin/
+**/obj/
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/.env*
+**/*.user
+**/*.pfx
+**/*.pem
+**/secrets.json
+**/Properties/launchSettings.json

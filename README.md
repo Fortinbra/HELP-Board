@@ -8,6 +8,7 @@ This purpose-built application will run as a Docker container on PiTony (Raspber
 
 - [Global application requirements](docs/global-requirements.md) - Product scope, architecture, identity, reporting, visualization catalog, quality requirements, and open decisions.
 - [Feature documents](docs/features/README.md) - Feature-level scope and implementation guidance.
+- [Production deployment](docs/deployment.md) - Build and publish private GHCR AMD64/ARM64 images under one tag (for example `ghcr.io/fortinbra/help-board:sha-f8475f4`), then pull onto PiTony behind Nginx Proxy Manager. The current release is an unauthenticated shell and must remain access-restricted with no real board data.
 
 ## Initial UI baseline
 

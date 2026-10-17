@@ -1,0 +1,4 @@
+@baseUrl = http://localhost:8080
+
+### Container liveness only; does not check PostgreSQL or authentication.
+GET {{baseUrl}}/healthz
