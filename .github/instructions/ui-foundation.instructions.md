@@ -16,6 +16,7 @@ Use when building or modifying shared UI structure, reusable components, page sh
 - Name classes semantically by purpose, not by visual appearance. Prefer names like `ticket-card__meta` over `blue-box` or `left-col`.
 - Keep component variants and states consistent across surfaces. Reuse established component patterns before introducing a new one.
 - New shared UI primitives must expose stable, intention-revealing class hooks and avoid page-specific coupling.
+- All new and changed UI components must support every enabled application theme, including text, controls, focus, status, and chart/data views; use shared semantic tokens and verify contrast in each theme.
 
 ## Enforcement Expectations
 

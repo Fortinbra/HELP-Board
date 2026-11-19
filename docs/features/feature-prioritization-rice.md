@@ -23,7 +23,7 @@ Use these fields for updates as requirements mature:
 
 ## Current Feature Priorities
 
-The scores below are historical planning estimates, pending re-scoring against the [current global requirements](../global-requirements.md). Google Workspace authentication and the standard Light/Dark/HELP theme set are production acceptance requirements regardless of their historical feature priority. Authentik fallback is not required at this stage; optional novelty themes remain later scope. Do not interpret the older ordering as approval to release protected reporting without authentication.
+The scores below are historical planning estimates, pending re-scoring against the [current global requirements](../global-requirements.md). Google Workspace authentication and the standard Light/Dark/HELP theme set are production acceptance requirements regardless of their historical feature priority. Authentik fallback is not required at this stage; optional novelty themes are independently gated and enabled in the current web configuration by product approval. Do not interpret the older ordering as approval to release protected reporting without authentication.
 
 [Feature 010: Director's Report](feature-010-directors-report.md) is the confirmed first business-reporting feature, including its form, publication lifecycle, meeting snapshots, and trends. Its RICE inputs have not been estimated; do not invent a score or defer it behind unrelated reporting work because it is absent from the historical table.
 
@@ -40,16 +40,16 @@ The scores below are historical planning estimates, pending re-scoring against t
 | Feature 005: Authentication and Authorization | 55 | 1.2 | 0.40 | 4.8 | 5.50 | P4 |
 
 ## Priority Order for Initial Execution
-Features 003 and 004 are on hold while dashboard work is prioritized; their positions below are historical and do not authorize current implementation.
+Features 003, 004, and 006 are on hold while dashboard work is prioritized; their positions below are historical and do not authorize current implementation. Applicable production release requirements still apply.
 
 1. **P1** — Feature 001: UI Foundation & Theme System
-2. **P1** — Feature 009: PostgreSQL & EF Core Integration
+2. **P1 (historical estimate)** — Feature 009: PostgreSQL & EF Core Integration (initial foundation archived; [follow-up work](backlog.md#persistence) remains)
 3. **P1** — Feature 007: Feature Toggle System
 4. **P2** — Feature 002: Dashboard Experience
 5. **P2** — Feature 006: CI/CD and Release Deployment
 6. **P3** — Feature 003: Strategic Plan Tracker (hidden by default and iterated behind feature toggle until product-ready)
 7. **P3** — Feature 004: Project Boards
-8. **P4** — Feature 008: Theme Expansion
+8. **P4 (historical estimate)** — Feature 008: Theme Expansion (initial implementation archived; [follow-up work](backlog.md#themes) remains)
 9. **P4 (historical estimate)** — Feature 005: Authentication and Authorization (provider direction is now confirmed; re-score remaining eligibility, fallback, and session work before release planning)
 
 ## Update Guidance

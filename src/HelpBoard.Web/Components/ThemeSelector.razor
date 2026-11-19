@@ -1,0 +1,43 @@
+@if (_isLoaded)
+{
+    <div class="baseline-theme">
+        <label for="app-theme">Theme</label>
+        <select id="app-theme" data-theme-selector aria-describedby="theme-feedback">
+            <option value="system">System</option>
+            @if (_isLightEnabled)
+            {
+                <option value="light">Light</option>
+            }
+            @if (_isDarkEnabled)
+            {
+                <option value="dark">Dark</option>
+            }
+            @if (_isHelpEnabled)
+            {
+                <option value="help">HELP</option>
+            }
+            @if (_isGeocitiesEnabled)
+            {
+                <option value="geocities">Geocities</option>
+            }
+            @if (_isMinimalistEnabled)
+            {
+                <option value="minimalist">Minimalist</option>
+            }
+            @if (_isWesternEnabled)
+            {
+                <option value="western">Western</option>
+            }
+        </select>
+    </div>
+    @if (_isGeocitiesEnabled)
+    {
+        <div class="baseline-theme-motion">
+            <label>
+                <input type="checkbox" data-geocities-motion-control checked />
+                <span>Animate Geocities <small>Respects reduced motion</small></span>
+            </label>
+        </div>
+    }
+    <p id="theme-feedback" class="baseline-theme-feedback" role="status" aria-live="polite"></p>
+}

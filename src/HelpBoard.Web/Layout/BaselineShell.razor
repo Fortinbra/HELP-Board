@@ -6,27 +6,9 @@
             <span>HELP-Board</span>
         </a>
         <div class="baseline-header__status">
-            <div class="baseline-theme">
-                <label for="baseline-theme">Theme</label>
-                <select id="baseline-theme" data-theme-selector aria-describedby="theme-feedback">
-                    <option value="system">System</option>
-                    @if (IsLightEnabled)
-                    {
-                        <option value="light">Light</option>
-                    }
-                    @if (IsDarkEnabled)
-                    {
-                        <option value="dark">Dark</option>
-                    }
-                    @if (IsHelpEnabled)
-                    {
-                        <option value="help">HELP</option>
-                    }
-                </select>
-            </div>
+            <ThemeSelector />
             <AuthenticationPanel />
         </div>
-        <p id="theme-feedback" class="baseline-theme-feedback" role="status" aria-live="polite"></p>
     </header>
     <aside class="baseline-sidebar">
         <nav aria-label="Sample navigation" aria-describedby="baseline-navigation-note">

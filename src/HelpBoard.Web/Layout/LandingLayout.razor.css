@@ -16,7 +16,7 @@
     transform: translateY(-180%);
     border-radius: var(--radius-sm);
     background: var(--color-text-strong);
-    color: var(--color-text-inverse);
+    color: var(--color-bg);
 }
 
 .landing-skip-link:focus {
@@ -25,7 +25,10 @@
 
 .landing-header {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
     min-height: 5rem;
     max-width: 72rem;
     width: 100%;

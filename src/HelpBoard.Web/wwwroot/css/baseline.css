@@ -7,6 +7,8 @@
     --baseline-border: #767676;
     --baseline-accent: #005fb8;
     --baseline-focus: #005fb8;
+    --baseline-action-text: #ffffff;
+    --baseline-validation-error: #b91c1c;
     --baseline-font: "Segoe UI", sans-serif;
     --baseline-font-size: 1rem;
     --baseline-title-size: clamp(1.75rem, 4vw, 2.5rem);
@@ -19,9 +21,23 @@
     --baseline-focus-width: 3px;
     --baseline-radius: 0.25rem;
     --baseline-touch-size: 2.75rem;
+    --color-primary: var(--baseline-accent);
+    --color-primary-strong: var(--baseline-accent);
+    --color-primary-soft: var(--baseline-accent);
+    --color-accent: var(--baseline-accent);
+    --color-bg: var(--baseline-bg);
+    --color-bg-raised: var(--baseline-panel);
+    --color-bg-panel: var(--baseline-panel);
+    --color-border-subtle: var(--baseline-border);
+    --color-border-strong: var(--baseline-border);
+    --color-text: var(--baseline-text);
+    --color-text-strong: var(--baseline-text);
+    --color-text-muted: var(--baseline-muted);
+    --focus-ring: 0 0 0 var(--baseline-focus-width) var(--baseline-focus);
 }
 
 :root[data-theme="dark"] {
+    color-scheme: dark;
     --baseline-bg: #1f1f1f;
     --baseline-panel: #181818;
     --baseline-header: #181818;
@@ -30,6 +46,8 @@
     --baseline-border: #808080;
     --baseline-accent: #75beff;
     --baseline-focus: #75beff;
+    --baseline-action-text: #1f1f1f;
+    --baseline-validation-error: #ffb4a9;
 }
 
 :root[data-theme="help"] {
@@ -42,6 +60,171 @@
     --baseline-accent: #7400b3;
     --baseline-focus: #006778;
     --baseline-brand-teal: #00b4d0;
+}
+
+:root[data-theme="geocities"] {
+    color-scheme: dark;
+    --baseline-bg: #000000;
+    --baseline-panel: #000033;
+    --baseline-header: #111111;
+    --baseline-text: #ffff00;
+    --baseline-muted: #00ff00;
+    --baseline-border: #ff3030;
+    --baseline-accent: #ffff00;
+    --baseline-focus: #00ffff;
+    --baseline-action-text: #000000;
+    --baseline-validation-error: #ff8080;
+    --baseline-heading: #ff44ff;
+    --baseline-festive-outline: #00aaff;
+    --baseline-font: "Comic Sans MS", "Chalkboard SE", sans-serif;
+    --baseline-radius: 0;
+    --color-text-strong: var(--baseline-heading);
+    --font-body: var(--baseline-font);
+    --font-display: var(--baseline-font);
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+    --radius-2xl: 0;
+}
+
+:root[data-theme="minimalist"] {
+    --baseline-bg: #ffffff;
+    --baseline-panel: #f3f3f3;
+    --baseline-header: #ffffff;
+    --baseline-text: #1c1c1c;
+    --baseline-muted: #515151;
+    --baseline-border: #707070;
+    --baseline-accent: #333333;
+    --baseline-focus: #333333;
+    --baseline-font: "Segoe UI", sans-serif;
+    --font-body: var(--baseline-font);
+    --font-display: var(--baseline-font);
+    --baseline-radius: 0;
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+    --radius-2xl: 0;
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+}
+
+:root[data-theme="western"] {
+    --baseline-bg: #fff8eb;
+    --baseline-panel: #f4e5cf;
+    --baseline-header: #eddbc1;
+    --baseline-text: #342111;
+    --baseline-muted: #60452b;
+    --baseline-border: #795835;
+    --baseline-accent: #84451f;
+    --baseline-focus: #713411;
+    --baseline-font: Georgia, serif;
+    --font-body: var(--baseline-font);
+    --font-display: var(--baseline-font);
+}
+
+:root[data-theme="geocities"] .baseline-header,
+:root[data-theme="geocities"] .baseline-placeholder,
+:root[data-theme="geocities"] .hb-card,
+:root[data-theme="geocities"] .landing-content {
+    border: 4px solid var(--baseline-border);
+    border-block-start-color: var(--baseline-heading);
+    box-shadow: 0 0 0 2px var(--baseline-festive-outline);
+}
+
+:root[data-theme="geocities"] .landing-content {
+    padding: var(--space-5);
+    background: var(--baseline-panel);
+}
+
+:root[data-theme="geocities"] .baseline-shell :is(h1, h2) {
+    color: var(--baseline-heading);
+}
+
+:root[data-theme="geocities"] .baseline-shell .hb-alert :is(h1, h2) {
+    color: inherit;
+}
+
+:root[data-theme="geocities"] .baseline-theme select {
+    color-scheme: dark;
+}
+
+.baseline-theme-motion {
+    display: none;
+}
+
+:root[data-theme="geocities"] .baseline-theme-motion {
+    display: flex;
+}
+
+.baseline-theme-motion label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: var(--baseline-touch-size);
+}
+
+.baseline-theme-motion input {
+    width: 1.25rem;
+    min-height: 1.25rem;
+    padding: 0;
+    accent-color: var(--baseline-accent);
+}
+
+.baseline-theme-motion small {
+    display: block;
+    color: var(--baseline-muted);
+    font-size: var(--baseline-small-size);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    :root[data-theme="geocities"][data-geocities-motion="on"] .landing-content h1,
+    :root[data-theme="geocities"][data-geocities-motion="on"] .baseline-nav-title,
+    :root[data-theme="geocities"][data-geocities-motion="on"] main h1:not(.hb-alert *),
+    :root[data-theme="geocities"][data-geocities-motion="on"] .hb-card > h2,
+    :root[data-theme="geocities"][data-geocities-motion="on"] .baseline-placeholder > h2 {
+        animation: geocities-rainbow-text 8s linear infinite;
+    }
+
+    :root[data-theme="geocities"][data-geocities-motion="on"] .baseline-header,
+    :root[data-theme="geocities"][data-geocities-motion="on"] .baseline-placeholder,
+    :root[data-theme="geocities"][data-geocities-motion="on"] .hb-card,
+    :root[data-theme="geocities"][data-geocities-motion="on"] .landing-content {
+        animation: geocities-rainbow-border 8s linear infinite;
+    }
+
+    :root[data-theme="geocities"][data-geocities-motion="on"] .baseline-logo img,
+    :root[data-theme="geocities"][data-geocities-motion="on"] .landing-brand img,
+    :root[data-theme="geocities"][data-geocities-motion="on"] .app-brand__mark {
+        animation: geocities-wobble 5s ease-in-out infinite;
+    }
+}
+
+@keyframes geocities-rainbow-text {
+    0%, 100% { color: var(--baseline-heading); }
+    25% { color: var(--baseline-focus); }
+    50% { color: var(--baseline-text); }
+    75% { color: var(--baseline-muted); }
+}
+
+@keyframes geocities-rainbow-border {
+    0%, 100% { border-color: var(--baseline-border); }
+    33% { border-color: var(--baseline-heading); }
+    66% { border-color: var(--baseline-focus); }
+}
+
+@keyframes geocities-wobble {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-4deg); }
+    75% { transform: rotate(4deg); }
+}
+
+:root[data-theme="western"] .baseline-header,
+:root[data-theme="western"] .hb-card {
+    border-width: 3px;
+    border-style: double;
 }
 
 .baseline-shell {

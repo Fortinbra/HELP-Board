@@ -15,6 +15,9 @@ public static class FeatureToggleKeys
     public const string LightTheme = "LightTheme";
     public const string DarkTheme = "DarkTheme";
     public const string HelpTheme = "HelpTheme";
+    public const string GeocitiesTheme = "GeocitiesTheme";
+    public const string MinimalistTheme = "MinimalistTheme";
+    public const string WesternTheme = "WesternTheme";
 
     public const string StrategicPlan = "StrategicPlan";
 }
@@ -28,6 +31,9 @@ public sealed class FeatureToggleService : IFeatureToggleService
             FeatureToggleKeys.LightTheme,
             FeatureToggleKeys.DarkTheme,
             FeatureToggleKeys.HelpTheme,
+            FeatureToggleKeys.GeocitiesTheme,
+            FeatureToggleKeys.MinimalistTheme,
+            FeatureToggleKeys.WesternTheme,
             FeatureToggleKeys.StrategicPlan,
         };
 

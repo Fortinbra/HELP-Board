@@ -17,6 +17,12 @@ public sealed class FeatureToggleServiceTests
     [InlineData(FeatureToggleKeys.LightTheme, false)]
     [InlineData(FeatureToggleKeys.DarkTheme, false)]
     [InlineData(FeatureToggleKeys.HelpTheme, false)]
+    [InlineData(FeatureToggleKeys.GeocitiesTheme, true)]
+    [InlineData(FeatureToggleKeys.GeocitiesTheme, false)]
+    [InlineData(FeatureToggleKeys.MinimalistTheme, true)]
+    [InlineData(FeatureToggleKeys.MinimalistTheme, false)]
+    [InlineData(FeatureToggleKeys.WesternTheme, true)]
+    [InlineData(FeatureToggleKeys.WesternTheme, false)]
     public async Task IsEnabledAsync_KnownKey_ReturnsFeatureManagerValue(string key, bool expected)
     {
         // Arrange

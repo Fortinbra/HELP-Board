@@ -270,7 +270,7 @@ The pipeline and container never apply production migrations. No application
 data is stored in the container, so replacing it does not move or delete PiDB
 data. Review migration history, take and verify a PiDB backup, and approve/apply
 schema changes separately using the repository's
-[persistence guidance](features/feature-009-postgres-efcore-integration.md).
+[persistence guidance](database.md).
 The current shell and liveness probe do not require database tables.
 
 ## 5. Update, restart, and roll back

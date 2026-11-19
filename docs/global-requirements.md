@@ -34,7 +34,7 @@ Each requirement has a stable identifier for feature and test traceability. Impl
 | GLB-010 | This is a one-off, purpose-built application for HELP, not a general-purpose dashboard product, multi-tenant platform, or externally distributed API. | Confirmed |
 | GLB-011 | The sole production application target shall be a Docker container on PiTony, the owner's Raspberry Pi 5 with 16 GB RAM. Alternative production deployment platforms are out of scope. | Confirmed |
 | GLB-012 | The standard themes shall be VS Code-inspired Light and Dark, plus a separate HELP purple/teal theme. Initial selection shall follow the system light/dark preference until the user explicitly chooses a theme. | Confirmed |
-| GLB-013 | Geocities, Minimalist, and Western shall remain optional planned themes, not required default themes. | Confirmed |
+| GLB-013 | Geocities, Minimalist, and Western shall remain optional, independently controlled themes; they are enabled in the current web configuration by product approval. | Confirmed |
 | GLB-014 | The first business report shall be the Director's Report, generated from a director-completed form stored in the application database, with one report per board meeting, between-meeting updates, and historical trends. | Confirmed |
 
 ## 3. Users and Access Responsibilities
@@ -85,7 +85,7 @@ Kubernetes, cloud deployment variants, multi-region/high-availability topology, 
 
 ### 4.2 Existing persistence requirements
 
-These requirements consolidate the [Feature 009 persistence plan](features/feature-009-postgres-efcore-integration.md). Its proof-of-concept scope and historical examples are not evidence of production completion.
+These requirements consolidate the persistence plan. See the tracked [database guidance](database.md) and [remaining work](features/backlog.md#persistence); the proof-of-concept scope and historical examples are not evidence of production completion.
 
 | ID | Requirement | Classification |
 |----|-------------|----------------|
@@ -245,6 +245,8 @@ This is the first visual baseline, preceding the first production reporting rele
 
 Milestone checks: verify desktop layout and responsive stacking, logo loading without runtime website access, disabled navigation behavior, truthful login status, keyboard focus/skip link, system-theme changes, explicit theme override, browser reload persistence, and theme failure/disabled-state behavior. These checks establish the visual baseline only, not completion of all global requirements.
 
+On 2026-11-18 the product owner approved the current standard-theme appearance and enabled `GeocitiesTheme`, `MinimalistTheme`, and `WesternTheme` in the web application's local configuration. These flags remain individually controllable; the application maintainer owns their review at first reporting-release readiness. The product owner subsequently approved Geocities animations, which respect reduced motion and can be disabled.
+
 ### 10.1 Themes, branding, and shared UI
 
 | ID | Requirement | Classification |
@@ -253,7 +255,7 @@ Milestone checks: verify desktop layout and responsive stacking, logo loading wi
 | THM-002 | With no explicit user choice, follow the system light/dark preference, including changes to that preference. A saved explicit theme selection shall take precedence until the user returns to system selection. | Confirmed |
 | THM-003 | Provide a theme selector and preview of key components. Changes shall apply immediately in-session, persist as user preferences, and load on subsequent sign-in/session start. Define a safe available-theme fallback if a selected theme is disabled. | Baseline; Feature 008 |
 | THM-004 | Represent themes through a registry of key, display name, token set, and availability flag. All themes shall preserve core controls, states, chart readability, and semantic status meanings. | Baseline |
-| THM-005 | Retain optional Geocities (bright/nostalgic), Minimalist (low-noise), and Western (horse/cowboy-inspired) plans behind separate flags. Decorative effects/fonts shall preserve legibility; reduced motion shall suppress nonessential animation. | Planned; confirmed retention |
+| THM-005 | Provide optional Geocities (bright/nostalgic), Minimalist (low-noise), and Western (horse/cowboy-inspired) themes behind separate flags. Geocities nonessential animation shall support reduced motion and a disable option. Decorative effects/fonts shall preserve legibility. | Confirmed; optional themes |
 | THM-006 | Use the official HELP website as the source for HELP logos and brand color references. Record provenance and confirm authorized asset use and final token mappings; do not hotlink runtime branding assets or make application startup depend on the website. | Confirmed brand source; baseline asset handling |
 | THM-007 | Adapt brand reference colors into contrast-tested semantic tokens for backgrounds, text, controls, focus, and charts. Raw brand colors are not automatically accessible foreground/background pairs. | Baseline |
 | UIF-001 | Use the in-repository Blazor design system rather than a replacement UI framework. Central CSS tokens shall cover colors, spacing, radii, elevation, typography, and interaction states; use semantic class names and reusable components instead of duplicated page-specific styles. | Baseline; Feature 001 |
@@ -346,11 +348,11 @@ No external source, refresh interval, export format, role hierarchy, or paid vis
 | Dashboard groundwork | Completed planning slice; current dashboard and database-backed reporting requirements are consolidated under REP/VIS/DAT and the other feature documents. |
 | [Feature 003: Strategic Plan Tracker](features/on-hold/feature-003-strategic-plan-tracker.md) | On-hold tracking/reporting capability with existing ownership, roll-up, and launch-gate constraints. |
 | [Feature 004: Project Boards](features/on-hold/feature-004-project-boards.md) | On-hold work-management capability and shared board model. |
-| [Feature 005: Authentication](features/feature-005-authentication-and-authorization.md) | Google Workspace sign-in; detailed eligibility, session, and provisioning policy still require decisions. Authentik fallback is deferred. |
-| [Feature 006: Delivery Pipeline](features/feature-006-ci-cd-and-release-deployment.md) | Validation and deployment planning supporting production operation. |
-| [Feature 007: Feature Toggles](features/feature-007-feature-toggle-system.md) | Controlled rollout; not access control. |
-| [Feature 008: Themes](features/feature-008-theme-expansion.md) | Standard Light/Dark/HELP themes, system preference and persistence; optional novelty themes retained behind flags. |
-| [Feature 009: PostgreSQL and EF Core](features/feature-009-postgres-efcore-integration.md) | Persistence foundation; a separate reporting slice must define business datasets and aggregates. |
+| Authentication | Google Workspace sign-in is implemented; [remaining authentication work](features/backlog.md#authentication) is in the backlog. Global security requirements and release gates still apply. |
+| [Feature 006: Delivery Pipeline](features/on-hold/feature-006-ci-cd-and-release-deployment.md) | On-hold delivery pipeline work; applicable production release requirements remain in CIC. |
+| Feature toggles | Controlled rollout, not access control. [Follow-up work](features/backlog.md#feature-toggles) is in the backlog; FLG requirements still apply. |
+| Themes | Standard Light/Dark/HELP themes, system preference and browser-local persistence; optional novelty themes retained behind flags. [Remaining work](features/backlog.md#themes) is in the backlog; theme and accessibility requirements still apply. |
+| PostgreSQL and EF Core | Persistence foundation; [remaining work](features/backlog.md#persistence) includes testing, recovery, and production configuration. A separate reporting slice must define business datasets and aggregates. |
 | [Feature 010: Director's Report](features/feature-010-directors-report.md) | First form-driven business report, publication lifecycle, meeting records, and historical trends. |
 | [Accessibility checklist](accessibility/wcag-checklist.md) and [accessibility decisions](architecture/accessibility-decisions.md) | Contrast thresholds, icon semantics, skip/route focus, status announcements, and manual/automated evidence, consolidated under QUA/UIF/A11. |
 | [Bootstrap migration](migration/bootstrap-migration-plan.md) | Phased replacement, exit checks, and phase-local rollback, consolidated under UIF-005. |

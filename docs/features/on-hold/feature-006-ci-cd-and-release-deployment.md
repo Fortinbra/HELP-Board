@@ -1,23 +1,33 @@
 # Feature 006: CI/CD and Release Deployment
 
+Delivery status: On hold while dashboard work is prioritized. Applicable global security and production release requirements still apply.
+
 ## Goal
 Establish required pull-request validation and a release-triggered deployment pipeline so HELP-Board can ship safely and consistently.
 
 ## Implemented Packaging Baseline
 
-The [deployment guide](../deployment.md) documents the initial implementation:
+The [deployment guide](../../deployment.md) documents the initial implementation:
 
-- [CI workflow](../../.github/workflows/ci.yml): solution restore/build, all .NET tests, and JavaScript theme tests on pull requests and `main` pushes.
-- [Publishing workflow](../../.github/workflows/publish-image.yml): manual dispatch or a pushed `v*` tag, successful CI validation, native Linux AMD64/ARM64 builds, hosted-shell/liveness smoke tests, then publication of the verified images and a combined multi-architecture tag to GHCR. Short SHA tags match the BudgetExperiment pull workflow; the API and frontend remain in one image.
-- Private package visibility must be verified in GitHub package settings; publication uses the job-scoped `GITHUB_TOKEN`, and PiTony pulls with a read-only package credential.
-- [Production Compose configuration](../../deploy/compose.yml): explicit image digest, PiTony LAN port `2026` forwarded to container port `8080` (matching BudgetExperiment's host-port model), trusted NPM proxy, runtime-injected PiDB settings, migrations disabled, non-root/read-only execution, and initial resource/log limits.
+- [CI workflow](../../../.github/workflows/ci.yml): solution restore/build, all .NET tests, and JavaScript theme tests on pull requests and `main` pushes.
+- [Publishing workflow](../../../.github/workflows/publish-image.yml): manual dispatch or a pushed `v*` tag, successful CI validation, native Linux AMD64/ARM64 builds, hosted-shell/liveness smoke tests, then publication of the verified images and a combined multi-architecture tag to GHCR. Short SHA tags match the BudgetExperiment pull workflow; the API and frontend remain in one image.
+- The publishing workflow checks private package visibility before publishing combined tags; publication uses the job-scoped `GITHUB_TOKEN`, and PiTony pulls with a read-only package credential.
+- [Production Compose configuration](../../../deploy/compose.yml): a configured image tag or digest, PiTony LAN port `2026` forwarded to container port `8080` (matching BudgetExperiment's host-port model), trusted NPM proxy, runtime-injected PiDB settings, migrations disabled, non-root/read-only execution, and initial resource/log limits.
 - Production pull/restart and rollback are manual operator actions. Branch protection, package visibility, measured PiTony limits, environment approval gates, and self-hosted deployment automation are not configured by these files.
 
-This is deployment packaging for the current unauthenticated shell, not approval to expose board data. Restrict the entire proxy host until authentication and authorization are implemented. The complete target pipeline and its remaining acceptance criteria below still apply; internal-agent deployment is deferred rather than required for image publication.
+This packages the current application, not the completed reporting product. Google Workspace sign-in and authenticated API access are implemented, subject to deployment configuration and verification. The complete target pipeline and its remaining acceptance criteria below still apply; internal-agent deployment is deferred rather than required for image publication.
+
+## Remaining Work
+
+- Verify actual branch protection and required checks in GitHub; the repository documents expectations but does not configure those settings.
+- Reconcile the planned release-created/published trigger with the implemented tag-push and manual-dispatch triggers.
+- Decide and implement the planned private-runner deployment and approval gates; the current operator performs deployment and rollback manually.
+- Document and exercise pre/post-deployment validation and rollback, including a schema/data recovery plan. Decide rollback approval and health-check thresholds.
+- Review the proposed CI/CD governance guidance and define any warranted persistent artifacts.
 
 ## Fixed Deployment Target
 
-The [global requirements](../global-requirements.md#41-fixed-deployment-and-resource-boundaries) define the sole production target: a Docker container on PiTony, a Raspberry Pi 5 with 16 GB RAM, exposed at `https://help.becauseimclever.com`. Build for the host's verified OS/CPU platform (Linux ARM64 for a 64-bit OS), validate resource use on PiTony, and retain container identity for rollback. Alternative production platforms, mandatory staging infrastructure, and external-client API versioning are not required. Release tags identify application/container builds, not public API support versions.
+The [global requirements](../../global-requirements.md#41-fixed-deployment-and-resource-boundaries) define the sole production target: a Docker container on PiTony, a Raspberry Pi 5 with 16 GB RAM, exposed at `https://help.becauseimclever.com`. Build for the host's verified OS/CPU platform (Linux ARM64 for a 64-bit OS), validate resource use on PiTony, and retain container identity for rollback. Alternative production platforms, mandatory staging infrastructure, and external-client API versioning are not required. Release tags identify application/container builds, not public API support versions.
 
 ## User Value
 Contributors gain fast feedback before merge, and operators gain a predictable release path that builds, tests, and deploys from tagged releases.
@@ -75,6 +85,7 @@ Contributors gain fast feedback before merge, and operators gain a predictable r
 - Include at least one required review and dismissal of stale approvals on new commits.
 
 ## Release and Deployment Pipeline
+- The following describes the planned target, not the currently implemented manual deployment path.
 - Trigger: release version created/published.
 - Steps: checkout, restore, build, full test run, package a PiTony-compatible Docker image, deploy to PiTony.
 - Deployment executes on self-hosted runner/agent in private network.
@@ -114,8 +125,8 @@ Contributors gain fast feedback before merge, and operators gain a predictable r
 - "Identify which CI/CD decisions should become persistent Copilot instructions or reusable release prompts."
 
 ## Acceptance Criteria
-- [ ] PR validation workflow requires successful build and all tests.
-- [ ] Branch protection requirements are documented for required checks and merge rules.
+- [x] PR validation workflow runs the solution build and tests and the JavaScript theme tests.
+- [x] Branch protection requirements are documented for required checks and merge rules; actual enforcement remains to be verified.
 - [ ] Release workflow is documented to trigger on release version creation.
 - [ ] Full release build and test execution is documented before deployment.
 - [ ] Self-hosted deployment agent model and security boundaries are documented.
@@ -124,5 +135,6 @@ Contributors gain fast feedback before merge, and operators gain a predictable r
 
 ## Open Questions
 - Which branches should be protected beyond the default branch?
+- Should a published release event trigger the pipeline, or is a release tag sufficient?
 - Should production deployment rollback be automatic or approval-based?
 - What deployment health-check threshold should block completion?

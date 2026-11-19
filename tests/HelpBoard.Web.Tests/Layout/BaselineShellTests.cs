@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace HelpBoard.Web.Tests.Layout;
 
@@ -26,6 +27,9 @@ public sealed class BaselineShellTests
 
         Assert.Contains("images/help-logo.png", html);
         Assert.Contains("Theme", html);
+        Assert.Contains("value=\"geocities\"", html);
+        Assert.Contains("value=\"minimalist\"", html);
+        Assert.Contains("value=\"western\"", html);
         Assert.Contains("Not signed in", html);
         Assert.Contains("Google Workspace sign-in is not configured.", html);
         Assert.Contains("Director's report", System.Net.WebUtility.HtmlDecode(html));
@@ -59,20 +63,64 @@ public sealed class BaselineShellTests
     [Fact]
     public async Task Render_DisabledHelpTheme_HidesOption()
     {
-        var services = CreateServices(new(false, false, null, null, null));
+        var services = CreateServices(new(false, false, null, null, null), FeatureToggleKeys.HelpTheme);
         await using var provider = services.BuildServiceProvider();
         await using var renderer = new HtmlRenderer(provider, provider.GetRequiredService<ILoggerFactory>());
 
         var html = await renderer.Dispatcher.InvokeAsync(async () =>
         {
-            var result = await renderer.RenderComponentAsync<BaselineShell>(
-                ParameterView.FromDictionary(new Dictionary<string, object?> { ["IsHelpEnabled"] = false }));
+            var result = await renderer.RenderComponentAsync<BaselineShell>();
             return result.ToHtmlString();
         });
 
         Assert.DoesNotContain("value=\"help\"", html);
         Assert.Contains("value=\"dark\"", html);
         Assert.Contains("value=\"light\"", html);
+    }
+
+    [Theory]
+    [InlineData(FeatureToggleKeys.GeocitiesTheme, "geocities")]
+    [InlineData(FeatureToggleKeys.MinimalistTheme, "minimalist")]
+    [InlineData(FeatureToggleKeys.WesternTheme, "western")]
+    public async Task Render_OptionalThemeFlag_HidesOnlyDisabledTheme(string disabledKey, string value)
+    {
+        var services = CreateServices(new(false, false, null, null, null), disabledKey);
+        await using var provider = services.BuildServiceProvider();
+        await using var renderer = new HtmlRenderer(provider, provider.GetRequiredService<ILoggerFactory>());
+
+        var html = await renderer.Dispatcher.InvokeAsync(async () =>
+        {
+            var result = await renderer.RenderComponentAsync<BaselineShell>();
+            return result.ToHtmlString();
+        });
+
+        Assert.DoesNotContain($"value=\"{value}\"", html);
+        Assert.Contains("value=\"light\"", html);
+        Assert.Contains("value=\"dark\"", html);
+        Assert.Contains("value=\"help\"", html);
+        foreach (var otherTheme in new[] { "geocities", "minimalist", "western" }.Where(theme => theme != value))
+        {
+            Assert.Contains($"value=\"{otherTheme}\"", html);
+        }
+    }
+
+    [Fact]
+    public async Task Render_LegacyLayout_OffersThemeSelection()
+    {
+        var services = CreateServices(new(false, false, null, null, null), FeatureToggleKeys.HelloWorldBaseline);
+        await using var provider = services.BuildServiceProvider();
+        await using var renderer = new HtmlRenderer(provider, provider.GetRequiredService<ILoggerFactory>());
+
+        var html = await renderer.Dispatcher.InvokeAsync(async () =>
+        {
+            var result = await renderer.RenderComponentAsync<MainLayout>();
+            return result.ToHtmlString();
+        });
+
+        Assert.Contains("app-shell", html);
+        Assert.Contains("value=\"geocities\"", html);
+        Assert.Contains("value=\"minimalist\"", html);
+        Assert.Contains("value=\"western\"", html);
     }
 
     [Fact]
@@ -92,11 +140,15 @@ public sealed class BaselineShellTests
         Assert.Contains("Sign in with Google Workspace", html);
     }
 
-    private static IServiceCollection CreateServices(AuthenticationStatusResponse status)
+    private static IServiceCollection CreateServices(AuthenticationStatusResponse status, string? disabledTheme = null)
     {
         var services = new ServiceCollection().AddLogging();
         services.AddSingleton<IAuthenticationClient>(new FixedAuthenticationClient(status));
         services.AddSingleton<NavigationManager>(new TestNavigationManager());
+        var featureToggles = new Mock<IFeatureToggleService>();
+        featureToggles.Setup(service => service.IsEnabledAsync(It.IsAny<string>()))
+            .ReturnsAsync((string key) => key != disabledTheme);
+        services.AddSingleton(featureToggles.Object);
         return services;
     }
 
