@@ -26,7 +26,7 @@ Each requirement has a stable identifier for feature and test traceability. Impl
 | GLB-002 | An ASP.NET Core Web API shall serve the application API and host the Blazor WebAssembly frontend. | Confirmed |
 | GLB-003 | The application-owned database shall be PostgreSQL, accessed through Entity Framework Core. | Confirmed |
 | GLB-004 | The application shall support multiple data sources over time, beginning with its own database. | Confirmed |
-| GLB-005 | Google Workspace credentials already held by board members shall provide primary sign-in, using OpenID Connect for authentication and OAuth 2.0 where applicable. Authentik OIDC fallback shall also be supported. | Confirmed |
+| GLB-005 | Google Workspace credentials already held by board members shall provide sign-in, using OpenID Connect for authentication and OAuth 2.0 where applicable. Authentik fallback is not required at this stage. | Confirmed |
 | GLB-006 | A broad, extensible catalog of graphs and infographic types shall be delivered in phases. The initial-release chart list remains to be agreed. | Confirmed |
 | GLB-007 | The current reporting scope shall be interactive dashboards. Downloadable reports, exports, and print-specific report delivery are future scope. | Confirmed |
 | GLB-008 | Strategic plan tracking and project boards shall remain supporting planned features rather than displacing reporting as the primary purpose. | Confirmed |
@@ -198,20 +198,20 @@ The first database-backed business dataset is the director-entered Director's Re
 | ID | Requirement | Classification |
 |----|-------------|----------------|
 | SEC-001 | Users shall sign in primarily with their existing Google Workspace identity. The application shall not introduce its own password store. | Confirmed |
-| SEC-002 | Authentik shall provide a supported OIDC fallback with documented activation, account eligibility, and recovery procedures. Fallback shall not bypass normal authorization or create an unrestricted emergency login. | Confirmed |
+| SEC-002 | Authentik OIDC fallback may be reconsidered later; if approved, define activation, account eligibility, and recovery procedures without bypassing authorization or creating an unrestricted emergency login. | Planned |
 | SEC-003 | The API shall enforce authorization independently of frontend route guards, chart visibility, or feature flags, including supporting-detail and future export endpoints. | Baseline |
 | SEC-004 | Access shall be restricted to approved organizational identities and application permissions. Email domain hints alone shall not authorize a user; Workspace membership and eligibility rules must be defined and validated server-side. | Baseline |
 | SEC-005 | Authentication shall use a standards-compliant OIDC flow. A browser public-client flow shall use authorization code with PKCE and no client secret; any server-held credentials shall remain server-side. | Baseline |
 | SEC-006 | Token validation shall enforce the applicable issuer, audience, signature, and lifetime checks; login flows shall validate state and nonce as applicable. API credentials shall be intended for the API, not accepted merely because they are Google identity tokens. | Baseline |
-| SEC-007 | External identities shall be keyed by issuer/provider and subject. Google and Authentik accounts shall not be automatically linked solely by matching email addresses. Linking and fallback access require an approved mapping procedure. | Baseline |
-| SEC-008 | The permission model shall define provisioning, default access, administrator bootstrap, role changes, deprovisioning, and revocation behavior across both providers. Least privilege shall be the default. | Baseline |
+| SEC-007 | External identities shall be keyed by issuer/provider and subject. If another provider is approved later, accounts shall not be automatically linked solely by matching email addresses; linking requires an approved mapping procedure. | Baseline |
+| SEC-008 | The permission model shall define provisioning, default access, administrator bootstrap, role changes, deprovisioning, and revocation behavior for configured providers. Least privilege shall be the default. | Baseline |
 | SEC-009 | HTTPS, approved redirect destinations, secure session/token handling, sign-out, expiry, and reauthentication behavior shall be defined and tested. Cookie-based designs shall include CSRF defenses for state-changing operations. | Baseline |
 | SEC-010 | Authentication failures, denied access, provider transitions, and administrative access changes shall be auditable without logging tokens, secrets, or unnecessary personal data. | Baseline |
 | SEC-011 | Reports shall expose only data authorized for the requesting user. Aggregation, drill-down, and caching shall preserve those restrictions. | Baseline |
-| SEC-012 | Google Workspace and Authentik registrations shall allow only explicitly approved authentication callback URLs. Production callbacks shall use `https://help.becauseimclever.com` with paths defined by the approved authentication design; callback paths are not selected by this document. | Baseline |
+| SEC-012 | Configured identity-provider registrations shall allow only explicitly approved authentication callback URLs. Production callbacks shall use `https://help.becauseimclever.com` with paths defined by the approved authentication design; callback paths are not selected by this document. | Baseline |
 | SEC-013 | Retain the approved identity profile fields (provider/subject, email, display name, last login, provisioning source) and auditable role/permission assignments. Provide clear sign-in/redirect, provisioning, access-denied, session status, and provider-unavailable states with support guidance. | Baseline; Feature 005 |
 
-Whether fallback activation is manual or automatic, whether provider selection is visible to users, and the session architecture remain open design decisions. Both providers must enforce the same application access policy.
+Session architecture remains an open design decision. Authentik fallback is not required at this stage; any future provider must enforce the same application access policy.
 
 ## 9. Accessibility, UX, and Operational Quality
 
@@ -316,7 +316,7 @@ The first reporting release shall demonstrate the following, with its exact busi
 
 1. The Docker container on PiTony serves the Blazor WASM application and its API at `https://help.becauseimclever.com`, with working DNS and valid HTTPS.
 2. Eligible board users can sign in with Google Workspace; ineligible users and unauthorized direct API requests are denied.
-3. Authentik fallback is exercised under the approved activation and identity-mapping procedure, preserving equivalent permissions.
+3. Google sign-in failures and outages are handled without granting unauthorized access; no fallback provider is required at this stage.
 4. The Director's Report form persists real data in PostgreSQL through EF Core-backed server-side writes/queries and generates an authorized interactive report.
 5. Every chart type selected for that release renders its approved data shape correctly, including documented edge cases and accessible equivalents.
 6. Filters, calculations, timestamps, and supporting detail reconcile against agreed reference data.
@@ -342,11 +342,11 @@ No external source, refresh interval, export format, role hierarchy, or paid vis
 
 | Existing document | Relationship |
 |-------------------|--------------|
-| [Feature 001: UI Foundation](features/feature-001-ui-foundation-and-theme-system.md) | Shared UI and WCAG foundation; does not itself deliver the reporting catalog. |
-| [Feature 002: Dashboard Experience](features/feature-002-dashboard-experience.md) | Dashboard groundwork only. Its database exclusions are boundaries of that feature slice, not a global exclusion of database-backed reporting. |
-| [Feature 003: Strategic Plan Tracker](features/feature-003-strategic-plan-tracker.md) | Supporting planned tracking/reporting capability with existing ownership, roll-up, and launch-gate constraints. |
-| [Feature 004: Project Boards](features/feature-004-project-boards.md) | Supporting planned work-management capability and shared board model. |
-| [Feature 005: Authentication](features/feature-005-authentication-and-authorization.md) | Google Workspace primary and required Authentik fallback; detailed eligibility, session, and activation policy still require decisions. |
+| UI foundation | Completed initial UI and WCAG foundation; ongoing requirements are consolidated under UIF/A11 and the accessibility and migration documents below. It does not itself deliver the reporting catalog. |
+| Dashboard groundwork | Completed planning slice; current dashboard and database-backed reporting requirements are consolidated under REP/VIS/DAT and the other feature documents. |
+| [Feature 003: Strategic Plan Tracker](features/on-hold/feature-003-strategic-plan-tracker.md) | On-hold tracking/reporting capability with existing ownership, roll-up, and launch-gate constraints. |
+| [Feature 004: Project Boards](features/on-hold/feature-004-project-boards.md) | On-hold work-management capability and shared board model. |
+| [Feature 005: Authentication](features/feature-005-authentication-and-authorization.md) | Google Workspace sign-in; detailed eligibility, session, and provisioning policy still require decisions. Authentik fallback is deferred. |
 | [Feature 006: Delivery Pipeline](features/feature-006-ci-cd-and-release-deployment.md) | Validation and deployment planning supporting production operation. |
 | [Feature 007: Feature Toggles](features/feature-007-feature-toggle-system.md) | Controlled rollout; not access control. |
 | [Feature 008: Themes](features/feature-008-theme-expansion.md) | Standard Light/Dark/HELP themes, system preference and persistence; optional novelty themes retained behind flags. |
@@ -369,7 +369,7 @@ Repository inspection for this draft confirms the hosted WASM structure, Postgre
 | DEC-002 | Which visualization types are required in each phase, especially the first production release? | GLB-006, VIS-001 through VIS-008 |
 | DEC-003 | What Workspace organizations/domains and membership checks establish eligibility, and how is access provisioned/revoked? | SEC-004, SEC-008 |
 | DEC-004 | What are the approved roles and permissions? Who can curate dashboards or edit source records? | Section 3, SEC-003, SEC-008 |
-| DEC-005 | How is Authentik activated, how are fallback identities mapped, and how is fallback tested during a Google outage? | SEC-002, SEC-007 |
+| DEC-005 | If a fallback provider is approved later, how will it be activated, how will identities be mapped, and how will fallback be tested? | SEC-002, SEC-007 |
 | DEC-006 | Which session/token architecture, expiry, idle timeout, and revocation deadline apply? | SEC-005, SEC-006, SEC-009 |
 | DEC-007 | Which filters, fiscal calendar, timezone, locale, currencies, and comparison periods apply? | REP-003, DAT-004 |
 | DEC-008 | What data freshness, history/snapshot, retention, and sensitivity rules apply to each dataset? | REP-008 through REP-010, DAT-002 |

@@ -1,5 +1,7 @@
 # Feature 004: Project Boards
 
+Delivery status: On hold while dashboard work is prioritized.
+
 ## Goal
 Provide a shared project board model so teams can create and manage work tracking spaces for any project, while the Strategic Plan is represented as the required always-present system board with reserved identity/name and non-deletable constraints.
 
