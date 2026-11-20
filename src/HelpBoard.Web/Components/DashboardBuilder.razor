@@ -1,0 +1,130 @@
+@using HelpBoard.Contracts
+
+<section class="dashboard-builder" aria-labelledby="builder-title">
+    <header class="hb-page-header">
+        <div>
+            <p class="hb-eyebrow">Shared workspace</p>
+            <h1 id="builder-title">Dashboards</h1>
+            <p>Create a dashboard and arrange its widgets. Changes save automatically.</p>
+        </div>
+    </header>
+
+    @if (_loading)
+    {
+        <p role="status">Loading dashboards...</p>
+    }
+    else if (_loadError is not null)
+    {
+        <p role="alert">@_loadError</p>
+        <button class="hb-button hb-button--secondary" type="button" @onclick="LoadAsync">Try again</button>
+    }
+    else
+    {
+        <div class="dashboard-builder__tools">
+            <div>
+                <label for="dashboard-name">New dashboard name</label>
+                <input id="dashboard-name" maxlength="100" @bind="_newName" @bind:event="oninput" disabled="@ControlsDisabled" />
+                <button class="hb-button hb-button--primary" type="button" @onclick="CreateAsync"
+                        disabled="@(ControlsDisabled || string.IsNullOrWhiteSpace(_newName))">Create dashboard</button>
+            </div>
+            @if (_dashboards.Count > 0)
+            {
+                <div>
+                    <label for="dashboard-selector">Shared dashboard</label>
+                    <select id="dashboard-selector" value="@_dashboard?.Id" @onchange="SelectAsync" disabled="@ControlsDisabled">
+                        @foreach (var dashboard in _dashboards)
+                        {
+                            <option value="@dashboard.Id">@dashboard.Name</option>
+                        }
+                    </select>
+                </div>
+            }
+        </div>
+
+        <p role="status" aria-live="polite">@_status</p>
+        @if (_saveError is not null)
+        {
+            <div class="dashboard-builder__error" role="alert">
+                <p>@_saveError</p>
+                @if (!_conflict)
+                {
+                    <button class="hb-button hb-button--secondary" type="button" @onclick="RetrySaveAsync" disabled="@_saving">Retry save</button>
+                }
+                <button class="hb-button hb-button--secondary" type="button" @onclick="ReloadDashboardAsync" disabled="@_saving">
+                    Discard local changes and reload
+                </button>
+            </div>
+        }
+
+        @if (_dashboard is null)
+        {
+            <p>No shared dashboards yet. Create one to get started.</p>
+        }
+        else
+        {
+            <section aria-labelledby="dashboard-edit-title">
+                <h2 id="dashboard-edit-title">@_dashboard.Name</h2>
+                <div class="dashboard-builder__tools">
+                    <div>
+                        <label for="dashboard-rename">Dashboard name</label>
+                        <input id="dashboard-rename" maxlength="100" value="@_dashboard.Name"
+                               @onchange="RenameAsync" readonly="@ControlsDisabled" />
+                    </div>
+                    <div>
+                        <label for="widget-type">Widget type</label>
+                        <select id="widget-type" @bind="_widgetType" disabled="@ControlsDisabled">
+                            <option value="Line">Line chart</option>
+                            <option value="Bar">Bar chart</option>
+                            <option value="Table">Table</option>
+                            <option value="Text">Text / notes</option>
+                        </select>
+                        <button class="hb-button hb-button--primary" type="button" @onclick="AddWidgetAsync" disabled="@ControlsDisabled">Add widget</button>
+                    </div>
+                </div>
+                <p>Use the move and size buttons to arrange widgets. Other widgets move down when needed.</p>
+                @if (_dashboard.Widgets.Count == 0)
+                {
+                    <p>This dashboard has no widgets yet.</p>
+                }
+                <div class="dashboard-grid">
+                    @foreach (var widget in _dashboard.Widgets.OrderBy(item => item.Row).ThenBy(item => item.Column))
+                    {
+                        <article class="dashboard-widget" style="@GridStyle(widget)" @key="widget.Id">
+                            <h3>@widget.Title <span class="dashboard-widget__type">(@WidgetTypeLabel(widget.Type))</span></h3>
+                            <label for="@($"title-{widget.Id}")">Widget title</label>
+                            <input id="@($"title-{widget.Id}")" maxlength="100" value="@widget.Title"
+                                   @onchange="args => SetTitleAsync(widget, args)" readonly="@ControlsDisabled" />
+                            @if (widget.Type == "Text")
+                            {
+                                <label for="@($"notes-{widget.Id}")">Notes</label>
+                                <textarea id="@($"notes-{widget.Id}")" maxlength="4000" value="@widget.Content"
+                                          @onchange="args => SetContentAsync(widget, args)" readonly="@ControlsDisabled"></textarea>
+                            }
+                            else
+                            {
+                                <p>No data source configured. This widget does not display data yet.</p>
+                            }
+                            <details>
+                                <summary>Arrange @widget.Title</summary>
+                                <p>Position: column @(widget.Column + 1), row @(widget.Row + 1). Size: @widget.Width by @widget.Height cells.</p>
+                                <div class="dashboard-widget__controls" role="group" aria-label="Move @widget.Title">
+                                    <button type="button" @onclick="() => MoveAsync(widget, 0, -1)" disabled="@(ControlsDisabled || widget.Row == 0)">Up</button>
+                                    <button type="button" @onclick="() => MoveAsync(widget, 0, 1)" disabled="@ControlsDisabled">Down</button>
+                                    <button type="button" @onclick="() => MoveAsync(widget, -1, 0)" disabled="@(ControlsDisabled || widget.Column == 0)">Left</button>
+                                    <button type="button" @onclick="() => MoveAsync(widget, 1, 0)" disabled="@(ControlsDisabled || widget.Column + widget.Width >= DashboardLayout.Columns)">Right</button>
+                                </div>
+                                <div class="dashboard-widget__controls" role="group" aria-label="Resize @widget.Title">
+                                    <button type="button" @onclick="() => ResizeAsync(widget, -1, 0)" disabled="@(ControlsDisabled || widget.Width <= DashboardLayout.MinimumSize)">Narrower</button>
+                                    <button type="button" @onclick="() => ResizeAsync(widget, 1, 0)" disabled="@(ControlsDisabled || widget.Column + widget.Width >= DashboardLayout.Columns)">Wider</button>
+                                    <button type="button" @onclick="() => ResizeAsync(widget, 0, -1)" disabled="@(ControlsDisabled || widget.Height <= DashboardLayout.MinimumSize)">Shorter</button>
+                                    <button type="button" @onclick="() => ResizeAsync(widget, 0, 1)" disabled="@(ControlsDisabled || widget.Height >= DashboardLayout.MaximumHeight)">Taller</button>
+                                </div>
+                                <button type="button" @onclick="() => RemoveAsync(widget)" disabled="@ControlsDisabled">Remove @widget.Title</button>
+                            </details>
+                        </article>
+                    }
+                </div>
+            </section>
+        }
+    }
+</section>

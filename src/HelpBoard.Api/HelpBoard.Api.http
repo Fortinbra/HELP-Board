@@ -2,3 +2,50 @@
 
 ### Container liveness only; does not check PostgreSQL or authentication.
 GET {{baseUrl}}/healthz
+
+### Dashboard endpoints require an authenticated HTTPS session.
+### Obtain a token in the same session and copy it into @csrfToken below.
+@secureBaseUrl = https://localhost:7138
+@csrfToken = replace-with-antiforgery-token
+@dashboardId = replace-with-dashboard-guid
+@revision = replace-with-current-revision-guid
+
+### Get an antiforgery token
+GET {{secureBaseUrl}}/auth/antiforgery
+
+### List shared dashboards
+GET {{secureBaseUrl}}/api/dashboards
+
+### Get a dashboard
+GET {{secureBaseUrl}}/api/dashboards/{{dashboardId}}
+
+### Create a dashboard
+POST {{secureBaseUrl}}/api/dashboards
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrfToken}}
+
+{
+  "name": "Board overview"
+}
+
+### Save a dashboard using the revision returned by GET or POST
+PUT {{secureBaseUrl}}/api/dashboards/{{dashboardId}}
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrfToken}}
+
+{
+  "name": "Board overview",
+  "revision": "{{revision}}",
+  "widgets": [
+    {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "type": "Text",
+      "title": "Notes",
+      "content": "Board notes",
+      "column": 0,
+      "row": 0,
+      "width": 2,
+      "height": 2
+    }
+  ]
+}

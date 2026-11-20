@@ -11,6 +11,8 @@ public sealed class FeatureToggleServiceTests
     [InlineData(FeatureToggleKeys.StrategicPlan, false)]
     [InlineData(FeatureToggleKeys.HelloWorldBaseline, true)]
     [InlineData(FeatureToggleKeys.HelloWorldBaseline, false)]
+    [InlineData(FeatureToggleKeys.DashboardBuilder, true)]
+    [InlineData(FeatureToggleKeys.DashboardBuilder, false)]
     [InlineData(FeatureToggleKeys.LightTheme, true)]
     [InlineData(FeatureToggleKeys.DarkTheme, true)]
     [InlineData(FeatureToggleKeys.HelpTheme, true)]

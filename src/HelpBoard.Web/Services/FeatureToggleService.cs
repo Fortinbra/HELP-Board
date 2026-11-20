@@ -12,6 +12,7 @@ public interface IFeatureToggleService
 public static class FeatureToggleKeys
 {
     public const string HelloWorldBaseline = "HelloWorldBaseline";
+    public const string DashboardBuilder = "DashboardBuilder";
     public const string LightTheme = "LightTheme";
     public const string DarkTheme = "DarkTheme";
     public const string HelpTheme = "HelpTheme";
@@ -28,6 +29,7 @@ public sealed class FeatureToggleService : IFeatureToggleService
         new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             FeatureToggleKeys.HelloWorldBaseline,
+            FeatureToggleKeys.DashboardBuilder,
             FeatureToggleKeys.LightTheme,
             FeatureToggleKeys.DarkTheme,
             FeatureToggleKeys.HelpTheme,

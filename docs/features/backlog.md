@@ -108,6 +108,6 @@ or detailed configuration. See the tracked [database guidance](../database.md).
 ### Future data models and governance
 
 - **Origin:** Feature 009: PostgreSQL & EF Core Integration.
-- Add the Director's Report model with Feature 010. Add shared board/work-item persistence when the on-hold Features 003/004 resume; do not introduce a separate strategic-only persistence model.
+- Add the Director's Report model when on-hold Feature 010 resumes. Add shared board/work-item persistence when the on-hold Features 003/004 resume; do not introduce a separate strategic-only persistence model.
 - Decide whether optimistic concurrency, audit history, soft deletes, further query optimization, or additional EF/migration governance tooling is needed as those features mature.
-- **Related requirements:** [PST-005](../global-requirements.md#42-existing-persistence-requirements) and the [Director's Report](feature-010-directors-report.md).
+- **Related requirements:** [PST-005](../global-requirements.md#42-existing-persistence-requirements) and the [Director's Report](on-hold/feature-010-directors-report.md).

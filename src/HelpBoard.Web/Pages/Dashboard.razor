@@ -32,6 +32,10 @@ else if (_status is not { IsAuthenticated: true })
         }
     </section>
 }
+else if (IsDashboardBuilderEnabled)
+{
+    <DashboardBuilder />
+}
 else if (IsHelloWorldBaselineEnabled)
 {
     <section class="baseline-welcome" aria-labelledby="welcome-title">

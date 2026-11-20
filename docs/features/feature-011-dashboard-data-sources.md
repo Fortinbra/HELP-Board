@@ -1,26 +1,34 @@
-# Feature 011: Dashboard Data Sources
+# Feature 011: Shared Dashboard Builder and Data Sources
 
-Status: Requirements draft; not implemented
-Last updated: 2026-11-18
+Status: Builder implemented; provider integrations not implemented
+Last updated: 2026-11-19
+
+The dashboard builder flag is enabled in the current web configuration. Its
+database migration must be reviewed and applied to the intended environment
+before deployment; it has not been applied to production. This does not waive
+authentication, accessibility, backup, recovery, or other release requirements.
 
 ## Goal
 
-Allow an authorized dashboard configurator to select a data source for each graph component and configure the data it visualizes. Introduce the application-owned PostgreSQL database first, followed by Google Sheets and QuickBooks Online integrations.
+Allow authorized users to create shared dashboards, arrange and resize widgets on a grid, and eventually select a data source for each data-driven widget. Deliver the builder first without live financial data; PostgreSQL is the initial provider direction, and financial data such as receivables, payables, and donations is expected to come mostly from QuickBooks Online.
 
 This feature refines [GLB-004 and the reporting and integration requirements](../global-requirements.md#4-architecture-and-persistence). The [dashboard requirements](../global-requirements.md#5-dashboards-and-interactive-reporting) include source-agnostic guidance; graph configuration and data-source selection are not yet implemented. This is a purpose-built HELP-Board feature, not a general-purpose dashboard product.
 
 ## User Value
 
-Dashboard configurators can choose an appropriate approved source for each graph instead of relying on a single hard-coded source. Board members can see meaningful, attributable visualizations while understanding when data is missing, stale, or unavailable.
+Authorized users can create and edit shared dashboards without a dedicated page for each report. Board members can later connect widgets to approved sources and see attributable data without mistaking missing or unavailable data for a genuine value.
 
 ## Scope
 
 ### In Scope
 
+- Shared dashboards that all authorized users can create and edit, with changes saved automatically.
+- A six-column desktop grid where new widgets default to 2 by 2 cells and cannot be smaller than 2 by 2; line charts, bar charts, tables, and text/notes can each be resized. Repositioning a widget moves other widgets out of the way.
+- A builder-first slice with clearly identified unconfigured widgets, without invented live data. Define and preserve widget configuration for future source selection.
 - A source-agnostic contract for retrieving approved graph data, with provider-specific configuration and a common graph-ready result.
 - Selecting an available source per graph, selecting an approved dataset and mapping its fields to a compatible graph, and persisting the configuration.
 - Managing approved source connections and access separately from configuring graphs.
-- Application-owned PostgreSQL as the first source, followed by Google Sheets and QuickBooks Online as separately delivered integrations.
+- PostgreSQL as the first provider direction, with QuickBooks Online and Google Sheets delivered as separately scoped integrations. No initial live dataset is approved yet.
 - Source and graph validation, authorization, refresh and failure states, accessible data equivalents, and operational guidance.
 - A delivery path that permits PostgreSQL-backed graphs to work without waiting for either external integration.
 
@@ -29,12 +37,18 @@ Dashboard configurators can choose an appropriate approved source for each graph
 - Arbitrary SQL or unrestricted access to application tables, spreadsheets, or QuickBooks data.
 - Writing back to external sources, bulk replication of their entire contents, or using external data to change the Director's Report publication or meeting snapshots.
 - A public connector marketplace, multi-tenancy, general-purpose analytics platform, or external-client API.
-- Exports, scheduled report delivery, personal dashboard layouts, and self-service report building beyond the authorized graph configuration described here.
-- Assuming specific business metrics, graph types, QuickBooks entities, spreadsheet layouts, or refresh intervals are approved.
+- Exports, scheduled report delivery, and personal dashboard layouts.
+- Assuming specific business metrics, additional graph types, QuickBooks entities, spreadsheet layouts, or refresh intervals are approved.
 
 ## UX
 
 ### User Flows
+
+1. An authorized user creates or opens a shared dashboard and adds a line chart, bar chart, table, or text/notes widget.
+2. The user repositions or resizes widgets on the grid; other widgets move out of the way and changes save automatically. Save failures and concurrent-edit conflicts are reported rather than silently losing changes.
+3. Before an approved live dataset is connected, data-driven widgets clearly indicate that they are unconfigured. Text/notes remain editable.
+
+Later source-integration flows:
 
 1. An authorized administrator makes a supported source available, supplies or authorizes its connection using the approved credential mechanism, and tests access without exposing secrets. PostgreSQL uses the existing application database configuration.
 2. An authorized dashboard configurator adds or edits a graph, selects an available source and an approved dataset, and chooses compatible fields, metric meaning, units, aggregation, reporting period, and applicable filters.
@@ -42,7 +56,7 @@ Dashboard configurators can choose an appropriate approved source for each graph
 4. An authorized viewer sees the graph with source attribution, reporting context, and freshness information, and can request a refresh.
 5. If a source is disconnected, access is revoked, its schema changes, or retrieval fails, the graph reports the problem rather than silently switching sources or presenting unavailable data as zero. Other graphs remain usable.
 
-Connection management, graph configuration, and viewing are distinct permissions; their exact role assignments and configuration/publishing workflow remain open. Provider connection authorization is separate from signing in to HELP-Board.
+All authorized users may create and edit shared dashboards. Connection management and access to source datasets remain separate permissions; editing a dashboard does not grant access to data or credentials. Provider connection authorization is separate from signing in to HELP-Board.
 
 ### Key Screens / Components
 
@@ -57,6 +71,39 @@ Connection management, graph configuration, and viewing are distinct permissions
 - Graph loading, empty, stale, partially available, unavailable, and failed; any retained last-successful data must be clearly identified as stale and subject to current authorization.
 
 Saving an invalid or failed edit must not silently replace a previously valid configuration. A graph with no data must be distinguishable from a graph whose true value is zero.
+
+### Builder implementation
+
+The builder creates shared dashboards and saves committed field edits and widget
+changes automatically. It uses move and resize buttons, including keyboard
+operation, rather than drag-and-drop. New widgets occupy the first available
+2-by-2 space. Moving or resizing places the changed widget first, then processes
+the other widgets by row, column, and identifier, pushing collisions downward.
+The grid has six desktop columns; narrow screens display widgets in a single
+column without changing their saved positions.
+
+Dashboard writes carry a revision checked atomically by the database. A failed
+save leaves the local draft visible with a retry option; a conflict requires
+explicitly discarding the draft and reloading. A failed create may have reached
+the server even if its response was lost, so check the dashboard list before
+retrying by reloading the page. A dashboard supports at most 50 widgets, 20 rows per widget, and
+1,000 grid rows. Titles are limited to 100 characters and notes to 4,000.
+These limits also apply server-side.
+
+Line charts, bar charts, and tables display an unconfigured message; no source
+selection or live data is implemented. Widget text and layout are stored as
+dashboard configuration, not as credentials or source data.
+
+Automated coverage includes layout collisions and bounds, authenticated and
+antiforgery-protected API writes, invalid layouts, stale revisions, a SQLite
+concurrency test, and component rendering. Browser smoke tests used mocked API
+responses to exercise widget creation, keyboard movement and resizing, notes,
+reload, conflicts, a narrow viewport, and all six themes. These tests are not a
+full accessibility, production-authentication, or PostgreSQL migration review.
+The migration was applied to a disposable PostgreSQL 17 database containing an
+existing test ticket; the ticket remained intact. The local EF CLI warned that
+its preview version is older than the 10.0.13 runtime. Production migration and
+recovery planning are still outstanding.
 
 ## Data Needs
 
@@ -76,7 +123,7 @@ Conceptual records, not a prescribed schema:
 
 - **Source connection:** stable identity, provider type, display name, status, non-secret settings, and a secure reference to credentials where required.
 - **Approved dataset:** connection, permitted data selection, field names and types, and metric/aggregation constraints.
-- **Graph configuration:** stable graph identity, source and dataset references, visualization type, field mappings, metric/units, period, filters, and refresh policy.
+- **Dashboard and widget configuration:** shared dashboard identity, widget type and content, grid position and size, and revision/concurrency information; data-driven widgets later retain source and dataset references, mappings, metric/units, period, filters, and refresh policy.
 - **Retrieval result:** typed graph-ready values and labels, completeness/error state, retrieval time, and source observation/update time when available.
 
 Persist configuration in application PostgreSQL with reviewed EF Core migrations. Credentials and tokens must not be stored in graph configuration, returned to the browser, logged, or committed. Use an approved server-side secret storage and token lifecycle; document rotation, revocation, and recovery. Referential integrity and explicit behavior for source deletion, disconnection, and in-use configuration changes must be designed before implementation; never silently repoint graphs.
@@ -92,6 +139,7 @@ Use approved, bounded, server-side queries and aggregations. Validate mappings a
 
 ## Accessibility (WCAG)
 
+- Moving and resizing widgets must have keyboard-operable alternatives, visible focus, and clear announcements; do not rely on dragging alone.
 - Source and field selectors, connection actions, preview, and refresh must be keyboard operable with associated labels, instructions, and errors.
 - Announce connection, loading, save, and refresh outcomes without relying on color or stealing focus.
 - Provide each graph with a meaningful text summary and accessible data equivalent; do not rely on color, hover, or chart graphics alone.
@@ -106,10 +154,10 @@ Use approved, bounded, server-side queries and aggregations. Validate mappings a
 
 ## Dependencies
 
-- Feature 002 dashboard foundation and an authorized graph configuration workflow, neither of which currently provides this feature.
+- Feature 002 dashboard foundation; shared dashboard creation and grid editing are implemented here.
 - Feature 005 authentication and approved authorization policies for source management, configuration, and viewing.
 - Feature 009 PostgreSQL/EF Core, reviewed migrations, and the existing PiDB topology.
-- Feature 010 publication and access rules when Director's Report data is selected; never expose drafts to board viewers.
+- Feature 010 is on hold and is not required for the builder. If its data is used later, respect publication and access rules and never expose drafts to board viewers.
 - Features 001 and 008 for accessible UI and standard themes; Feature 007 for the agreed rollout/flag strategy; Feature 006 for deployment and secret handling.
 - Approved datasets, metric definitions, provider accounts, access grants, and operational capacity for each delivery slice.
 
@@ -139,9 +187,15 @@ Use approved, bounded, server-side queries and aggregations. Validate mappings a
 
 ## Acceptance Criteria
 
+- [ ] An authorized user creates a shared dashboard and another authorized user can view and edit it; anonymous access is denied.
+- [x] Users add line chart, bar chart, table, and text/notes widgets. Each starts at 2 by 2 grid cells, supports resizing, and cannot be smaller than 2 by 2. The desktop grid has six columns.
+- [x] Users reposition widgets on the grid; colliding widgets move out of the way without overlap. Keyboard users can move and resize widgets too.
+- [ ] Dashboard and widget changes save automatically and survive reload; failed saves and concurrent edits are surfaced without silent data loss.
+- [x] Before live data is available, data-driven widgets clearly show an unconfigured state rather than invented financial values.
+- [x] The feature flag is enabled in the current web configuration after the builder is ready; missing or disabled flags retain the existing experience.
 - [ ] An authorized configurator selects an approved source and dataset for each graph, maps compatible fields, previews and saves it; a reload retains each graph's selection.
 - [ ] PostgreSQL is the first working provider, using approved application-owned data and existing persistence boundaries. Its delivery does not require Google Sheets or QuickBooks Online.
-- [ ] Google Sheets and QuickBooks Online are delivered as subsequent provider slices, each with approved account access, dataset/metric definitions, connection and recovery guidance, and the same graph contract and authorization checks.
+- [ ] Google Sheets and QuickBooks Online are delivered as subsequent provider slices, each with approved account access, dataset/metric definitions, connection and recovery guidance, and the same graph contract and authorization checks; their order is not yet fixed.
 - [ ] Different graphs can use different approved sources; an unavailable source does not prevent independent graphs from rendering or silently change their sources.
 - [ ] Server-side validation rejects incompatible mappings and unauthorized source/dataset access; failed edits retain the last valid configuration.
 - [ ] Tests cover empty data, actual zero, missing/invalid fields, source schema changes, provider errors, revoked access, failed refresh, and permission-safe caching.
@@ -160,3 +214,4 @@ Use approved, bounded, server-side queries and aggregations. Validate mappings a
 - What refresh intervals, stale thresholds, cache retention, rate limits, and resource budgets are acceptable for each provider?
 - What happens to graphs when a source is disabled, deleted, reauthorized, or changes schema? May authorized users see retained stale values, and for how long?
 - What is the intended delivery order and release timing for Google Sheets and QuickBooks Online after PostgreSQL?
+- What widget maximum sizes and deterministic collision-placement rules best fit desktop and mobile layouts?

@@ -35,7 +35,8 @@ Each requirement has a stable identifier for feature and test traceability. Impl
 | GLB-011 | The sole production application target shall be a Docker container on PiTony, the owner's Raspberry Pi 5 with 16 GB RAM. Alternative production deployment platforms are out of scope. | Confirmed |
 | GLB-012 | The standard themes shall be VS Code-inspired Light and Dark, plus a separate HELP purple/teal theme. Initial selection shall follow the system light/dark preference until the user explicitly chooses a theme. | Confirmed |
 | GLB-013 | Geocities, Minimalist, and Western shall remain optional, independently controlled themes; they are enabled in the current web configuration by product approval. | Confirmed |
-| GLB-014 | The first business report shall be the Director's Report, generated from a director-completed form stored in the application database, with one report per board meeting, between-meeting updates, and historical trends. | Confirmed |
+| GLB-014 | The dedicated Director's Report and its form, publication, meeting records, and historical trends are on hold while shared custom dashboards are prioritized. | Confirmed change in priority |
+| GLB-015 | Authorized users shall create and edit shared dashboards with configurable widgets on a repositionable grid. | Confirmed |
 
 ## 3. Users and Access Responsibilities
 
@@ -44,8 +45,8 @@ Board members are the primary consumers of dashboards and reports. Additional re
 | Responsibility | Intended capabilities | Status |
 |----------------|-----------------------|--------|
 | Board/report viewer | Sign in, view authorized dashboards, filter data, inspect visualizations and supporting details. | Confirmed primary audience |
-| Director/report author | Complete the Director's Report form, save drafts, and explicitly publish updates for authorized board members. | Confirmed; exact permission assignments remain open |
-| Dashboard/report curator | Define approved metrics, dashboard content, and visualization configuration. | Proposed; role assignment and authoring UX undecided |
+| Director/report author | Complete the Director's Report form, save drafts, and explicitly publish updates for authorized board members when that on-hold feature resumes. | Planned; exact permission assignments remain open |
+| Dashboard editor | Create and edit shared dashboards and widget layouts. | Confirmed for all authorized users; source-data permissions remain separate |
 | Data contributor | Maintain application-owned records used by approved reports, where an editing feature is authorized. | Planned supporting capability |
 | Application administrator | Manage access, identity-provider configuration, and approved data-source configuration. | Baseline operational responsibility |
 
@@ -120,15 +121,23 @@ Full-text search, advanced JSONB, sharding/read replicas, general audit-history/
 | REP-011 | Use a responsive dashboard shell with summary KPIs, widget/card regions, and applicable filters. A widget contract shall identify its key, title, metrics, source, refresh strategy, states, and drill-down destination, independent of source technology. | Baseline; Feature 002 |
 | REP-012 | Prioritize above-the-fold summaries, progressively load lower-priority widgets, and debounce frequent filter changes. Any caching shall respect freshness and user permissions. | Baseline; Feature 002 |
 
-Saved views, personal dashboard layouts, self-service report building, scheduled delivery, and public sharing are not implied by interactive reporting. Their inclusion requires separate scope approval.
-
-### 5.1 First report: Director's Report
-
-The [Director's Report feature plan](features/feature-010-directors-report.md) elaborates these requirements. Field definitions are undecided; no financial, personnel, participant, or other domain-specific metrics are approved by implication.
+Shared self-service dashboard creation and editing are approved. Personal dashboards, scheduled delivery, and public sharing remain out of scope unless separately approved.
 
 | ID | Requirement | Classification |
 |----|-------------|----------------|
-| DIR-001 | Provide a director-facing form whose persisted inputs generate the first interactive Director's Report. Approved numeric/date/categorical fields shall support appropriate visualizations; narrative content shall remain readable as narrative rather than invented quantitative metrics. | Confirmed purpose; baseline presentation |
+| REP-013 | All authorized users may create and edit shared dashboards; widget changes save automatically and survive reload. | Confirmed |
+| REP-014 | Widgets use a six-column desktop grid, default to 2 by 2 cells, and cannot be smaller than 2 by 2. Moving a widget moves other widgets out of the way; users can reposition widgets without a pointer. | Confirmed; keyboard access is baseline |
+| REP-015 | Initial widget types are line chart, bar chart, table, and text/notes. Each initial type supports resizing. | Confirmed |
+| REP-016 | Deliver the builder before live financial data is selected. Unconfigured data-driven widgets shall not present fabricated data as real; source selection and retrieval follow as approved datasets become available. | Confirmed direction; baseline data integrity |
+| REP-017 | Automatic saves shall surface failure and concurrent-edit conflicts without silently overwriting another user's changes. | Baseline |
+
+### 5.1 Director's Report (on hold)
+
+The [Director's Report feature plan](features/on-hold/feature-010-directors-report.md) preserves these requirements for later. The report is not a prerequisite for the initial dashboard builder. Field definitions are undecided; no financial, personnel, participant, or other domain-specific metrics are approved by implication.
+
+| ID | Requirement | Classification |
+|----|-------------|----------------|
+| DIR-001 | Provide a director-facing form whose persisted inputs generate an interactive Director's Report when this on-hold feature resumes. Approved numeric/date/categorical fields shall support appropriate visualizations; narrative content shall remain readable as narrative rather than invented quantitative metrics. | On hold; baseline presentation |
 | DIR-002 | Associate one logical Director's Report with each board meeting. Support 12 regular board meetings per year plus additional ad hoc meetings without an annual cap of 12 reports. | Confirmed |
 | DIR-003 | Identify meetings independently of calendar month or date, with regular/ad hoc type and a scheduled date. Rescheduling shall retain the meeting/report identity; multiple meetings in one month shall be distinguishable. Exact schedule, timezone, and canceled-meeting policy remain open. | Baseline |
 | DIR-004 | The director shall save drafts and explicitly publish initial reports and later updates. Board members shall continue to see the last successfully published version, not unpublished edits; an unpublished report shall not appear as a completed report. | Confirmed |
@@ -191,7 +200,7 @@ No charting vendor or commercial license is selected by this document. The in-re
 | DAT-007 | Calculations and roll-ups shall have deterministic tests against known inputs and expected outputs. Dashboard totals and supporting detail shall reconcile under the same filters. | Baseline |
 | DAT-008 | Future integrations shall be independently scoped and approved, including their access rights, operational costs, rate limits, and data-handling obligations. | Planned |
 
-The first database-backed business dataset is the director-entered Director's Report. Its form sections, reporting questions, metric definitions, and chart selections remain open. Existing ticket persistence is a technical foundation, not the first approved business report.
+The initial builder does not require a live business dataset. PostgreSQL remains the first provider direction; no initial dataset has been selected. Financial data such as receivables, payables, and donations is expected to come mostly from QuickBooks Online in a later integration. Existing ticket persistence is a technical foundation, not an approved substitute dataset.
 
 ## 8. Authentication, Authorization, and Privacy
 
@@ -314,29 +323,29 @@ The existing RICE prioritization method remains a planning aid: `(Reach x Impact
 
 ### 10.4 Initial production reporting capability
 
-The first reporting release shall demonstrate the following, with its exact business dataset and chart list approved before implementation acceptance:
+The initial dashboard builder and subsequent live-data releases shall retain the following acceptance expectations. The builder is delivered before selection of a live dataset:
 
 1. The Docker container on PiTony serves the Blazor WASM application and its API at `https://help.becauseimclever.com`, with working DNS and valid HTTPS.
 2. Eligible board users can sign in with Google Workspace; ineligible users and unauthorized direct API requests are denied.
 3. Google sign-in failures and outages are handled without granting unauthorized access; no fallback provider is required at this stage.
-4. The Director's Report form persists real data in PostgreSQL through EF Core-backed server-side writes/queries and generates an authorized interactive report.
-5. Every chart type selected for that release renders its approved data shape correctly, including documented edge cases and accessible equivalents.
-6. Filters, calculations, timestamps, and supporting detail reconcile against agreed reference data.
+4. Authorized users can create shared dashboards, add and resize the four initial widget types, and reposition them on a grid with automatic persistence and keyboard alternatives.
+5. Once live data is delivered, every selected chart type renders its approved data shape correctly, including documented edge cases and accessible equivalents.
+6. Once live data is delivered, filters, calculations, timestamps, and supporting detail reconcile against agreed reference data.
 7. Empty, stale, failed, and partially available results are demonstrably distinct from valid zero values.
 8. Approved performance and accessibility acceptance checks pass.
 9. Operational configuration, migrations, backup/restore, and support procedures are documented and exercised to the agreed release scope.
 10. Light/Dark system selection, explicit persisted choice, and the HELP theme pass theme, chart, and accessibility checks. Optional novelty themes remain separately gated.
 11. Approved resource limits are validated on PiTony, and release deployment/recovery is exercised on that sole production target.
-12. Draft/publish isolation, between-meeting updates, meeting snapshots, linked corrections, and history/trend comparisons pass the Director's Report acceptance checks. Verify 12 regular meetings plus additional ad hoc meetings without overwriting or double-counting history.
+12. When the on-hold Director's Report resumes, its draft/publish isolation, meeting snapshots, corrections, and history checks apply to that feature.
 
-These are acceptance expectations, not statements of current completion. Required datasets, chart selections, and measurable operating targets are release-planning blockers until agreed.
+These are acceptance expectations, not statements of current completion. Live-data releases require approved datasets and measurable operating targets; the builder may expose clearly unconfigured data-driven widgets before datasets are available.
 
 ### 10.5 Subsequent phases
 
 - Expand visualization coverage against the approved catalog.
 - Add individually approved external data sources.
 - Add strategic/project reporting and supporting work-management features under their existing feature plans and launch gates.
-- Evaluate exports, print-specific reports, scheduled delivery, saved views, and self-service authoring through separate requirements.
+- Evaluate exports, print-specific reports, scheduled delivery, and personal dashboards through separate requirements.
 
 No external source, refresh interval, export format, role hierarchy, or paid visualization dependency is approved by implication.
 
@@ -353,7 +362,8 @@ No external source, refresh interval, export format, role hierarchy, or paid vis
 | Feature toggles | Controlled rollout, not access control. [Follow-up work](features/backlog.md#feature-toggles) is in the backlog; FLG requirements still apply. |
 | Themes | Standard Light/Dark/HELP themes, system preference and browser-local persistence; optional novelty themes retained behind flags. [Remaining work](features/backlog.md#themes) is in the backlog; theme and accessibility requirements still apply. |
 | PostgreSQL and EF Core | Persistence foundation; [remaining work](features/backlog.md#persistence) includes testing, recovery, and production configuration. A separate reporting slice must define business datasets and aggregates. |
-| [Feature 010: Director's Report](features/feature-010-directors-report.md) | First form-driven business report, publication lifecycle, meeting records, and historical trends. |
+| [Feature 010: Director's Report](features/on-hold/feature-010-directors-report.md) | On-hold form-driven business report, publication lifecycle, meeting records, and historical trends. |
+| [Feature 011: Shared Dashboard Builder and Data Sources](features/feature-011-dashboard-data-sources.md) | Current priority: shared grid-based dashboards first, followed by approved data integrations. |
 | [Accessibility checklist](accessibility/wcag-checklist.md) and [accessibility decisions](architecture/accessibility-decisions.md) | Contrast thresholds, icon semantics, skip/route focus, status announcements, and manual/automated evidence, consolidated under QUA/UIF/A11. |
 | [Bootstrap migration](migration/bootstrap-migration-plan.md) | Phased replacement, exit checks, and phase-local rollback, consolidated under UIF-005. |
 | [RICE prioritization](features/feature-prioritization-rice.md) | Planning method and historical estimates, not a substitute for current release gates. |
@@ -367,7 +377,7 @@ Repository inspection for this draft confirms the hosted WASM structure, Postgre
 
 | ID | Decision needed | Affected requirements |
 |----|-----------------|-----------------------|
-| DEC-001 | Which form sections, fields, board questions, and KPIs define the Director's Report? Who approves field validation and metric definitions? The report identity and director-entered database source are confirmed. | DIR-001, REP-001, DAT-001 through DAT-004 |
+| DEC-001 | When the Director's Report resumes, which form sections, fields, board questions, and KPIs define it? Who approves validation and metric definitions? | DIR-001, REP-001, DAT-001 through DAT-004 |
 | DEC-002 | Which visualization types are required in each phase, especially the first production release? | GLB-006, VIS-001 through VIS-008 |
 | DEC-003 | What Workspace organizations/domains and membership checks establish eligibility, and how is access provisioned/revoked? | SEC-004, SEC-008 |
 | DEC-004 | What are the approved roles and permissions? Who can curate dashboards or edit source records? | Section 3, SEC-003, SEC-008 |

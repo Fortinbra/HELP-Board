@@ -39,6 +39,8 @@ public sealed class DashboardTests
     {
         // Arrange
         var flags = new Mock<IFeatureToggleService>(MockBehavior.Strict);
+        flags.Setup(service => service.IsEnabledAsync(FeatureToggleKeys.DashboardBuilder))
+            .ReturnsAsync(false);
         flags.Setup(service => service.IsEnabledAsync(FeatureToggleKeys.HelloWorldBaseline))
             .ReturnsAsync(true);
         var services = CreateServices(new(true, true, "Board Member", "member@example.org", "Viewer"), flags.Object);

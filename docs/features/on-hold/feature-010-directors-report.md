@@ -1,13 +1,18 @@
 # Feature 010: Director's Report
 
-Status: Requirements draft; not implemented  
-Last updated: 2026-10-16
+Status: On hold; not implemented  
+Last updated: 2026-11-18
+
+The product owner has put dedicated report pages on hold while shared,
+customizable dashboards and widgets are prioritized. Preserve the requirements
+below for a future decision; this feature is not a prerequisite for the initial
+dashboard builder.
 
 ## Goal
 
-Deliver the first HELP-Board business report: a director-completed form that generates an interactive report for authorized board members, remains current between meetings, and preserves meeting records and historical trends.
+Deliver a future HELP-Board business report: a director-completed form that generates an interactive report for authorized board members, remains current between meetings, and preserves meeting records and historical trends.
 
-This feature implements [global requirements GLB-014 and DIR-001 through DIR-012](../global-requirements.md#51-first-report-directors-report). Report sections, fields, metric definitions, and chart choices are undecided.
+This feature implements [global requirements GLB-014 and DIR-001 through DIR-012](../../global-requirements.md#51-directors-report-on-hold). Report sections, fields, metric definitions, and chart choices are undecided.
 
 ## User Value
 
@@ -112,7 +117,7 @@ Twelve regular meetings is the expected annual schedule, not a report-count limi
 ## Dependencies
 
 - Feature 001 shared UI and Feature 008 standard themes.
-- Feature 002 dashboard foundation; this feature supplies its first business-data reporting slice rather than expanding that foundation's historical scope.
+- Dashboard foundation and custom dashboard builder; this report is not required for the initial builder.
 - Feature 005 identity and distinct author/view permissions.
 - Feature 009 PostgreSQL/EF Core and reviewed migrations.
 - Feature 007 flag strategy with explicit enablement approval.

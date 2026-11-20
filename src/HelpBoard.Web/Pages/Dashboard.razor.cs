@@ -15,6 +15,7 @@ public partial class Dashboard : IDisposable
     private bool _isCheckingAccess = true;
     private bool IsLoading { get; set; }
     private bool IsHelloWorldBaselineEnabled { get; set; }
+    private bool IsDashboardBuilderEnabled { get; set; }
     private bool IsStrategicPlanEnabled { get; set; }
     private DateTimeOffset? LastUpdatedAt { get; set; }
     private DateTimeOffset? StrategicLastUpdatedAt { get; set; }
@@ -74,6 +75,12 @@ public partial class Dashboard : IDisposable
         }
 
         if (_status is not { IsAuthenticated: true })
+        {
+            return;
+        }
+
+        IsDashboardBuilderEnabled = await FeatureToggleService.IsEnabledAsync(FeatureToggleKeys.DashboardBuilder);
+        if (IsDashboardBuilderEnabled)
         {
             return;
         }

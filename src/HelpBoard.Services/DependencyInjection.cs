@@ -1,5 +1,6 @@
 using HelpBoard.Abstractions.Services;
 using HelpBoard.Services.Strategic;
+using HelpBoard.Services.Dashboards;
 using HelpBoard.Services.Tickets;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,7 @@ public static class DependencyInjection
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddScoped<ITicketService, TicketService>();
+        services.AddScoped<IDashboardService, DashboardService>();
         services.AddSingleton<IStrategicPlanService, StrategicPlanService>();
 
         return services;

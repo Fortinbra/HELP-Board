@@ -18,8 +18,11 @@ against PiTony/PiDB capacity; example values are not production benchmarks.
 The current proof of concept stores Tickets with GUID keys, UTC timestamps,
 string-converted status and priority, required fields and length limits. The
 initial EF migration creates the `Tickets` table and indexes on `CreatedAt`
-and `Status`. Future boards and strategic work items belong to their respective
-features; the Director's Report requires its own data model.
+and `Status`. The `SharedDashboards` migration adds the `Dashboards` table for
+shared names, widget configuration, and optimistic-concurrency revisions.
+Its `Down` drops that table and all saved dashboards. Future boards and strategic
+work items belong to their respective features; the Director's Report requires
+its own data model.
 
 ## Migration workflow
 
@@ -59,7 +62,9 @@ outstanding.
 EF can target a previous migration with `dotnet ef database update` and the
 previous migration's name, but a down migration may destroy data. In
 particular, the initial migration's `Down` drops the `Tickets` table. Do not
-assume an image rollback reverses a database migration or restores data; test
+roll back `SharedDashboards` unless dashboard data loss is explicitly accepted
+and a tested recovery plan exists. Do not assume an image rollback reverses a
+database migration or restores data; test
 supported recovery paths on an isolated database before use. Never modify or
 delete deployed migration history; create a new reviewed migration instead.
 
@@ -72,5 +77,7 @@ rollback on failure. Keep transactions short and propagate cancellation.
 
 Request validation belongs at the API boundary, business and cross-aggregate
 rules in services, and relational constraints in database mappings. Current
-in-memory and SQLite tests do not establish PostgreSQL constraint, transaction,
-or migration behavior; real PostgreSQL verification remains outstanding.
+in-memory and SQLite tests do not establish PostgreSQL constraint or transaction
+behavior. The dashboard migration was applied to an isolated PostgreSQL 17
+container after the initial migration; an existing test ticket remained intact.
+This does not validate production migration history, backups, or recovery.

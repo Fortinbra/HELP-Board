@@ -1,5 +1,6 @@
 using HelpBoard.Abstractions.Repositories;
 using HelpBoard.Repositories.Data;
+using HelpBoard.Repositories.Dashboards;
 using HelpBoard.Repositories.Tickets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,8 @@ public static class DependencyInjection
 
         services.AddScoped<ITicketReader, TicketRepository>();
         services.AddScoped<ITicketWriter, TicketRepository>();
+        services.AddScoped<IDashboardReader, DashboardRepository>();
+        services.AddScoped<IDashboardWriter, DashboardRepository>();
 
         return services;
     }

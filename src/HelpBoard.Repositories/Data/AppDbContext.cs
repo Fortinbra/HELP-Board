@@ -7,6 +7,7 @@ namespace HelpBoard.Repositories.Data;
 public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<Ticket> Tickets => Set<Ticket>();
+    public DbSet<DashboardDocument> Dashboards => Set<DashboardDocument>();
 
     // Feature 004 placeholders: DbSet<ProjectBoard> and DbSet<WorkItem>.
     // Feature 003 placeholders: DbSet<StrategicObjective>, DbSet<StrategicInitiative>, and DbSet<StrategicMilestone>.
@@ -26,6 +27,14 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
             entity.HasIndex(t => t.CreatedAt);
             entity.HasIndex(t => t.Status);
+        });
+
+        modelBuilder.Entity<DashboardDocument>(entity =>
+        {
+            entity.HasKey(dashboard => dashboard.Id);
+            entity.Property(dashboard => dashboard.Name).HasMaxLength(100).IsRequired();
+            entity.Property(dashboard => dashboard.WidgetsJson).IsRequired();
+            entity.Property(dashboard => dashboard.Revision).IsConcurrencyToken();
         });
 
         // Feature 004 placeholder: configure ProjectBoard and WorkItem mappings here.

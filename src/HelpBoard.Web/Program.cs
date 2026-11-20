@@ -12,6 +12,7 @@ builder.Services.AddFeatureManagement();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<IFeatureToggleService, FeatureToggleService>();
 builder.Services.AddScoped<IAuthenticationClient, AuthenticationClient>();
+builder.Services.AddScoped<DashboardApiClient>();
 builder.Services.AddScoped<TicketApiService>();
 builder.Services.AddScoped<DashboardFoundationService>();
 builder.Services.AddScoped<StrategicPlanApiService>();
